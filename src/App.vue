@@ -1,30 +1,38 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <nav-bar v-if="loggedIn" :extended="true" />
+    <div class="flex-1 w-full  overflow-x-hidden h-screen" :class="{'pl-1/6 md:pl-16 bg':loggedIn}">
+      <router-view />
+    </div>
 </template>
+<style >
+body {
+  background-color: rgba(55, 65, 81);
+}
+.bg{
+
+  background-color: rgba(55, 65, 81);
+}
+.pl-1\/6 {
+  padding-left: 16.666%;
+}
+@media (min-width: 768px) {
+    .md\:pl-16 {
+        padding-left: 3.5rem/* 64px */;
+    }
+}
+</style>
+<script>
+// import {useAuth  } from '@websanova/vue-auth/src/v3.js';
+export default {
+  name: 'App',
+  computed:{
+    loggedIn(){
+      console.log(this.$store.state)
+      return this.$store.state.users.authenticated
+    }
+  }
+}
+</script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

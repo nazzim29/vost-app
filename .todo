@@ -1,0 +1,61 @@
+Todos:
+    gestion ustilisateur:
+        ✔ afficher les utilisateurs @done(21-11-13 17:36)
+        ✔ modifier un utilisateur @done(21-11-13 17:36)
+        ✔ supprimer un utilisateur @done(21-11-13 17:36)
+        ✔ creer un utilisateur @done(21-11-13 17:36)
+        ✔ modifier son propre profile @done(21-11-27 14:06)
+        gestion des fonctions:
+            ✔ afficher les fonctions et leurs autorisations @done(21-11-30 11:50)
+            ✔ creer une fonction @done(22-01-29 14:42)
+            editer une fonction
+            ☐ supprimer une fonction
+            ☐ donner des droits a une fonction
+            ☐ enlever des droits a une fonction
+    gestion des produits:
+        ☐ ajouter un nouveau produit
+        ☐ modifier un produit existant
+        ☐ supprimer un produit existant
+        ☐ appliquer une reduction a un produit
+        ☐ enlever la reduction d'un produit
+    gestion des clients:
+        ☐ ajouter
+        ☐ modifier
+        ☐ supprimer
+        ☐ afficher
+        afficher le profile d'un client:
+            ☐ voir les dettes
+            ☐ voir l'historique de payement
+            ☐ voir l'historique de commande et d'achat
+    gestion du stock:
+        ☐ voir l'etat du stock
+        ☐ supprimer un produit du stock
+        ☐ diminuer ou augmenter la quantité d'un ou plusieurs produit en stock
+    gestion des commandes:
+        ☐ passer une commande
+        ☐ annuler une commande
+        ☐ modifier une commande
+        ☐ marquer une commande comme vendu
+    gestion des ventes:
+        ☐ ajouter une vente
+        ☐ annuler une vente
+        ☐ modifier une vente
+        ☐ marquer comme finished
+    gestion des factures:
+        ☐ marquer une facture comme payer
+        ☐ ajouter un payement a la facture
+        ☐ voir les factures impayer
+        ☐ voir les factures d'un client
+    parametres de l'application:
+        ☐ frequence de backup de la bdd
+        ☐ telecharger un backup de la bdd
+        ☐ durée de la validité d'une session utilisateur
+        ☐ effectuer une sauvegarde maintenant
+    modification de la bdd:
+        ☐ ajouter la pdp aux utilisateurs @2m @low
+        ☐ ajouter les icones aux fonctions @2m @low
+        ☐ ajouter les couleurs aux fonctions @2m @low
+        ☐ ajouter les tables 'discussion' et 'message' @10m @low
+    messagerie:
+
+Archive:
