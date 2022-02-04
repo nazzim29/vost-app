@@ -347,7 +347,7 @@ export default {
 		async updateFonction() {
 			// if (!this.selectedFonction.updated) return; 
 			try {
-				await this.$store.commit("update-fonction", this.selectedFonction);
+				await this.$store.dispatch("updateFonction", this.selectedFonction);
 				this.selectedFonction.updated = false;
 			} catch (e) {
 				console.log(e);
@@ -355,7 +355,7 @@ export default {
 		},
 		async saveFonction() {
 			try {
-				await this.$store.commit("add-fonction", this.newFonction);
+				await this.$store.dispatch("addFonction", this.newFonction);
 				this.$refs.createModal.open = false;
 			} catch (e) {
 				console.log(e);
@@ -363,7 +363,7 @@ export default {
 		},
 		async deleteFonction(f) {
 			try {
-				await this.$store.commit("delete-fonction", f || this.selectedFonction);
+				await this.$store.dispatch("deleteFonction", f || this.selectedFonction);
 				this.$refs.deletedModal.open = false;
 			} catch (e) {
 				console.log(e);
@@ -374,8 +374,8 @@ export default {
 		},
 	},
 	async beforeMount() {
-		await this.$store.commit("get-fonction");
-		await this.$store.commit("get-autorisation");
+		await this.$store.dispatch("getFonctions");
+		await this.$store.dispatch("getAutorisations");
 		// console.log("hey",)
 		this.selectedFonction =
 			this.fonctions[
@@ -392,18 +392,22 @@ export default {
 			icons: [],
 			isMobile: false,
 			showColorPicker: false,
-			fonctions: this.$store.state.fonctions,
+			
 		};
 	},
 	computed: {
 		autorisations() {
-			return this.$store.state.autorisations;
+			return this.$store.state.fonctions.autorisations;
 		},
 		categories() {
-			return this.$store.state.autorisations
+			console.log(this.$store.state);
+			return this.$store.state.fonctions.autorisations
 				.map((autorisation) => autorisation.categorie)
 				.filter((categorie, index, self) => self.indexOf(categorie) === index);
 		},
+		fonctions(){
+			return this.$store.state.fonctions.fonctions
+		}
 	},
 	watch: {
 		"newFonction.icon": _.debounce(async function () {

@@ -304,7 +304,7 @@
 								class="flex items-center text-bold h-full rounded-l-md text-md"
 								>Fonction</label
 							>
-							<Listbox v-model="newUser.fonction">
+							<Listbox v-model="newUser.ProfileId">
 								<div class="relative w-3/4">
 									<ListboxButton
 										class="h-10 relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm border-1"
@@ -334,7 +334,7 @@
 												v-slot="{ active, selected }"
 												v-for="f in fonctions"
 												:key="f.id"
-												:value="f"
+												:value="f.id"
 												as="template"
 											>
 												<li
@@ -485,18 +485,18 @@ export default {
 	data() {
 		return {
 			newUser: {},
-			users: this.$store.getters.getUsers,
 			currentPage: 1,
 			fonctionsel: [],
 			mobileFiltersOpen: false,
 			subCategories: [],
 			subcategorytitle: "hey",
+			
 		};
 	},
 	methods: {
 		searchfn: debounce(function (e) {
 			this.$store.users.dispatch("getUsers", {
-				FonctionId: this.fonctionsel,
+				ProfileId: this.fonctionsel.id,
 				nom: e,
 				prenom: e,
 				username: e,
@@ -508,7 +508,7 @@ export default {
 			this.$refs.modal.user = user;
 		},
 		async deleteUser(user) {
-			this.$store.dispatch('deleteUser',user.id);
+			this.$store.dispatch("deleteUser", user.id);
 			this.$refs.modal.open = false;
 			this.searchfn("");
 		},
@@ -530,7 +530,7 @@ export default {
 		},
 	},
 	computed: {
-		fonctions: () => this.$store.getters.getFonctions,
+		users(){return this.$store.getters.getUsers},
 		filters() {
 			return [
 				{
@@ -558,6 +558,7 @@ export default {
 			if (this.users?.length % 10 != 0) nb++;
 			return parseInt(nb);
 		},
+		fonctions() {return this.$store.getters.getFonctions},
 	},
 	watch: {},
 };

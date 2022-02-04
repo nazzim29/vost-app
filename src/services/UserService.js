@@ -22,6 +22,7 @@ export function hasRight(user, action, /*object*/) {
 }
 export default {
     get,
+    create,
     show,
     destroy,
     update,

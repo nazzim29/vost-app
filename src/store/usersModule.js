@@ -56,8 +56,9 @@ const usersModule = {
             })
         },
         addUser(context, user) {
+            console.log(UserService);
             return UserService.create(user).then(() => {
-                return context.dispatch('getUsers', {});
+                return context.dispatch('getUsers');
             }).catch(err => {
                 return context.dispatch('add-error', err.response.data.message);
             })

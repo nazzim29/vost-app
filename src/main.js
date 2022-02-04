@@ -10,6 +10,5 @@ createApp(App)
 	.use(store)
 	.use(router)	
 	.use(AsyncComputed)
-
 	.component("NavBar", NavBar)
 	.mount("#app");

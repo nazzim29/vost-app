@@ -22,12 +22,10 @@ body {
 }
 </style>
 <script>
-// import {useAuth  } from '@websanova/vue-auth/src/v3.js';
 export default {
   name: 'App',
   computed:{
     loggedIn(){
-      console.log(this.$store.state)
       return this.$store.state.users.authenticated
     }
   }
