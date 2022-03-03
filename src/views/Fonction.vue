@@ -337,7 +337,6 @@ export default {
 						(autorisation) => autorisation.id != aut.id
 					);
 			} else {
-				console.log(aut);
 				// aut.autorisations_fonctions?.type = type || 'all';
 				
 				this.selectedFonction.Autorisations.push({autorisations_fonctions:{type: type || 'all'}, ...aut});
@@ -400,7 +399,6 @@ export default {
 			return this.$store.state.fonctions.autorisations;
 		},
 		categories() {
-			console.log(this.$store.state);
 			return this.$store.state.fonctions.autorisations
 				.map((autorisation) => autorisation.categorie)
 				.filter((categorie, index, self) => self.indexOf(categorie) === index);
@@ -416,7 +414,6 @@ export default {
 					`https://api.iconify.design/search?query=${this.newFonction.icon}`
 				)
 			).data.icons;
-			console.log(this.icons);
 		}, 200),
 	},
 };

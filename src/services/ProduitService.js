@@ -8,7 +8,7 @@ export function getCouleurs(query) {
 }
 export function getTypes(query) {
     return Api.get("/typeProduit", { ...query });
-}
+}	
 export function show(id) {
 	return Api.get("/produit/" + id);
 }
@@ -25,7 +25,8 @@ export default {
 	get,
 	show,
 	destroy,
-    update,
+	update,
+	create,
     getCouleurs,
     getTypes
 };

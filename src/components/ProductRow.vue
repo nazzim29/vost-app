@@ -3,9 +3,9 @@
         <div class="w-full h-1/2 rounded-t-md">
             <div :style="{'background-color': `#${produit.Couleur.code}`}" class="w-full h-full object-fit flex flex-col p-1 space-y-2">
                 <div class="w-full flex flex-row justify-between">
-                    <Icon icon="ic:baseline-favorite" class="h-5 w-5" :class="{'text-red-400' : produit.featured,'text-gray-300':!produit.featured}" @click="fav"/>
-                    <Icon icon="bx:bx-edit-alt" class="h-5 w-5 text-gray-600" @click="this.emmit('edit',produit)" />
-                    <Icon icon="clarity:archive-line" class="h-5 w-5 text-red-600" @click="this.$emmit('delete')" />
+                    <Icon icon="ic:baseline-favorite" class="h-5 w-5" :class="{'text-red-400' : produit.featured,'text-gray-300':!produit.featured}" @click="this.$emit('fav',produit)"/>
+                    <Icon icon="bi:brush" class="h-5 w-5 text-gray-600" @click="this.$emit('edit',produit)" />
+                    <Icon icon="clarity:archive-line" class="h-5 w-5 text-red-600" @click="this.$emit('delete')" />
                 </div>
                 <span class="font-bold w-full text-lg text-center">{{produit.TypeProduit.nom}}</span>
             </div>

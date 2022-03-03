@@ -11,6 +11,9 @@ export function create(fonction) {
 export function update(fonction) {
 	return Api.post(`/fonction/${fonction.id}`,fonction)
 }
+export function destroy(id) {
+	return Api.delete(`/fonction/${id}`)
+}
 export default {
-	get,create,update
+	get,create,update,destroy
 };

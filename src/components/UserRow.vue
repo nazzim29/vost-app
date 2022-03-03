@@ -19,8 +19,8 @@
 				src="https://therminic2018.eu/wp-content/uploads/2018/07/dummy-avatar.jpg"
 			/>
 			<div class="flex flex-col flex-1">
-				<label class="text-bold"
-					>{{ user.nom.toUpperCase() }} {{ user.nom.toLowerCase() }}</label
+				<label class="text-bold w-32 whitespace-nowrap overflow-hidden text-ellipsis"
+					>{{ user.nom.toUpperCase() }} {{ user.prenom.toLowerCase() }}</label
 				>
 				<h3 class="text-light text-gray-400 text-sm">@{{ user.username }}</h3>
 			</div>
@@ -105,7 +105,7 @@
 										px-2
 										rounded-sm
 									"
-									@click="this.$emit('delete', this.user)"
+									@click="this.$refs.deleteModal.open = true"
 								>
 									<UserRemoveIcon
 										class="h-5 w-5 ml-2 mr-2 text-bold text-red-800"
@@ -139,10 +139,20 @@
 			</Menu>
 		</div>
 	</li>
+	<Modal ref="deleteModal" primaryColor="red-400" @submit="deleteUser">
+		<template v-slot:title>Supprimer un utilisateur</template>
+		<template v-slot:body
+			>Etes-vous sur de vouloir supprimer l'utilisateur
+			{{ user.nom.toUpperCase() }}
+			{{ user.prenom.toLowerCase() }}</template
+		>
+		<template v-slot:submit>Supprimer</template>
+	</Modal>
 </template>
 
 <script>
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import Modal from "./Modal.vue"
 import {Icon} from "@iconify/vue";
 import {
 	DotsVerticalIcon,
@@ -160,7 +170,8 @@ export default {
 		PencilIcon,
 		UserRemoveIcon,
 		UserCircleIcon,
-		Icon
+		Icon,
+		Modal
 	},
 	data() {
 		return {
@@ -168,10 +179,14 @@ export default {
 		};
 	},
 	mounted() {
-		console.log(this.user);
 	},
 	props: ["user"],
-	methods: {},
+	methods: {
+		async deleteUser(user) {
+			this.$store.dispatch("deleteUser", user.id);
+			this.$refs.deleteModal.open = false;
+		}
+	},
 };
 </script>
 

@@ -17,14 +17,6 @@ const routes = [
 		}
 	},
 	{
-		path: "/about",
-		name: "About",
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
-		component: loadView("About"),
-	},
-	{
 		path: "/login",
 		name: "Login",
 		component: loadView("Login"),
@@ -89,9 +81,33 @@ const routes = [
 		}
 	},
 	{
+		path: "/commandes/:id",
+		name: "Commande",
+		component: loadView("CommandeShow"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
 		path: "/produits",
 		name: "Produits",
 		component: loadView("Produits"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
+		path: "/clients",
+		name: "Clients",
+		component: loadView("Produits"),
+		meta: {
+			auth: true,
+		}
+	}
+	{
+		path: "/clients/:id",
+		name: "ClientShow",
+		component: loadView("ClientShow"),
 		meta: {
 			auth: true,
 		}
@@ -111,7 +127,6 @@ async function checklogin() {
 	})
 }
 router.beforeEach(async function (to, from, next) {
-	console.log(to)
 	let isLogged = await checklogin();
 	if (to.meta.auth === true) {
 		if (isLogged) next();

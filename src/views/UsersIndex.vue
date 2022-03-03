@@ -126,10 +126,10 @@
 		<div class="flex-1 flex flex-col overflow-hidden">
 			<div
 				v-if="showedusers?.length != 0"
-				class="w-full flex flex-1 flex-col overflow-hidden"
+				class="w-full flex flex-1 flex-col overflow-y-auto"
 			>
 				<ul
-					class="w-full grid grid-rows-5 md:grid-cols-4 overflow-y-auto space-y-2 md:space-y-0"
+					class="w-full h-full grid grid-rows-10 md:grid-cols-4 space-y-2 md:space-y-0 items-center"
 				>
 					<UserRow
 						v-for="user in showedusers"
@@ -139,58 +139,17 @@
 					/>
 				</ul>
 			</div>
-			<div
-				v-if="users.length != 0"
-				class="h-15 self-end mb-3 flex flex-row w-full justify-center items-center"
-			>
-				<ul class="flex flex-row items-center justify-center space-x-3">
-					<li class="diamond bg-blue-800 p-0.5 rounded-md text-white">
-						<div>
-							<ChevronDoubleLeftIcon
-								class="h-5"
-								@click="currentPage = 1"
-								:disabled="currentPage == 1"
-							/>
-						</div>
-					</li>
-					<li class="diamond bg-blue-800 p-0.5 rounded-md text-white">
-						<div>
-							<ChevronLeftIcon
-								class="h-5"
-								@click="currentPage--"
-								:disabled="currentPage == 1"
-							/>
-						</div>
-					</li>
-					<div class="flex flex-row space-x-3 items-center justify-center px-3">
-						<li
-							v-for="i in pageNumber"
-							:key="i"
-							class="diamond bg-blue-800 p-0.5 h-5 w-5 rounded-md text-white"
-						>
-							<div class="flex items-center justify-center">{{ i }}</div>
-						</li>
-					</div>
-					<li class="diamond bg-blue-800 p-0.5 rounded-md text-white">
-						<div>
-							<ChevronRightIcon
-								class="h-5"
-								@click="currentPage++"
-								:disabled="currentPage == pageNumber"
-							/>
-						</div>
-					</li>
-					<li class="diamond bg-blue-800 p-0.5 rounded-md text-white">
-						<div>
-							<ChevronDoubleRightIcon
-								class="h-5"
-								@click="currentPage = pageNumber"
-								:disabled="currentPage == pageNumber"
-							/>
-						</div>
-					</li>
-				</ul>
-			</div>
+			<Pagination
+				ref="Pagination"
+				:currentPage="currentPage"
+				:pageSize="nbperpage"
+				:dataLength="users.length"
+				@page="currentPage = $event"
+				@next="currentPage++"
+				@prev="currentPage--"
+				@first="currentPage = 1"
+				@last="currentPage = $refs.Pagination.pageNumber"
+			/>
 		</div>
 	</div>
 	<Modal ref="createModal" primaryColor="haja" @submit="addUser">
@@ -405,20 +364,12 @@
 		</template>
 		<template v-slot:submit>Ajouter</template>
 	</Modal>
-	<Modal ref="modal" primaryColor="haja" @submit="deleteUser">
-		<template v-slot:title>Supprimer un utilisateur</template>
-		<template v-slot:body="slotProps"
-			>Etes-vous sur de vouloir supprimer l'utilisateur
-			{{ slotProps.user.nom.toUpperCase() }}
-			{{ slotProps.user.prenom.toLowerCase() }}</template
-		>
-		<template v-slot:submit>Supprimer</template>
-	</Modal>
 </template>
 
 <script>
 import Modal from "@/components/Modal";
 import { debounce } from "lodash";
+import Pagination from "@/components/Pagination";
 import {
 	Dialog,
 	DialogOverlay,
@@ -436,10 +387,6 @@ import {
 	MinusSmIcon,
 	PlusSmIcon,
 	FilterIcon,
-	ChevronDoubleLeftIcon,
-	ChevronDoubleRightIcon,
-	ChevronRightIcon,
-	ChevronLeftIcon,
 	CheckIcon,
 	SelectorIcon,
 } from "@heroicons/vue/solid";
@@ -451,6 +398,7 @@ import { Icon } from "@iconify/vue";
 export default {
 	name: "UsersIndex",
 	components: {
+		Pagination,
 		SearchBar,
 		Dialog,
 		DialogOverlay,
@@ -464,10 +412,6 @@ export default {
 		MinusSmIcon,
 		PlusSmIcon,
 		XIcon,
-		ChevronDoubleLeftIcon,
-		ChevronDoubleRightIcon,
-		ChevronLeftIcon,
-		ChevronRightIcon,
 		Modal,
 		Icon,
 		PencilIcon,
@@ -479,24 +423,24 @@ export default {
 		ListboxOption,
 	},
 	async beforeMount() {
+		// $(window).on('resize',this.)
 		await this.$store.dispatch("getUsers");
 		await this.$store.dispatch("getFonctions");
 	},
 	data() {
 		return {
 			newUser: {},
-			currentPage: 1,
 			fonctionsel: [],
+			currentPage:1,
 			mobileFiltersOpen: false,
 			subCategories: [],
 			subcategorytitle: "hey",
-			
 		};
 	},
 	methods: {
 		searchfn: debounce(function (e) {
-			this.$store.users.dispatch("getUsers", {
-				ProfileId: this.fonctionsel.id,
+			this.$store.dispatch("getUsers", {
+				ProfileId: this.fonctionsel,
 				nom: e,
 				prenom: e,
 				username: e,
@@ -507,16 +451,11 @@ export default {
 			this.$refs.modal.open = true;
 			this.$refs.modal.user = user;
 		},
-		async deleteUser(user) {
-			this.$store.dispatch("deleteUser", user.id);
-			this.$refs.modal.open = false;
-			this.searchfn("");
-		},
+		
 		pencilCLick() {
 			this.$refs.fileInput.click();
 		},
 		avatarChanged() {
-			console.log(this.$refs.fileInput.files[0]);
 			this.$refs.avatarDisplay.src = URL.createObjectURL(
 				this.$refs.fileInput.files[0]
 			);
@@ -530,7 +469,15 @@ export default {
 		},
 	},
 	computed: {
-		users(){return this.$store.getters.getUsers},
+		users() {
+			return this.$store.getters.getUsers;
+		},
+		nbperpage() {
+			if (window.innerWidth >= 640 && window.innerWidth < 768) return 2 * 5;
+			else if (window.innerWidth >= 768 && window.innerWidth < 1280) return 16;
+			else if (window.innerWidth > 1280) return 4 * 5;
+			else return 1 * 5;
+		},
 		filters() {
 			return [
 				{
@@ -541,26 +488,35 @@ export default {
 			];
 		},
 		showedusers() {
+			let cp = this.$refs?.Pagination?.currentPage || 1;
 			let users = this.users;
-			if (!users) return null;
-			if (
-				users?.length % 10 != 0 &&
-				parseInt(users?.length / 10) == this.currentPage - 1
-			)
-				return users?.slice((this.currentPage - 1) * 10);
-			return users?.slice(
-				(this.currentPage - 1) * 10,
-				(this.currentPage - 1) * 10 + 10
-			);
+			if (!users) return [];
+			return users.slice((cp - 1) * this.nbperpage, cp * this.nbperpage);
 		},
-		pageNumber() {
-			let nb = this.users?.length / 10;
-			if (this.users?.length % 10 != 0) nb++;
-			return parseInt(nb);
+
+		fonctions() {
+			return this.$store.getters.getFonctions;
 		},
-		fonctions() {return this.$store.getters.getFonctions},
 	},
-	watch: {},
+	watch: {
+		fonctionsel: function () {
+			this.$store.dispatch("getUsers", {
+				...(this.fonctionsel.length != 0 && { ProfileId: this.fonctionsel }),
+				...(this.$refs.searchbar.search != "" && {
+					nom: this.$refs.searchbar.search,
+				}),
+				...(this.$refs.searchbar.search != "" && {
+					prenom: this.$refs.searchbar.search,
+				}),
+				...(this.$refs.searchbar.search != "" && {
+					username: this.$refs.searchbar.search,
+				}),
+				...(this.$refs.searchbar.search != "" && {
+					numero: this.$refs.searchbar.search,
+				}),
+			});
+		},
+	},
 };
 </script>
 

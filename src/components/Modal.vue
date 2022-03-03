@@ -33,8 +33,8 @@
 					<div
 						class="
 							overflow-hidden
-							max-h-95/100
-							min-w-95/100
+							min-h-max
+							max-w-xl
 							pt-2
 							inline-flex
 							flex-col
@@ -52,7 +52,7 @@
 						>
 							<slot name="title"></slot>
 						</DialogTitle>
-						<div class="flex flex-1 overflow-hidden py-2 ">
+						<div class="flex flex-1 overflow-hidden py-2 px-3 min-h-16 items-center">
 							<slot name="body" :obj="obj"></slot>
 						</div>
 

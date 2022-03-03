@@ -1,21 +1,23 @@
 <template>
 	<div
-		class="
-			flex flex-col
-			w-full
-			justify-center
-			items-center
-			h-full
-			bg-gray-700
-			overflow-hidden
-		"
+		class="flex flex-col w-full justify-center items-center h-full bg-gray-700 overflow-hidden"
 	>
-		<div class="flex self-start w-full items-center space-x-3">
+		<div class="flex self-start w-full items-center space-x-3 h-16 py-1 px-2">
 			<SearchBar ref="searchbar" @search="searchfn" />
-			<div class="rounded-full py-2 px-2 mt-4 bg-gray-500" :class="{hidden: refs?.searchbar?.open}">
+			<div
+				class="rounded-full py-2 px-2 bg-gray-500"
+				:class="{ hidden: refs?.searchbar?.open }"
+			>
 				<FilterIcon
 					@click="mobileFiltersOpen = !mobileFiltersOpen"
 					class="h-7 fill-current text-white"
+				/>
+			</div>
+			<div class="rounded-full py-2 px-2 bg-gray-500">
+				<Icon
+					icon="bx:bx-paint-roll"
+					@click="openCreateModal"
+					class="h-7 w-7 fill-current text-white"
 				/>
 			</div>
 		</div>
@@ -50,36 +52,13 @@
 							leave-to="translate-x-full"
 						>
 							<div
-								class="
-									ml-auto
-									relative
-									max-w-xs
-									w-full
-									h-full
-									bg-gray-900
-									shadow-xl
-									py-4
-									pb-12
-									flex flex-col
-									overflow-y-auto
-								"
+								class="ml-auto relative max-w-xs w-full h-full bg-gray-900 shadow-xl py-4 pb-12 flex flex-col overflow-y-auto"
 							>
 								<div class="px-4 flex items-center justify-between">
 									<h2 class="text-lg font-medium text-gray-300">Filters</h2>
 									<button
 										type="button"
-										class="
-											-mr-2
-											w-7
-											h-7
-											bg-gray-800
-											p-1
-											rounded-md
-											flex
-											items-center
-											justify-center
-											text-gray-400
-										"
+										class="-mr-2 w-7 h-7 bg-gray-800 p-1 rounded-md flex items-center justify-center text-gray-400"
 										@click="mobileFiltersOpen = false"
 									>
 										<span class="sr-only text-white">Close menu</span>
@@ -94,17 +73,7 @@
 									<h3 class="-mx-2 -my-3 flow-root">
 										<DisclosureButton as="template">
 											<div
-												class="
-													px-2
-													py-3
-													bg-gray-700
-													w-full
-													flex
-													items-center
-													justify-between
-													text-gray-400
-													hover:text-gray-200
-												"
+												class="px-2 py-3 bg-gray-700 w-full flex items-center justify-between text-gray-400 hover:text-gray-200"
 											>
 												<span class="font-medium text-gray-400"> Types </span>
 												<span class="ml-6 flex items-center">
@@ -133,14 +102,7 @@
 													:value="type.id"
 													type="checkbox"
 													:checked="type.checked"
-													class="
-														h-4
-														w-4
-														border-gray-400
-														rounded
-														text-blue-600
-														focus:ring-blue-500
-													"
+													class="h-4 w-4 border-gray-400 rounded text-blue-600 focus:ring-blue-500"
 													v-model="typesel"
 												/>
 												<label class="ml-3 min-w-0 flex-1 text-gray-500">
@@ -158,17 +120,7 @@
 									<h3 class="-mx-2 -my-3 flow-root">
 										<DisclosureButton as="template">
 											<div
-												class="
-													px-2
-													py-3
-													bg-gray-700
-													w-full
-													flex
-													items-center
-													justify-between
-													text-gray-400
-													hover:text-gray-200
-												"
+												class="px-2 py-3 bg-gray-700 w-full flex items-center justify-between text-gray-400 hover:text-gray-200"
 											>
 												<span class="font-medium text-gray-400">
 													Couleurs
@@ -199,16 +151,17 @@
 													:value="couleur.id"
 													type="checkbox"
 													:checked="couleur.checked"
-													class="
-														h-4
-														w-4
-														border-gray-400
-														rounded
-													"
-                                                    :style="{'--tw-ring-color' : `#${couleur.code}`,color:`#${couleur.code}`}"
+													class="h-4 w-4 border-gray-400 rounded"
+													:style="{
+														'--tw-ring-color': `#${couleur.code}`,
+														color: `#${couleur.code}`,
+													}"
 													v-model="couleursel"
 												/>
-												<label class="ml-3 min-w-0 flex-1 " :style="{color:`#${couleur.code}`}">
+												<label
+													class="ml-3 min-w-0 flex-1"
+													:style="{ color: `#${couleur.code}` }"
+												>
 													{{ couleur.nom }}
 												</label>
 											</div>
@@ -222,11 +175,12 @@
 			</div>
 		</div>
 		<div class="flex-1 flex flex-col h-full w-full overflow-hidden">
-			<div class="h-full justify-center aligned-center w-full flex flex-1 flex-col overflow-auto overflow-x-hidden py-2">
-				<ul class="w-full grid grid-flow-row gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-center items-center overflow-y-auto overflow-hidden">
-					<!-- 
-                        //todo: product row
-                     -->
+			<div
+				class="h-full md:justify-center aligned-center w-full flex flex-1 flex-col overflow-auto overflow-x-hidden py-3"
+			>
+				<ul
+					class="w-full h-full grid grid-flow-row gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-center items-center"
+				>
 					<ProductRow
 						v-for="produit in showedProduits"
 						:key="produit.id"
@@ -235,73 +189,17 @@
 					/>
 				</ul>
 			</div>
-			<div
-				class="
-                    py-1.5
-					self-end
-					flex flex-row
-					w-full
-					justify-center
-					items-center
-				"
-			>
-				<ul class="flex flex-row items-center justify-evenly space-x-3">
-					<li class="diamond bg-blue-800 p-0.5 rounded-md text-white hidden sm:flex">
-						<div>
-							<ChevronDoubleLeftIcon
-								class="h-5"
-								@click="firstpage"
-								:disabled="currentPage == 1"
-							/>
-						</div>
-					</li>
-					<li class="diamond bg-blue-800 p-0.5 rounded-md text-white">
-						<div>
-							<ChevronLeftIcon
-								class="h-5"
-								@click="prevpage"
-								:disabled="currentPage == 1"
-							/>
-						</div>
-					</li>
-					<div v-if="!(nbperpage < 10 && i != currentPage)" class="flex flex-row space-x-3 items-center justify-center px-3 overflow-hidden">
-						<li
-							v-for="i in pageNumber"
-							:key="i"
-                            :class="{hidden: i != currentPage,'sm:flex': i != currentPage,'bg-blue-500': i == currentPage,'bg-blue-800': i!=currentPage}"
-							class="diamond p-0.5 h-5 w-5 rounded-md text-white"
-						>
-							<div class="flex items-center justify-center">{{ i }}</div>
-						</li>
-
-					</div>
-					<div v-else class="flex flex-row space-x-3 items-center justify-center px-3 overflow-hidden">
-						<li
-							class="diamond bg-blue-800 p-0.5 h-5 w-5 rounded-md text-white"
-						>
-							<div class="flex items-center justify-center">{{ currentPage }}</div>
-						</li>
-					</div>
-					<li class="diamond bg-blue-800 p-0.5 rounded-md text-white">
-						<div>
-							<ChevronRightIcon
-								class="h-5"
-								@click="nextpage"
-								:disabled="currentPage == pageNumber"
-							/>
-						</div>
-					</li>
-					<li class="diamond bg-blue-800 p-0.5 rounded-md text-white hidden sm:flex">
-						<div>
-							<ChevronDoubleRightIcon
-								class="h-5"
-								@click="lastpage"
-								:disabled="currentPage == pageNumber"
-							/>
-						</div>
-					</li>
-				</ul>
-			</div>
+			<Pagination
+				ref="Pagination"
+				:currentPage="currentPage"
+				:pageSize="nbperpage"
+				:dataLength="produits.length"
+				@page="currentPage = $event"
+				@next="currentPage++"
+				@prev="currentPage--"
+				@first="currentPage = 1"
+				@last="currentPage = $refs.Pagination.pageNumber"
+			/>
 		</div>
 	</div>
 	<Modal ref="deletemodal" primaryColor="haja" @submit="deleteproduit">
@@ -312,10 +210,245 @@
 		>
 		<template v-slot:submit>archiver</template>
 	</Modal>
+	<Modal ref="createmodal" primaryColor="haja" @submit="create">
+		<template v-slot:title>Ajouter un produit</template>
+		<template v-slot:body>
+			<div class="flex flex-col w-full pb-5 overflow-y-auto">
+				<div class="relative mt-5 self-center mx-4">
+					<img
+						ref="avatarDisplay"
+						class="w-full object-fit h-full rounded-md overflow-hidden"
+						src="https://therminic2018.eu/wp-content/uploads/2018/07/dummy-avatar.jpg"
+					/>
+					<PencilIcon
+						class="absolute w-5 bottom-1 right-1"
+						@click="pencilCLick"
+					/>
+					<input
+						type="file"
+						style="display: none"
+						class="absolute w-5 bottom-1 right-1"
+						ref="fileInput"
+						@change="picturechanged"
+					/>
+				</div>
+				<div class="flex flex-col space-y-3 mt-4 px-2">
+					<div class="flex flex-col w-full">
+						<div class="flex flex-col items-start space-y-2 space-x-2 w-full">
+							<label
+								for="nom"
+								class="flex items-center text-bold h-full rounded-l-md text-md"
+								>Nom</label
+							>
+							<input
+								type="text"
+								name="nom"
+								id="nom"
+								v-model="newProduit.nom"
+								placeholder="Nom"
+								class="rounded-md border-0 w-3/4"
+							/>
+						</div>
+					</div>
+					<div class="flex flex-col w-full">
+						<div class="flex flex-col items-start w-full space-y-2 space-x-2">
+							<label
+								for="prenom"
+								class="flex items-center text-bold h-full rounded-l-md px-2text-xl"
+								>contenance</label
+							>
+							<input
+								type="number"
+								name="contenance"
+								id="contenance"
+								v-model="newProduit.contenance"
+								placeholder="Contenance"
+								class="rounded-md border-0 w-3/4"
+							/>
+						</div>
+					</div>
+					<!-- <div class="flex flex-col w-full">
+						<label for="color">Choisissez une couleur: </label>
+						<div class="w-full inline-flex items-center">
+							<input
+								class="rounded-md w-20"
+								type="color"
+								name="color"
+								v-model="newProduit.couleur"
+							/>
+							<input
+								v-model="newProduit.couleur"
+								type="text"
+								class="rounded-md border-none text-gray-400 w-24"
+								disabled
+							/>
+						</div>
+					</div> -->
+					<div class="flex flex-col w-full">
+						<div class="flex flex-col items-start w-full space-y-2 space-x-2">
+							<label
+								for="passwordConfirm"
+								class="flex items-center text-bold h-full rounded-l-md text-md"
+								>Type</label
+							>
+							<Listbox v-model="newProduit.TypeProduit">
+								<div class="relative w-3/4">
+									<ListboxButton
+										class="h-10 relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm border-1"
+									>
+										<span class="block truncate">{{
+											newProduit?.TypeProduit?.nom || "Type"
+										}}</span>
+										<span
+											class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+										>
+											<SelectorIcon
+												class="w-5 h-5 text-gray-400"
+												aria-hidden="true"
+											/>
+										</span>
+									</ListboxButton>
+
+									<transition
+										leave-active-class="transition duration-100 ease-in"
+										leave-from-class="opacity-100"
+										leave-to-class="opacity-0"
+									>
+										<ListboxOptions
+											class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm text-left z-50"
+										>
+											<ListboxOption
+												v-slot="{ active, selected }"
+												v-for="t in types"
+												:key="t.id"
+												:value="t"
+												as="template"
+											>
+												<li
+													:class="[
+														active
+															? 'text-amber-900 bg-amber-100'
+															: 'text-gray-900',
+														'cursor-default select-none relative py-2 pl-10 pr-4',
+													]"
+												>
+													<span
+														:class="[
+															selected ? 'font-medium' : 'font-normal',
+															'block truncate',
+														]"
+														>{{ t.nom }}</span
+													>
+													<span
+														v-if="selected"
+														class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
+													>
+														<CheckIcon class="w-5 h-5" aria-hidden="true" />
+													</span>
+												</li>
+											</ListboxOption>
+										</ListboxOptions>
+									</transition>
+								</div>
+							</Listbox>
+						</div>
+					</div>
+					<div class="flex flex-col w-full">
+						<div class="flex flex-col items-start w-full space-y-2 space-x-2">
+							<label
+								for="passwordConfirm"
+								class="flex items-center text-bold h-full rounded-l-md text-md"
+								>Couleur</label
+							>
+							<Listbox v-model="newProduit.Couleur">
+								<div class="relative w-3/4">
+									<ListboxButton
+										class="h-10 relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm border-1"
+									>
+										<span class="block truncate">{{
+											newProduit?.Couleur?.nom || "Couleur"
+										}}</span>
+										<span
+											class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+										>
+											<SelectorIcon
+												class="w-5 h-5 text-gray-400"
+												aria-hidden="true"
+											/>
+										</span>
+									</ListboxButton>
+
+									<transition
+										leave-active-class="transition duration-100 ease-in"
+										leave-from-class="opacity-100"
+										leave-to-class="opacity-0"
+									>
+										<ListboxOptions
+											class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm text-left"
+										>
+											<ListboxOption
+												v-slot="{ active, selected }"
+												v-for="t in couleurs"
+												:key="t.id"
+												:value="t"
+												as="template"
+											>
+												<li
+													:class="[
+														active
+															? 'text-amber-900 bg-amber-100'
+															: 'text-gray-900',
+														'cursor-default select-none relative py-2 pl-10 pr-4',
+													]"
+												>
+													<span
+														:class="[
+															selected ? 'font-medium' : 'font-normal',
+															'block truncate',
+														]"
+														>{{ t.nom }}</span
+													>
+													<span
+														v-if="selected"
+														class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
+													>
+														<CheckIcon class="w-5 h-5" aria-hidden="true" />
+													</span>
+												</li>
+											</ListboxOption>
+										</ListboxOptions>
+									</transition>
+								</div>
+							</Listbox>
+						</div>
+					</div>
+					<div class="flex flex-col w-full">
+						<div class="flex flex-row items-center w-full space-x-2">
+							<input
+								type="checkbox"
+								name="featured"
+								id="featured"
+								v-model="newProduit.featured"
+								class="rounded-md w-5 h-5 focus:outline-none focus:ring-0"
+							/>
+							<label
+								for="prenom"
+								class="flex items-center text-bold h-full rounded-l-md px-2text-xl"
+								>Mettre a la une</label
+							>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</template>
+		<template v-slot:submit>Ajouter</template>
+	</Modal>
 </template>
 
 <script>
 import Modal from "@/components/Modal";
+import Pagination from "@/components/Pagination";
 import { debounce } from "lodash";
 import {
 	Dialog,
@@ -330,19 +463,26 @@ import {
 	MinusSmIcon,
 	PlusSmIcon,
 	FilterIcon,
-	ChevronDoubleLeftIcon,
-	ChevronDoubleRightIcon,
-	ChevronRightIcon,
-	ChevronLeftIcon,
+
 } from "@heroicons/vue/solid";
-import { XIcon } from "@heroicons/vue/outline";
+import { XIcon, PencilIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar";
 import ProduitService from "@/services/ProduitService";
-import ProductRow from '@/components/ProductRow';
+import ProductRow from "@/components/ProductRow";
+import { Icon } from "@iconify/vue";
+import {
+	Listbox,
+	ListboxButton,
+	ListboxOptions,
+	ListboxOption,
+} from "@headlessui/vue";
 export default {
 	name: "Produits",
 	components: {
-        ProductRow,
+		Pagination,
+		Icon,
+		PencilIcon,
+		ProductRow,
 		SearchBar,
 		Dialog,
 		DialogOverlay,
@@ -355,57 +495,52 @@ export default {
 		MinusSmIcon,
 		PlusSmIcon,
 		XIcon,
-		ChevronDoubleLeftIcon,
-		ChevronDoubleRightIcon,
-		ChevronLeftIcon,
-		ChevronRightIcon,
+		Listbox,
+		ListboxButton,
+		ListboxOptions,
+		ListboxOption,
 		Modal,
 	},
-	async mounted() {
-		this.produits = (await ProduitService.get()).data;
-		this.couleurs = (await ProduitService.getCouleurs()).data;
-		this.types = (await ProduitService.getTypes()).data;
+	async beforeMount() {
+		// document.body.addEventListener('resize',function(){
+		// 	console.log("this")
+		// })
+		// console.log("saha", window)
+		await this.$store.dispatch("getProduits");
+		await this.$store.dispatch("getCouleurs");
+		await this.$store.dispatch("getTypeproduits");
+		// this.couleurs = (await ProduitService.getCouleurs()).data;
+		// this.types = (await ProduitService.getTypes()).data;
 		// this.getUsers();
 	},
 	data() {
 		return {
 			currentPage: 1,
-			produits: [],
 			couleursel: [],
 			typesel: [],
+			newProduit: {},
 			mobileFiltersOpen: false,
-			couleurs: [],
-			types: [],
 		};
 	},
 	methods: {
-		prevpage(){
-			if(this.currentPage == 1) return;
-			this.currentPage--;
+		async create(){
+			await this.$store.dispatch('addProduit',this.newProduit)
+			this.$refs.createmodal.open = false
 		},
-		nextpage(){
-			if(this.currentPage == this.pageNumber) return;
-			this.currentPage++;
+		pencilCLick() {
+			this.$refs.fileInput.click();
 		},
-		firstpage(){
-			if(this.currentPage == 1) return;
-			this.currentPage = 1;
+		openCreateModal() {
+			this.$refs.createmodal.open = true;
 		},
-		lastpage(){
-			if(this.currentPage == this.pageNumber) return;
-			this.currentPage = this.pageNumber;
-		},
+	
 		searchfn: debounce(async function (e) {
-			this.users = (
-				await ProduitService.get({
-					TypeProduitId: this.typesel || "",
-					CouleurId: this.couleursel || "",
-					featured: e || "",
-					contenance: e || "",
-					prix: e || "",
-					quantite: e || "",
-				})
-			).data;
+			this.$store.dispatch("getProduits", {
+				nom: e.target.value,
+				contenance: e.target.value,
+				couleur: this.couleursel,
+				type: this.typesel,
+			});
 		}, 500),
 		opendeletemodal(produit) {
 			this.$refs.deletemodal.open = true;
@@ -419,20 +554,22 @@ export default {
 		},
 	},
 	computed: {
-        // searchopen(){
-        //     console.log(this.$refs)
-        //     return this.$refs.searchbar.open
-        // },
-        nbperpage(){
-            if(window.innerWidth >= 640 && window.innerWidth < 768)
-                return 2*5;
-            else if(window.innerWidth >= 768 && window.innerWidth < 1280)
-                return 3*5
-            else if(window.innerWidth > 1280)
-                return 4*5;
-            else
-                return 1*5
-        },
+		couleurs() {
+			return this.$store.getters.getCouleurs;
+		},
+		types() {
+			return this.$store.getters.getTypeproduits;
+		},
+		produits() {
+			return this.$store.getters.getProduits;
+		},
+		nbperpage() {
+			if (window.innerWidth >= 640 && window.innerWidth < 768) return 2 * 5;
+			else if (window.innerWidth >= 768 && window.innerWidth < 1280)
+				return 3 * 5;
+			else if (window.innerWidth > 1280) return 4 * 5;
+			else return 6;
+		},
 		showedProduits() {
 			let produits = this.produits;
 			if (
@@ -445,14 +582,24 @@ export default {
 				(this.currentPage - 1) * this.nbperpage + this.nbperpage
 			);
 		},
-		pageNumber() {
-			let nb = this.produits.length / this.nbperpage;
-			if (this.produits.length % this.nbperpage != 0) nb++;
-			return parseInt(nb);
-		},
 	},
 	watch: {
-	
+		couleursel() {
+			this.$store.dispatch("getProduits", {
+				nom: this.$refs.searchbar.search,
+				contenance: this.$refs.searchbar.search,
+				couleur: this.couleursel,
+				type: this.typesel,
+			});
+		},
+		typesel() {
+			this.$store.dispatch("getProduits", {
+				nom: this.$refs.searchbar.search,
+				contenance: this.$refs.searchbar.search,
+				couleur: this.couleursel,
+				type: this.typesel,
+			});
+		},
 	},
 };
 </script>
@@ -469,12 +616,11 @@ export default {
 	transform: rotate(-45deg);
 }
 .diamond.hidden {
-    display: none;
+	display: none;
 }
 @media screen and (min-width: 640px) {
-
-    .diamond.sm\:flex{
-        display:flex;
-    }
+	.diamond.sm\:flex {
+		display: flex;
+	}
 }
 </style>

@@ -213,7 +213,6 @@ export default {
 	},
 	methods: {
 		async save() {
-			console.log(UserService);
 			const id = this.$store.state.user.id;
 			if (this.editing) {
 				let rep = await UserService.update({

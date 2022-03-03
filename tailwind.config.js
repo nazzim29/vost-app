@@ -1,7 +1,12 @@
 const colors = require("tailwindcss/colors");
 const plugin = require("tailwindcss/plugin");
 module.exports = {
-	content: ["./public/**/*.html", "./src/**/*.vue","./src/**/*.js","./src/*.vue"],
+	content: [
+		"./public/**/*.html",
+		"./src/**/*.vue",
+		"./src/**/*.js",
+		"./src/*.vue",
+	],
 	presets: [],
 	darkMode: "media", // or 'media' or 'class'
 
@@ -1174,5 +1179,14 @@ module.exports = {
 		wordBreak: ["responsive"],
 		zIndex: ["responsive", "focus-within", "focus"],
 	},
-	plugins: [require("@tailwindcss/forms")],
+	plugins: [require("@tailwindcss/forms"), require("daisyui")],
+	daisyui: {
+		styled: true,
+		themes: true,
+		base: true,
+		utils: true,
+		logs: true,
+		rtl: false,
+		darkTheme: "dark",
+	},
 };
