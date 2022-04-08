@@ -1,7 +1,8 @@
 import ClientService from "@/services/ClientService";
 const defaultState = () => ({
     clients: [],
-    client:{}
+	client: {},
+	typeClient: [],
 });
 const fonctionsModule = {
 	state: defaultState(),
@@ -11,6 +12,9 @@ const fonctionsModule = {
 		},
 		showClient(state, commande) {
 			state.commande = commande;
+		},
+		getTypeClients(state, typeClient) {
+			state.typeClient = typeClient;
 		},
 	},
 	actions: {
@@ -59,10 +63,20 @@ const fonctionsModule = {
 					return context.dispatch("add-error", err.response.data.message);
 				});
 		},
+		getTypeClients(context) {
+			return ClientService.getTypeClient()
+				.then((res) => {
+					return context.commit("getTypeClients", res.data);
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
 	},
 	getters: {
 		getClients: (state) => state.commandes,
 		getClient: (state) => state.commande,
+		getTypeClients: (state) => state.typeClient,
 	},
 };
 

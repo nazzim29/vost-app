@@ -5,6 +5,8 @@ import fonctions from "./fonctionModule";
 import produits from "./produitModule";
 import commandes from "./commandeModule";
 import clients from "./clientModule";
+import vente from "./venteModule";
+import matiere from "./matiereModule";
 export default createStore({
   plugins: [createPersistedState({paths:['users.jwt',"users.authenticated","users.user"]})],
   modules: {
@@ -13,5 +15,7 @@ export default createStore({
     produits,
     commandes,
     clients,
+    vente,
+    matiere
   }
 })

@@ -172,95 +172,49 @@
 			</div>
 			<div class="flex flex-row w-full">
 				<div class="flex-row mt-2 w-full">
-					<!-- <h1
-						:class="[extended ? 'h-6 w-full' : 'w-0 h-0']"
-						class="
-							overflow-hidden
-							text-gray-400
-							ml-1font-light
-							inline-flex
-							justify-center
-						"
-					>
-						Utilisateurs
-					</h1> -->
-					<Disclosure v-slot="{ open }">
-						<DisclosureButton
-							class="group transition-colors duration-100 ease-linear w-full h-16 text-white inline-flex overflow-hidden space-x-2 items-center outline-0"
-							:class="[
-								this.$router.currentRoute.value.name === 'User'
-									? 'bg-gray-600 bg-opacity-90 border-r-2 border-blue-700'
-									: 'bg-gray-900 hover:bg-gray-500',
-								,
-								this.extended
-									? 'justify-evenly p-1 delay-200'
-									: 'justify-center delay-200 ',
-							]"
-						>
-							<Icon
-								class="transition-all ease-linear flex-1 w-10 h-10"
-								icon="gridicons:multiple-users"
-							/>
-							<label
-								
-								class="overflow-hidden inline-flex items-center"
-								:class="[extended ? 'w-3/4 h-full' : 'w-0 h-0']"
-								v-if="extended"
-								>Utilisateurs</label
-							>
-							<div
-								class="inline-flex justify-end"
-								:class="[extended ? 'w-1/4 pr-2' : 'w-0 h-0']"
-								v-if="extended"
-							>
-								<Icon
-									icon="akar-icons:chevron-down"
-									class="w-5 h-5 transition-all duration-100"
-									:class="[open ? 'transform rotate-180' : '']"
-								/>
-							</div>
-						</DisclosureButton>
-						<transition
-							enter-active-class="transition duration-100 ease-out"
-							enter-from-class="transform scale-95 opacity-0"
-							enter-to-class="transform scale-100 opacity-100"
-							leave-active-class="transition duration-75 ease-out"
-							leave-from-class="transform scale-100 opacity-100"
-							leave-to-class="transform scale-95 opacity-0"
-						>
-							<DisclosurePanel
-								class="flex flex-col w-auto transition-all duration-750"
-							>
-								<DisclosureButton
-									:as="div"
-									class="group transition-colors duration-100 ease-linear w-full h-8 text-white inline-flex overflow-hidden space-x-2 items-center"
-									:class="[
-										this.$router.currentRoute.value.name === 'User'
-											? 'bg-gray-600 bg-opacity-90 border-r-2 border-blue-700'
-											: 'bg-gray-900 hover:bg-gray-500',
-										,
-										'justify-evenly p-1 delay-200'
-									]"
-									@click="goto('/user')"
-									v-if="extended"
-								>Liste des Utilisateurs</DisclosureButton>
-								<DisclosureButton
-									:as="div"
-									class="group transition-colors duration-100 ease-linear w-full h-8 text-white inline-flex overflow-hidden space-x-2 items-center"
-									:class="[
-										this.$router.currentRoute.value.name === 'Fonction'
-											? 'bg-gray-600 bg-opacity-90 border-r-2 border-blue-700'
-											: 'bg-gray-900 hover:bg-gray-500',
-										,'justify-evenly p-1 delay-200'
-									]"
-									@click="goto('/fonction')"
-									v-if="extended"
-								>Gestion des autorisations</DisclosureButton>
-							</DisclosurePanel>
-						</transition>
-					</Disclosure>
+					
 					<div
-						class="group transition-colors duration-100 ease-linear w-full h-16 text-white inline-flex space-x-2 justify-center items-center"
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'User'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						@click="goto('/user')"
+					>
+						<Icon
+							icon="clarity:employee-group-solid"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Utilisateurs</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Fonction'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						@click="goto('/fonction')"
+					>
+						<Icon
+							icon="icon-park-outline:permissions"
+							class="transition-all ease-linear  flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Privileges</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
 							this.$router.currentRoute.value.name === 'Produits'
 								? 'bg-gray-600 border-r-2 border-blue-700'
@@ -280,7 +234,127 @@
 						>
 					</div>
 					<div
-						class="group transition-colors duration-100 ease-linear w-full h-16 text-white inline-flex space-x-2 justify-center items-center"
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Ventes'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						@click="goto('/ventes')"
+					>
+						<Icon
+							icon="mdi:shipping-pallet"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Ventes</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'MatierePremiere'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						@click="goto('/MatierePremiere')"
+					>
+						<Icon
+							icon="ri:paint-fill"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Matieres premiere</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Formules'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						@click="goto('/Formules')"
+					>
+						<Icon
+							icon="icon-park-outline:composition"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Formules</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Productions'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						@click="goto('/Productions')"
+					>
+						<Icon
+							icon="lucide:package-plus"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Productions</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'ContactClient'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						@click="goto('/contact-client')"
+					>
+						<Icon
+							icon="icon-park-outline:mail-package"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Contact Client</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Messagerie'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						@click="goto('/messagerie')"
+					>
+						<Icon
+							icon="ant-design:message-filled"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Messagerie</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
 							this.$router.currentRoute.value.name === 'Commandes'
 								? 'bg-gray-600 border-r-2 border-blue-700'
@@ -291,12 +365,33 @@
 					>
 						<Icon
 							class="transition-all ease-linear flex-1 w-10 h-10"
-							icon="eos-icons:job"
+							icon="icon-park-outline:transaction-order"
 						/>
 						<label
 							class="h-6 overflow-hidden"
 							:class="[extended ? 'w-full' : 'w-0']"
 							>Commandes</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Clients'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1 pr-1' : 'justify-center',
+						]"
+						@click="goto('/clients')"
+					>
+						<Icon
+							class="transition-all ease-linear flex-1 w-10 h-10"
+							
+							icon="gridicons:multiple-users"
+						/>
+						<label
+							class="h-6 overflow-hidden"
+							:class="[extended ? 'w-full' : 'w-0']"
+							>Clients</label
 						>
 					</div>
 				</div>
@@ -320,13 +415,10 @@
 <script>
 import "alpinejs";
 import { Icon } from "@iconify/vue";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 export default {
 	components: {
 		Icon,
-		Disclosure,
-		DisclosureButton,
-		DisclosurePanel,
+
 		// TransitionRoot,
 	},
 	mounted() {},

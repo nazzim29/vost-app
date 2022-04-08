@@ -77,9 +77,7 @@
 												<div
 													class="px-2 py-3 bg-gray-700 w-full flex items-center justify-between text-gray-400 hover:text-gray-200"
 												>
-													<span class="font-medium text-gray-400">
-														Fonctions
-													</span>
+													<span class="font-medium text-gray-400"> Types </span>
 													<span class="ml-6 flex items-center">
 														<PlusSmIcon
 															v-if="!open"
@@ -96,21 +94,21 @@
 											</DisclosureButton>
 										</h3>
 										<DisclosurePanel class="pt-6">
-											<div v-if="fonctions?.length > 0" class="space-y-6">
+											<div v-if="types?.length > 0" class="space-y-6">
 												<div
-													v-for="fonction in fonctions"
-													:key="fonction.id"
+													v-for="type in types"
+													:key="type.id"
 													class="flex items-center"
 												>
 													<input
-														:value="fonction.id"
+														:value="type.id"
 														type="checkbox"
-														:checked="fonction.checked"
+														:checked="type.checked"
 														class="h-4 w-4 border-gray-400 rounded text-blue-600 focus:ring-blue-500"
-														v-model="fonctionsel"
+														v-model="typesel"
 													/>
 													<label class="ml-3 min-w-0 flex-1 text-gray-500">
-														{{ fonction.nom }}
+														{{ type.type }}
 													</label>
 												</div>
 											</div>
@@ -125,17 +123,16 @@
 		</div>
 		<div class="flex-1 flex flex-col overflow-hidden">
 			<div
-				v-if="showedusers?.length != 0"
+				v-if="showedClients?.length != 0"
 				class="w-full flex flex-1 flex-col overflow-y-auto"
 			>
 				<ul
-					class="w-full h-full grid grid-rows-10 md:grid-cols-4 space-y-2 md:space-y-0 items-center"
+					class="w-full h-full overflow-hidden flex flex-row flex-wrap justify-evenly space-y-2"
 				>
-					<UserRow
-						v-for="user in showedusers"
-						:key="user.id"
-						:user="user"
-						@delete="openModal"
+					<ClientRow
+						v-for="client in showedClients"
+						:key="client.id"
+						:client="client"
 					/>
 				</ul>
 			</div>
@@ -143,7 +140,7 @@
 				ref="Pagination"
 				:currentPage="currentPage"
 				:pageSize="nbperpage"
-				:dataLength="users.length"
+				:dataLength="clients?.length || 0"
 				@page="currentPage = $event"
 				@next="currentPage++"
 				@prev="currentPage--"
@@ -152,83 +149,26 @@
 			/>
 		</div>
 	</div>
-	<Modal ref="createModal" primaryColor="haja" @submit="addUser">
-		<template v-slot:title>Ajouter un utilisateur</template>
+	<Modal ref="createModal" primaryColor="haja" @submit="addClient">
+		<template v-slot:title>Ajouter un client</template>
 		<template v-slot:body>
-			<div class="flex flex-col w-full pb-5 overflow-y-auto">
-				<div class="relative mt-5 self-center w-28 h-28">
-					<img
-						ref="avatarDisplay"
-						class="w-full object-fit h-full rounded-md overflow-hidden"
-						src="https://therminic2018.eu/wp-content/uploads/2018/07/dummy-avatar.jpg"
-					/>
-					<PencilIcon
-						class="absolute w-5 bottom-1 right-1"
-						@click="pencilCLick"
-					/>
-					<input
-						type="file"
-						style="display: none"
-						class="absolute w-5 bottom-1 right-1"
-						ref="fileInput"
-						@change="avatarChanged"
-					/>
-				</div>
+			<div class="flex flex-col w-full pt-16 pb-5 overflow-hidden">
 				<div class="flex flex-col space-y-3 mt-4 px-2">
 					<div class="flex flex-col w-full space-y-2 space-x-2">
 						<label
 							class="flex items-center text-bold h-full rounded-l-md text-md"
-							>Username</label
+							>Raison Sociale</label
 						>
 						<div
-							class="flex flex-row items-cente w-3/4 focus-within:ring-1 rounded-md ring-blue-600"
+							class="flex flex-row items-cente w-auto focus-within:ring-1 rounded-md ring-blue-600 overflow-hidden"
 						>
-							<label
-								for="username"
-								class="flex items-center uppercase text-bold h-full rounded-l-md px-2 bg-gray-200 text-gray-800 text-xl border-t border-l border-b"
-								>@</label
-							>
 							<input
 								type="text"
-								name="username"
-								id="username"
-								v-model="newUser.username"
-								placeholder="Username"
+								name="raison_social"
+								id="raison_social"
+								v-model="newClient.raisonSociale"
+								placeholder="Raison social"
 								class="rounded-r-md border-0 focus:ring-0"
-							/>
-						</div>
-					</div>
-					<div class="flex flex-col w-full">
-						<div class="flex flex-col items-start space-y-2 space-x-2 w-full">
-							<label
-								for="nom"
-								class="flex items-center text-bold h-full rounded-l-md text-md"
-								>Nom</label
-							>
-							<input
-								type="text"
-								name="nom"
-								id="nom"
-								v-model="newUser.nom"
-								placeholder="Nom"
-								class="rounded-md border-0 w-3/4"
-							/>
-						</div>
-					</div>
-					<div class="flex flex-col w-full">
-						<div class="flex flex-col items-start w-full space-y-2 space-x-2">
-							<label
-								for="prenom"
-								class="flex items-center text-bold h-full rounded-l-md px-2text-xl"
-								>Prenom</label
-							>
-							<input
-								type="text"
-								name="prenom"
-								id="prenom"
-								v-model="newUser.prenom"
-								placeholder="Prenom"
-								class="rounded-md border-0 w-3/4"
 							/>
 						</div>
 					</div>
@@ -239,19 +179,43 @@
 							>Numero</label
 						>
 						<div
-							class="flex flex-row items-cente w-3/4 focus-within:ring-1 rounded-md ring-blue-600"
+							class="flex flex-row items-cente w-auto focus-within:ring-1 rounded-md ring-blue-600 overflow-hidden"
 						>
 							<label
 								for="numero"
-								class="flex items-center uppercase text-bold h-full rounded-l-md px-2 bg-gray-200 text-gray-800 text-md border-t border-l border-b"
+								class="flex items-center uppercase text-bold rounded-l-md px-2 bg-gray-200 text-gray-800 text-md border-t border-l border-b"
 								>+213</label
 							>
 							<input
-								type="text"
+								type="tel"
 								name="numero"
 								id="numero"
-								v-model="newUser.numero"
+								v-model="newClient.numero"
 								placeholder="Numero de telephone"
+								class="rounded-r-md border-0 focus:ring-0"
+							/>
+						</div>
+					</div>
+					<div class="flex flex-col w-full space-y-2 space-x-2">
+						<label
+							for="numero"
+							class="flex items-center text-bold h-full rounded-l-md text-md"
+							>Numero secondaire</label
+						>
+						<div
+							class="flex flex-row items-cente w-auto focus-within:ring-1 rounded-md ring-blue-600"
+						>
+							<label
+								for="numero"
+								class="flex items-center uppercase text-bold flex-1 rounded-l-md px-2 bg-gray-200 text-gray-800 text-md border-t border-l border-b"
+								>+213</label
+							>
+							<input
+								type="tel"
+								name="numero_secondaire"
+								id="numero_secondaire"
+								v-model="newClient.numeroSecondaire"
+								placeholder="Numero de telephone (optionel)"
 								class="rounded-r-md border-0 focus:ring-0"
 							/>
 						</div>
@@ -261,15 +225,16 @@
 							<label
 								for="passwordConfirm"
 								class="flex items-center text-bold h-full rounded-l-md text-md"
-								>Fonction</label
+								>Type</label
 							>
-							<Listbox v-model="newUser.ProfileId">
-								<div class="relative w-3/4">
+							<Listbox v-model="newClient.TypeClientId">
+								<div class="relative w-full mx-1 space-x-auto">
 									<ListboxButton
 										class="h-10 relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm border-1"
 									>
 										<span class="block truncate">{{
-											newUser?.fonction?.nom || "Fonction"
+											types.find((el) => el.id == newClient.TypeClientId)
+												?.type || "Type"
 										}}</span>
 										<span
 											class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
@@ -287,11 +252,11 @@
 										leave-to-class="opacity-0"
 									>
 										<ListboxOptions
-											class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm text-left"
+											class="absolute mt-1 w-11/12 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm text-left"
 										>
 											<ListboxOption
 												v-slot="{ active, selected }"
-												v-for="f in fonctions"
+												v-for="f in types"
 												:key="f.id"
 												:value="f.id"
 												as="template"
@@ -309,7 +274,7 @@
 															selected ? 'font-medium' : 'font-normal',
 															'block truncate',
 														]"
-														>{{ f.nom }}</span
+														>{{ f.type }}</span
 													>
 													<span
 														v-if="selected"
@@ -329,16 +294,16 @@
 						<div class="flex flex-col items-start space-y-2 space-x-2 w-full">
 							<label
 								for="password"
-								class="flex items-center text-bold h-full rounded-l-md px-2text-xl"
+								class="flex items-center text-bold h-full rounded-l-md px-2"
 								>Mot de passe</label
 							>
 							<input
 								type="password"
 								name="password"
 								id="password"
-								v-model="newUser.password"
+								v-model="newClient.password"
 								placeholder="Mot de passe"
-								class="rounded-md border-0 w-3/4"
+								class="rounded-md border-0 w-auto"
 							/>
 						</div>
 					</div>
@@ -353,9 +318,9 @@
 								type="password"
 								name="passwordConfirm"
 								id="passwordConfirm"
-								v-model="newUser.passwordConfirm"
+								v-model="newClient.passwordConfirm"
 								placeholder="Confirmation"
-								class="rounded-md border-0"
+								class="rounded-md border-0 w-auto"
 							/>
 						</div>
 					</div>
@@ -390,13 +355,13 @@ import {
 	CheckIcon,
 	SelectorIcon,
 } from "@heroicons/vue/solid";
-import { XIcon, PencilIcon } from "@heroicons/vue/outline";
+import { XIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar";
 // import UserService from "@/services/UserService";
-import UserRow from "@/components/UserRow";
+import ClientRow from "@/components/ClientRow";
 import { Icon } from "@iconify/vue";
 export default {
-	name: "UsersIndex",
+	name: "ClientIndex",
 	components: {
 		Pagination,
 		SearchBar,
@@ -405,7 +370,7 @@ export default {
 		Disclosure,
 		DisclosureButton,
 		DisclosurePanel,
-		UserRow,
+		ClientRow,
 		TransitionChild,
 		TransitionRoot,
 		FilterIcon,
@@ -414,7 +379,6 @@ export default {
 		XIcon,
 		Modal,
 		Icon,
-		PencilIcon,
 		CheckIcon,
 		SelectorIcon,
 		Listbox,
@@ -424,34 +388,38 @@ export default {
 	},
 	async beforeMount() {
 		// $(window).on('resize',this.)
-		await this.$store.dispatch("getUsers");
-		await this.$store.dispatch("getFonctions");
+		await this.$store.dispatch("getClients");
+		await this.$store.dispatch("getTypeClients");
 	},
 	data() {
 		return {
-			newUser: {},
-			fonctionsel: [],
-			currentPage:1,
+			newClient: {
+				raisonSociale: null,
+				numero: null,
+				numeroSecondaire: null,
+				email: null,
+				password: null,
+				paswordConfirm: null,
+			},
+			typesel: [],
+			currentPage: 1,
 			mobileFiltersOpen: false,
-			subCategories: [],
-			subcategorytitle: "hey",
 		};
 	},
 	methods: {
 		searchfn: debounce(function (e) {
-			this.$store.dispatch("getUsers", {
-				ProfileId: this.fonctionsel,
-				nom: e,
-				prenom: e,
-				username: e,
+			this.$store.dispatch("getClients", {
+				TypeClientId: this.fonctionsel,
+				raisonSociale: e,
 				numero: e,
+				numeroSecondaire: e,
 			});
 		}, 500),
-		openModal(user) {
+		openModal(client) {
 			this.$refs.modal.open = true;
-			this.$refs.modal.user = user;
+			this.$refs.modal.client = client;
 		},
-		
+
 		pencilCLick() {
 			this.$refs.fileInput.click();
 		},
@@ -463,14 +431,14 @@ export default {
 		openCreateModal() {
 			this.$refs.createModal.open = true;
 		},
-		addUser() {
-			this.$store.dispatch("addUser", this.newUser);
+		addClient() {
+			this.$store.dispatch("addClient", this.newClient);
 			this.$refs.createModal.open = false;
 		},
 	},
 	computed: {
-		users() {
-			return this.$store.getters.getUsers;
+		clients() {
+			return this.$store.getters.getClients;
 		},
 		nbperpage() {
 			if (window.innerWidth >= 640 && window.innerWidth < 768) return 2 * 5;
@@ -482,38 +450,29 @@ export default {
 			return [
 				{
 					id: "nom",
-					name: "Fonctions",
-					options: this.fonctions,
+					name: "Types",
+					options: this.types,
 				},
 			];
 		},
-		showedusers() {
+		showedClients() {
 			let cp = this.$refs?.Pagination?.currentPage || 1;
-			let users = this.users;
-			if (!users) return [];
-			return users.slice((cp - 1) * this.nbperpage, cp * this.nbperpage);
+			let clients = this.clients;
+			if (!clients) return [];
+			return clients.slice((cp - 1) * this.nbperpage, cp * this.nbperpage);
 		},
 
-		fonctions() {
-			return this.$store.getters.getFonctions;
+		types() {
+			return this.$store.getters.getTypeClients;
 		},
 	},
 	watch: {
-		fonctionsel: function () {
-			this.$store.dispatch("getUsers", {
-				...(this.fonctionsel.length != 0 && { ProfileId: this.fonctionsel }),
-				...(this.$refs.searchbar.search != "" && {
-					nom: this.$refs.searchbar.search,
-				}),
-				...(this.$refs.searchbar.search != "" && {
-					prenom: this.$refs.searchbar.search,
-				}),
-				...(this.$refs.searchbar.search != "" && {
-					username: this.$refs.searchbar.search,
-				}),
-				...(this.$refs.searchbar.search != "" && {
-					numero: this.$refs.searchbar.search,
-				}),
+		typesel: function () {
+			this.$store.dispatch("getClients", {
+				TypeClientId: this.typesel,
+				raisonSociale: this.$refs.searchbar.search,
+				numero: this.$refs.searchbar.search,
+				numeroSecondaire: this.$refs.searchbar.search,
 			});
 		},
 	},

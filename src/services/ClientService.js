@@ -11,9 +11,12 @@ export default {
 		return Api.get("/client/" + id);
 	},
 	update(client) {
-		return Api.put("/client/" + client.id, client);
+		return Api.patch("/client/" + client.id, client);
 	},
 	destroy(id) {
 		return Api.delete("/client/" + id);
 	},
+	getTypeClient() {
+		return Api.get("/typeClient");
+	}
 };

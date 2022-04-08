@@ -182,8 +182,8 @@ export default {
 	},
 	props: ["user"],
 	methods: {
-		async deleteUser(user) {
-			this.$store.dispatch("deleteUser", user.id);
+		async deleteUser() {
+			this.$store.dispatch("deleteUser", this.user.id);
 			this.$refs.deleteModal.open = false;
 		}
 	},

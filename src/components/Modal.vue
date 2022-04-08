@@ -33,8 +33,7 @@
 					<div
 						class="
 							overflow-hidden
-							min-h-max
-							max-w-xl
+							mx-5
 							pt-2
 							inline-flex
 							flex-col
@@ -45,14 +44,17 @@
 							shadow-xl
 							rounded-2xl
 						"
+						style="
+							max-height: calc(100vh - 16px);
+						"
 					>
 						<DialogTitle
 							as="h3"
-							class="text-lg font-medium leading-6 text-gray-900 shadow-md pb-1"
+							class="text-lg font-medium leading-6 text-gray-900 shadow-md pb-1 mx-2"
 						>
 							<slot name="title"></slot>
 						</DialogTitle>
-						<div class="flex flex-1 overflow-hidden py-2 px-3 min-h-16 items-center">
+						<div class="flex flex-1 overflow-hidden min-h-16 items-center overflow-y-auto">
 							<slot name="body" :obj="obj"></slot>
 						</div>
 

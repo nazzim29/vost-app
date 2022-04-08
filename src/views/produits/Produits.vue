@@ -1,12 +1,13 @@
 <template>
 	<div
-		class="flex flex-col w-full justify-center items-center h-full bg-gray-700 overflow-hidden"
+		:class="['flex flex-col w-full justify-center items-center h-full bg-gray-700 overflow-hidden']"
+		
 	>
 		<div class="flex self-start w-full items-center space-x-3 h-16 py-1 px-2">
 			<SearchBar ref="searchbar" @search="searchfn" />
 			<div
 				class="rounded-full py-2 px-2 bg-gray-500"
-				:class="{ hidden: refs?.searchbar?.open }"
+				:class="{ hidden: $refs?.searchbar?.open }"
 			>
 				<FilterIcon
 					@click="mobileFiltersOpen = !mobileFiltersOpen"
@@ -179,13 +180,14 @@
 				class="h-full md:justify-center aligned-center w-full flex flex-1 flex-col overflow-auto overflow-x-hidden py-3"
 			>
 				<ul
-					class="w-full h-full grid grid-flow-row gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-center items-center"
+					class="w-full h-full grid grid-flow-row gap-4 grid-cols-1 p-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-center items-center"
 				>
 					<ProductRow
 						v-for="produit in showedProduits"
 						:key="produit.id"
 						:produit="produit"
 						@delete="opendeletemodal"
+						@show="showProduct"
 					/>
 				</ul>
 			</div>
@@ -202,23 +204,18 @@
 			/>
 		</div>
 	</div>
-	<Modal ref="deletemodal" primaryColor="haja" @submit="deleteproduit">
-		<template v-slot:title>Archiver un produit</template>
-		<template v-slot:text="slotProps"
-			>Etes-vous sur de vouloir archiver le produit
-			{{ slotProps.produit.id }}</template
-		>
-		<template v-slot:submit>archiver</template>
-	</Modal>
 	<Modal ref="createmodal" primaryColor="haja" @submit="create">
 		<template v-slot:title>Ajouter un produit</template>
 		<template v-slot:body>
 			<div class="flex flex-col w-full pb-5 overflow-y-auto">
-				<div class="relative mt-5 self-center mx-4">
+				<div class="relative mt-24 self-center mx-4 max-w-xs">
 					<img
 						ref="avatarDisplay"
 						class="w-full object-fit h-full rounded-md overflow-hidden"
-						src="https://therminic2018.eu/wp-content/uploads/2018/07/dummy-avatar.jpg"
+						:src="
+							newProduit.image ||
+							`${api_url}/uploads/products/default.jpeg`
+						"
 					/>
 					<PencilIcon
 						class="absolute w-5 bottom-1 right-1"
@@ -423,6 +420,25 @@
 						</div>
 					</div>
 					<div class="flex flex-col w-full">
+						<div class="flex flex-col items-start w-full space-x-2">
+							<label
+								for="prenom"
+								class="flex items-center text-bold h-full rounded-l-md px-2text-xl"
+								>Description</label
+							>
+							<div>
+								<QuillEditor
+									v-model:content="newProduit.description"
+									contentType="html"
+									ref='quill'
+									placeholder="Description ..."
+									theme="snow"
+									@focus="focus"
+								></QuillEditor>
+							</div>
+						</div>
+					</div>
+					<div class="flex flex-col w-full">
 						<div class="flex flex-row items-center w-full space-x-2">
 							<input
 								type="checkbox"
@@ -438,7 +454,6 @@
 							>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</template>
@@ -463,11 +478,11 @@ import {
 	MinusSmIcon,
 	PlusSmIcon,
 	FilterIcon,
-
+	SelectorIcon,
+	CheckIcon,
 } from "@heroicons/vue/solid";
 import { XIcon, PencilIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar";
-import ProduitService from "@/services/ProduitService";
 import ProductRow from "@/components/ProductRow";
 import { Icon } from "@iconify/vue";
 import {
@@ -476,9 +491,13 @@ import {
 	ListboxOptions,
 	ListboxOption,
 } from "@headlessui/vue";
+import { QuillEditor } from "@vueup/vue-quill";
 export default {
 	name: "Produits",
 	components: {
+		QuillEditor,
+		SelectorIcon,
+		CheckIcon,
 		Pagination,
 		Icon,
 		PencilIcon,
@@ -506,6 +525,7 @@ export default {
 		// 	console.log("this")
 		// })
 		// console.log("saha", window)
+		await this.$store.dispatch("getMatieres")
 		await this.$store.dispatch("getProduits");
 		await this.$store.dispatch("getCouleurs");
 		await this.$store.dispatch("getTypeproduits");
@@ -518,14 +538,29 @@ export default {
 			currentPage: 1,
 			couleursel: [],
 			typesel: [],
-			newProduit: {},
+			newProduit: {
+				description: ''
+			},
 			mobileFiltersOpen: false,
+			api_url: process.env.VUE_APP_API_URL
 		};
 	},
 	methods: {
-		async create(){
-			await this.$store.dispatch('addProduit',this.newProduit)
-			this.$refs.createmodal.open = false
+		
+		picturechanged(event) {
+			this.newProduit.image = URL.createObjectURL(event.target.files[0]);
+		},
+		getImageUrl(image) {
+			let a = process.env.VUE_APP_API_URL + "uploads/products" + image;
+			console.error({ a });
+			return a;
+		},
+		async create() {
+			await this.$store.dispatch("addProduit", {
+				...this.newProduit,
+				image: this.$refs.fileInput.files[0],
+			});
+			this.$refs.createmodal.open = false;
 		},
 		pencilCLick() {
 			this.$refs.fileInput.click();
@@ -533,27 +568,24 @@ export default {
 		openCreateModal() {
 			this.$refs.createmodal.open = true;
 		},
-	
+
 		searchfn: debounce(async function (e) {
 			this.$store.dispatch("getProduits", {
-				nom: e.target.value,
-				contenance: e.target.value,
-				couleur: this.couleursel,
-				type: this.typesel,
+				nom: e,
+				contenance: e,
+				CouleurId: this.couleursel,
+				TypeProduitId: this.typesel,
 			});
 		}, 500),
 		opendeletemodal(produit) {
 			this.$refs.deletemodal.open = true;
 			this.$refs.deletemodal.produit = produit;
 		},
-		async deleteproduit(produit) {
-			console.log(produit.id);
-			await ProduitService.destroy(produit.id);
-			this.$refs.modal.open = false;
-			this.searchfn("");
-		},
 	},
 	computed: {
+		txt(){
+			return this.newProduit.description?.getText()||true;
+		},
 		couleurs() {
 			return this.$store.getters.getCouleurs;
 		},
@@ -589,7 +621,7 @@ export default {
 				nom: this.$refs.searchbar.search,
 				contenance: this.$refs.searchbar.search,
 				couleur: this.couleursel,
-				type: this.typesel,
+				TypeProduitId: this.typesel,
 			});
 		},
 		typesel() {
@@ -597,7 +629,7 @@ export default {
 				nom: this.$refs.searchbar.search,
 				contenance: this.$refs.searchbar.search,
 				couleur: this.couleursel,
-				type: this.typesel,
+				TypeProduitId: this.typesel,
 			});
 		},
 	},

@@ -96,7 +96,6 @@ export default {
         pageNumber() {
 			let nb = this.dataLength / this.pageSize;
 			if (this.dataLength % this.pageSize != 0) nb++;
-            console.log(nb)
 			return parseInt(nb);
 		},
     }

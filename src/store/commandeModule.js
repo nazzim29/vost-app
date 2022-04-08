@@ -1,7 +1,7 @@
 import CommandeService from "@/services/CommandeService";
 const defaultState = () => ({
 	commandes: [],
-	commande:{},
+	commande: {},
 });
 const fonctionsModule = {
 	state: defaultState(),
@@ -10,8 +10,8 @@ const fonctionsModule = {
 			state.commandes = commandes;
 		},
 		showCommande(state, commande) {
-			state.commande = commande
-		}
+			state.commande = commande;
+		},
 	},
 	actions: {
 		getCommandes(context, query) {
@@ -24,11 +24,24 @@ const fonctionsModule = {
 				});
 		},
 		showCommande(context, id) {
-			return CommandeService.show(id)
-			.then((res) => {
-					return context.commit("showCommande",res.data)
-				})
-				.catch((err) => context.dispatch("add-error", err.response.data.message))	
+			if (id == "new") {
+				console.log(context);
+				context.commit("showCommande", {
+					Client: {},
+					Produits: [],
+					User: context.getters.getCurrentUser,
+					etat: "non Enregistré",
+					montant: 0,
+					Payements: [],
+				});
+			} else
+				return CommandeService.show(id)
+					.then((res) => {
+						return context.commit("showCommande", res.data);
+					})
+					.catch((err) =>
+						context.dispatch("add-error", err.response.data.message)
+					);
 		},
 		deleteCommande(context, id) {
 			return CommandeService.destroy(id)
@@ -39,10 +52,13 @@ const fonctionsModule = {
 					return context.dispatch("add-error", err.response.data.message);
 				});
 		},
+		setCommande(context, commande) {
+			return context.commit("showCommande", commande);
+		},
 		addCommande(context, commande) {
 			return CommandeService.create(commande)
-				.then(() => {
-					return context.dispatch("getCommandes", {});
+				.then(({ data }) => {
+					return context.commit("showCommande", data);
 				})
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
@@ -50,8 +66,46 @@ const fonctionsModule = {
 		},
 		updateCommande(context, commande) {
 			return CommandeService.update(commande)
+				.then((c) => {
+					return context.commit("showCommande", c);
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		"commande/addProducts"(context, { commandeId, product }) {
+			return CommandeService.addProduit(commandeId, product)
 				.then(() => {
-					return context.dispatch("getCommandes", {});
+					return context.dispatch("showCommande", commandeId);
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		"commande/updateProduit"(context, { commandeId, product }) {
+			return CommandeService.updateProduit(commandeId, product)
+				.then(() => {
+					return context.dispatch("showCommande", commandeId);
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		"commande/deleteProduit"(context, { commandeId, productId }) {
+			return CommandeService.deleteProduit(commandeId, productId)
+				.then(() => {
+					return context.dispatch("showCommande", commandeId);
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		"commande/validate"(context, { idCommande, next }) {
+			return CommandeService.validate(idCommande)
+				.then(() => {
+					context.dispatch("getCommandes");
+					context.dispatch("getVentes");
+					return next.go(-1);
 				})
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
@@ -60,7 +114,7 @@ const fonctionsModule = {
 	},
 	getters: {
 		getCommandes: (state) => state.commandes,
-		getCommande: (state) => state.commande
+		getCommande: (state) => state.commande,
 	},
 };
 

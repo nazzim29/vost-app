@@ -30,6 +30,7 @@ const usersModule = {
 		getProduits(context, query) {
 			return ProduitService.get(query)
 				.then((res) => {
+					console.log("hey");
 					return context.commit("getProduits", res.data);
 				})
 				.catch((err) => {
@@ -45,7 +46,7 @@ const usersModule = {
 					return context.dispatch("add-error", err.response.data.message);
 				});
 		},
-		deleteProduits(context, id) {
+		deleteProduit(context, id) {
 			return ProduitService.destroy(id)
 				.then(() => {
 					return context.dispatch("getProduits", {});
@@ -56,6 +57,33 @@ const usersModule = {
 		},
 		addProduit(context, user) {
 			return ProduitService.create(user)
+				.then(() => {
+					return context.dispatch("getProduits");
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		updateProduit(context, user) {
+			return ProduitService.update(user)
+				.then(() => {
+					return context.dispatch("getProduits");
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		addFormule(context, formule) {
+			return ProduitService.addFormule(formule)
+				.then(() => {
+					return context.dispatch("getProduits");
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		removeFormule(context, formule) {
+			return ProduitService.removeFormule(formule)
 				.then(() => {
 					return context.dispatch("getProduits");
 				})

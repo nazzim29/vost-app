@@ -22,7 +22,6 @@
 					leave-to-class="opacity-0"
 				>
 					<ListboxOptions
-						@deletefonction="opendeletemodal"
 						class="absolute w-44 py-1 mt-10 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
 					>
 						<ListboxOption
@@ -36,7 +35,7 @@
 								:class="[
 									active ? 'text-gray-900 bg-gray-100' : 'text-gray-500',
 									selected ? 'bg-indigo-100' : 'bg-white',
-									'cursor-default select-none group  relative py-2 px-2 pr-4 text-left inline-flex w-full justify-between',
+									'cursor-default select-none group  relative py-2 px-2 pr-4 text-left inline-flex w-full justify-between items-center transition-all duration-100',
 								]"
 							>
 								<span
@@ -46,14 +45,15 @@
 									]"
 									>{{ fonction.nom }}</span
 								>
-								<Icon
-									@click="deletefonction(fonction)"
-									icon="bi:archive"
-									:class="[
-										'w-5 h-5 ml-2 hidden text-red-500 md:hover:text-red-500 md:group-hover:block',
-									]"
-									aria-hidden="true"
-								/>
+								<div class="p-1" @click="deleteFonction(fonction)">
+									<Icon
+										icon="bi:archive"
+										:class="[
+											'w-5 h-5 ml-2 hidden text-red-500 md:hover:text-red-500 md:group-hover:block',
+										]"
+										aria-hidden="true"
+									/>
+								</div>
 								<span
 									v-if="selected"
 									class="flex items-center pl-3 text-amber-600"
@@ -103,7 +103,7 @@
 					>
 						{{ capitalize(c) }}
 					</div>
-					<div class="grid md:grid-cols-4 col-span-2">
+					<div class="grid md:grid-cols-4 md:grid-flow-col col-span-2">
 						<div
 							:class="[
 								'flex flex-col md:justify-center md:border',
@@ -112,7 +112,9 @@
 									(a.nom.startsWith('update') && 'order-4') ||
 									(a.nom.startsWith('read') && 'order-1'),
 							]"
-							v-for="a in autorisations.filter((el) => el.categorie === c)"
+							v-for="a in autorisations
+								.filter((el) => el.categorie === c)
+								.sort((el) => el.id)"
 							:key="a"
 						>
 							<div
@@ -152,16 +154,18 @@
 								>
 									<input
 										type="radio"
+										:id="a.nom + '-own'"
+										:name="a.nom"
+										:class="[
+											'focus:outline-none focus:ring-0 rounded-md w-3 h-3',
+										]"
+										value="own"
 										v-model="
 											selectedFonction.Autorisations.find(
 												(el) => el.id === a.id
 											).autorisations_fonctions.type
 										"
-										:id="a.nom + '-own'"
-										:class="[
-											'focus:outline-none focus:ring-0 rounded-md w-3 h-3',
-										]"
-										value="own"
+										@change="selectedFonction.updated = false"
 									/>
 									<label :for="a.nom + '-own'">Own Only</label>
 								</div>
@@ -175,13 +179,15 @@
 												(el) => el.id === a.id
 											).autorisations_fonctions.type
 										"
-										:id="a.nom + '-own'"
+										@change="selectedFonction.updated = false"
+										:id="a.nom + '-all'"
+										:name="a.nom"
 										:class="[
 											'focus:outline-none focus:ring-0 rounded-md w-3 h-3',
 										]"
 										value="all"
 									/>
-									<label :for="a.nom + '-own'">All</label>
+									<label :for="a.nom + '-all'">All</label>
 								</div>
 							</div>
 						</div>
@@ -209,9 +215,9 @@
 				@click="updateFonction"
 				:class="[
 					'bg-green-500 text-white font-semibold rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-green-500',
-					!selectedFonction?.updated && 'bg-opacity-50',
+					selectedFonction?.updated && 'bg-opacity-50',
 				]"
-				:disable="selectedFonction?.updated || true"
+				:disable="!selectedFonction?.updated || false"
 			>
 				Enregistrer
 			</button>
@@ -338,16 +344,23 @@ export default {
 					);
 			} else {
 				// aut.autorisations_fonctions?.type = type || 'all';
-				
-				this.selectedFonction.Autorisations.push({autorisations_fonctions:{type: type || 'all'}, ...aut});
+
+				this.selectedFonction.Autorisations.push({
+					autorisations_fonctions: { type: type || "all" },
+					...aut,
+				});
 			}
-			this.selectedFonction.updated = true;
+			this.selectedFonction.updated = false;
 		},
 		async updateFonction() {
-			// if (!this.selectedFonction.updated) return; 
+			if (this.selectedFonction.updated) return;
 			try {
-				await this.$store.dispatch("updateFonction", this.selectedFonction);
-				this.selectedFonction.updated = false;
+				this.$store
+					.dispatch("updateFonction", this.selectedFonction)
+					.then((res) => {
+						console.log(res);
+						this.selectedFonction.updated = true;
+					});
 			} catch (e) {
 				console.log(e);
 			}
@@ -361,9 +374,13 @@ export default {
 			}
 		},
 		async deleteFonction(f) {
+			console.log(f)
 			try {
-				await this.$store.dispatch("deleteFonction", f || this.selectedFonction);
-				this.$refs.deletedModal.open = false;
+				await this.$store.dispatch(
+					"deleteFonction",
+					f.id || this.selectedFonction.id
+				);
+				// this.$refs.deletedModal.open = false;
 			} catch (e) {
 				console.log(e);
 			}
@@ -380,7 +397,7 @@ export default {
 			this.fonctions[
 				this.fonctions
 					.map((el) => el.id)
-					.indexOf(this.$store.state.user.Profile.id)
+					.indexOf(this.$store.state.users.user.Profile.id)
 			];
 	},
 	data() {
@@ -391,7 +408,6 @@ export default {
 			icons: [],
 			isMobile: false,
 			showColorPicker: false,
-			
 		};
 	},
 	computed: {
@@ -403,9 +419,9 @@ export default {
 				.map((autorisation) => autorisation.categorie)
 				.filter((categorie, index, self) => self.indexOf(categorie) === index);
 		},
-		fonctions(){
-			return this.$store.state.fonctions.fonctions
-		}
+		fonctions() {
+			return this.$store.state.fonctions.fonctions;
+		},
 	},
 	watch: {
 		"newFonction.icon": _.debounce(async function () {
@@ -415,6 +431,17 @@ export default {
 				)
 			).data.icons;
 		}, 200),
+		selectedFonction() {
+			// this.$store.dispatch('getFonctions')
+
+			if (this.selectedFonction.updated === undefined)
+				this.selectedFonction.updated = true;
+		},
+		"fonctions":function(){
+			if(!this.fonctions.find(el=>el.id == this.selectedFonction)){
+				this.selectedFonction = this.fonctions.find(el=>el.id == this.$store.state.users.user.Profile.id)
+			}
+		}
 	},
 };
 </script>

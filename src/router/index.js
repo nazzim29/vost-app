@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store";
-import AuthServices from '@/services/AuthServices';
 
 
 function loadView(view){
@@ -19,7 +18,7 @@ const routes = [
 	{
 		path: "/login",
 		name: "Login",
-		component: loadView("Login"),
+		component: loadView("user/Login"),
 		meta: {
 			auth:false,
 		}
@@ -27,7 +26,7 @@ const routes = [
 	{
 		path: "/user",
 		name: "User",
-		component: loadView("UsersIndex"),
+		component: loadView("user/UsersIndex"),
 		meta: {
 			auth:true,
 		}
@@ -35,7 +34,7 @@ const routes = [
 	{
 		path: "/user/new",
 		name: "NewUser",
-		component: loadView("NewUser"),
+		component: loadView("user/NewUser"),
 		meta: {
 			auth:true,
 		}
@@ -43,7 +42,7 @@ const routes = [
 	{
 		path: "/user/:id",
 		name: "UserProfile",
-		component: loadView("UsersIndex"),
+		component: loadView("user/UsersIndex"),
 		meta: {
 			auth:true,
 		}
@@ -51,7 +50,7 @@ const routes = [
 	{
 		path: "/user/edit/:id",
 		name: "UserEdit",
-		component: loadView("NewUser"),
+		component: loadView("user/NewUser"),
 		meta: {
 			auth: true,
 		}
@@ -59,7 +58,7 @@ const routes = [
 	{
 		path: "/me",
 		name: "Profile",
-		component: loadView("Profile"),
+		component: loadView("user/Profile"),
 		meta: {
 			auth: true,
 		}
@@ -67,7 +66,7 @@ const routes = [
 	{
 		path: "/fonction",
 		name: "Fonction",
-		component: loadView("Fonction"),
+		component: loadView("user/Fonction"),
 		meta: {
 			auth: true,
 		}
@@ -75,7 +74,7 @@ const routes = [
 	{
 		path: "/commandes",
 		name: "Commandes",
-		component: loadView("Commandes"),
+		component: loadView("commandes/Commandes"),
 		meta: {
 			auth: true,
 		}
@@ -83,7 +82,7 @@ const routes = [
 	{
 		path: "/commandes/:id",
 		name: "Commande",
-		component: loadView("CommandeShow"),
+		component: loadView("commandes/CommandeShow"),
 		meta: {
 			auth: true,
 		}
@@ -91,7 +90,63 @@ const routes = [
 	{
 		path: "/produits",
 		name: "Produits",
-		component: loadView("Produits"),
+		component: loadView("produits/Produits"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
+		path: "/productions",
+		name: "Productions",
+		component: loadView("produits/Productions"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
+		path: "/MatierePremiere",
+		name: "MatierePremiere",
+		component: loadView("produits/MatierePremiere"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
+		path: "/Formules",
+		name: "Formules",
+		component: loadView("produits/Formules"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
+		path: "/messagerie",
+		name: "messagerie",
+		component: loadView("Messagerie"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
+		path: "/contact-client",
+		name: "ContactClient",
+		component: loadView("client/ContactClient"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
+		path: "/Ventes/:id",
+		name: "Vente",
+		component: loadView("vente/VenteShow"),
+		meta: {
+			auth: true,
+		}
+	},
+	{
+		path: "/Ventes",
+		name: "Ventes",
+		component: loadView("vente/Ventes"),
 		meta: {
 			auth: true,
 		}
@@ -99,15 +154,15 @@ const routes = [
 	{
 		path: "/clients",
 		name: "Clients",
-		component: loadView("Produits"),
+		component: loadView("client/Client"),
 		meta: {
 			auth: true,
 		}
-	}
+	},
 	{
 		path: "/clients/:id",
 		name: "ClientShow",
-		component: loadView("ClientShow"),
+		component: loadView("client/ClientShow"),
 		meta: {
 			auth: true,
 		}
@@ -118,13 +173,19 @@ const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
 	routes,
 });
+let interval = null
 async function checklogin() {
-	if(store.getters.isAuth) return true
-	AuthServices.checklogin(store.getters.getJwt).then(() => {
+	if (store.getters.isAuth) {
+		if(!interval){
+			// interval = setInterval(async () => {
+			// 	await store.dispatch("checkAuth")
+			// }, 10000 )
+		}
 		return true
-	}).catch(() => {
+	} else {
 		return false
-	})
+	}
+	
 }
 router.beforeEach(async function (to, from, next) {
 	let isLogged = await checklogin();

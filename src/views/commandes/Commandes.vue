@@ -13,7 +13,10 @@
 					class="h-7 fill-current text-white"
 				/>
 			</div>
-			<div class="rounded-full py-2 px-2 bg-gray-500">
+			<div
+				class="rounded-full py-2 px-2 bg-gray-500"
+				@click="$router.push({ name: 'Commande', params: { id: 'new' } })"
+			>
 				<Icon
 					icon="bx:bx-paint-roll"
 					@click="openCreateModal"
@@ -75,7 +78,7 @@
 											<div
 												class="px-2 py-3 bg-gray-700 w-full flex items-center justify-between text-gray-400 hover:text-gray-200"
 											>
-												<span class="font-medium text-gray-400"> Types </span>
+												<span class="font-medium text-gray-400"> Etat </span>
 												<span class="ml-6 flex items-center">
 													<PlusSmIcon
 														v-if="!open"
@@ -92,21 +95,27 @@
 										</DisclosureButton>
 									</h3>
 									<DisclosurePanel class="pt-6">
-										<div v-if="types.length > 0" class="space-y-6">
-											<div
-												v-for="type in types"
-												:key="type.id"
-												class="flex items-center"
-											>
+										<div class="space-y-6">
+											<div class="flex items-center">
 												<input
-													:value="type.id"
+													value="en attente"
 													type="checkbox"
-													:checked="type.checked"
 													class="h-4 w-4 border-gray-400 rounded text-blue-600 focus:ring-blue-500"
-													v-model="typesel"
+													v-model="etatsel"
 												/>
 												<label class="ml-3 min-w-0 flex-1 text-gray-500">
-													{{ type.nom }}
+													En attente
+												</label>
+											</div>
+											<div class="flex items-center">
+												<input
+													value="valide"
+													type="checkbox"
+													class="h-4 w-4 border-gray-400 rounded text-blue-600 focus:ring-blue-500"
+													v-model="etatsel"
+												/>
+												<label class="ml-3 min-w-0 flex-1 text-gray-500">
+													Validé
 												</label>
 											</div>
 										</div>
@@ -179,7 +188,7 @@
 				class="h-full md:justify-center aligned-center w-full flex flex-1 flex-col overflow-auto overflow-x-hidden py-3"
 			>
 				<table
-					class="bg-white rounded-md mx-1 grid grid-flow-row overflow-hidden text-black flex-1"
+					class="bg-white rounded-md mx-1 grid grid-flow-row overflow-hidden text-black my-auto"
 				>
 					<thead>
 						<tr class="w-full grid grid-flow-col">
@@ -190,11 +199,11 @@
 						</tr>
 					</thead>
 					<tbody class="w-full grid grid-flow-row overflow-auto">
-							<CommandeRow 
-								v-for="commande in showedCommandes"
-								:key="commande.id"
-								:commande="commande"
-							/>
+						<CommandeRow
+							v-for="commande in showedCommandes"
+							:key="commande.id"
+							:commande="commande"
+						/>
 					</tbody>
 				</table>
 			</div>
@@ -228,12 +237,7 @@ import {
 } from "@headlessui/vue";
 import SearchBar from "@/components/SearchBar";
 import { Icon } from "@iconify/vue";
-import {
-	FilterIcon,
-	PlusSmIcon,
-	MinusSmIcon,
-
-} from "@heroicons/vue/solid";
+import { FilterIcon, PlusSmIcon, MinusSmIcon } from "@heroicons/vue/solid";
 import { XIcon } from "@heroicons/vue/outline";
 export default {
 	name: "Commandes",
@@ -244,6 +248,7 @@ export default {
 		return {
 			mobileFiltersOpen: false,
 			currentPage: 1,
+			etatsel: [],
 		};
 	},
 	components: {
@@ -279,16 +284,28 @@ export default {
 		commandes() {
 			return this.$store.getters.getCommandes;
 		},
-		showedCommandes(){
+		showedCommandes() {
 			let start = (this.currentPage - 1) * this.nbperpage;
 			let end = start + this.nbperpage;
 			return this.commandes.slice(start, end);
-		}
+		},
 	},
 	methods: {
-		searchfn: debounce(async function () {}, 500),
+		searchfn: debounce(async function () {
+			console.log(this.search)
+			this.$store.dispatch("getCommandes", {
+				etat: this.etatsel,
+				"$Client.raisonSociale$": this.$refs.searchbar.search,
+				
+			});
+		}, 500),
 		openCreateModal() {},
 	},
+	watch:{
+		etatsel: function(){
+			this.searchfn();
+		}
+	}
 };
 </script>
 

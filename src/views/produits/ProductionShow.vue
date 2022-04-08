@@ -1,5 +1,5 @@
 <template>
-  <div>client</div>
+  <div>production</div>
 </template>
 
 <script>

@@ -1,28 +1,25 @@
 Todos:
     gestion ustilisateur:
         ✔ afficher les utilisateurs @done(21-11-13 17:36)
-        ✔ modifier un utilisateur @done(21-11-13 17:36)
+        ☐ modifier un utilisateur
         ✔ supprimer un utilisateur @done(21-11-13 17:36)
         ✔ creer un utilisateur @done(21-11-13 17:36)
-        ✔ modifier son propre profile @done(21-11-27 14:06)
         gestion des fonctions:
             ✔ afficher les fonctions et leurs autorisations @done(21-11-30 11:50)
             ✔ creer une fonction @done(22-01-29 14:42)
-            editer une fonction
-            ☐ supprimer une fonction
-            ☐ donner des droits a une fonction
-            ☐ enlever des droits a une fonction
+            ✔ supprimer une fonction @done(22-03-03 15:00)
+            ✔ donner des droits a une fonction @done(22-03-26 18:14)
+            ✔ enlever des droits a une fonction @done(22-03-26 18:14)
     gestion des produits:
-        ☐ ajouter un nouveau produit
-        ☐ modifier un produit existant
-        ☐ supprimer un produit existant
-        ☐ appliquer une reduction a un produit
-        ☐ enlever la reduction d'un produit
+        ✔ ajouter un nouveau produit @done(22-03-23 00:31)
+        ✔ modifier un produit existant @done(22-03-23 00:31)
+        ✔ supprimer un produit existant @done(22-03-23 00:31)
+        ✔ mettre/enlever l'etat a la une d'un produit @done(22-03-23 00:31)
     gestion des clients:
-        ☐ ajouter
-        ☐ modifier
-        ☐ supprimer
-        ☐ afficher
+        ✔ ajouter @done(22-03-29 09:03)
+        ✔ modifier @done(22-03-29 09:03)
+        ✔ supprimer @done(22-03-29 09:13)
+        ✔ afficher @done(22-03-23 00:32)
         afficher le profile d'un client:
             ☐ voir les dettes
             ☐ voir l'historique de payement
@@ -32,15 +29,14 @@ Todos:
         ☐ supprimer un produit du stock
         ☐ diminuer ou augmenter la quantité d'un ou plusieurs produit en stock
     gestion des commandes:
-        ☐ passer une commande
-        ☐ annuler une commande
-        ☐ modifier une commande
-        ☐ marquer une commande comme vendu
-    gestion des ventes:
-        ☐ ajouter une vente
-        ☐ annuler une vente
-        ☐ modifier une vente
-        ☐ marquer comme finished
+        ✔ ajouter une commande @done(22-03-29 13:08)
+        ✔ valider une commande si en attente de confirmation @done(22-04-02 22:03)
+        ✔ archiver une commande @done(22-04-03 16:10)
+        ✔ modifier une commande @done(22-03-23 00:34)
+        gestion des ventes:
+            ☐ marquer en cours de livraison si en attente de livraison
+            ☐ marquer comme livrée
+            ☐ generer une facture de vente
     gestion des factures:
         ☐ marquer une facture comme payer
         ☐ ajouter un payement a la facture
@@ -53,8 +49,8 @@ Todos:
         ☐ effectuer une sauvegarde maintenant
     modification de la bdd:
         ☐ ajouter la pdp aux utilisateurs @2m @low
-        ☐ ajouter les icones aux fonctions @2m @low
-        ☐ ajouter les couleurs aux fonctions @2m @low
+        ✔ ajouter les icones aux fonctions @2m @low @done(22-03-23 00:33)
+        ✔ ajouter les couleurs aux fonctions @2m @low @done(22-03-23 00:33)
         ☐ ajouter les tables 'discussion' et 'message' @10m @low
     messagerie:
 
