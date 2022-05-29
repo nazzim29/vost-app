@@ -18,5 +18,11 @@ export default {
 	},
 	getTypeClient() {
 		return Api.get("/typeClient");
-	}
+	},
+	getFeedbacks(query) {
+		return Api.get("/feedback",query);
+	},
+	updateFeedback(feedback) {
+		return Api.post("/feedback/"+feedback.id)
+	},
 };

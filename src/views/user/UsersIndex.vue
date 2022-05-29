@@ -12,7 +12,7 @@
 					class="h-7 fill-current text-white"
 				/>
 			</div>
-			<div class="rounded-full py-2 px-2 bg-gray-500">
+			<div class="rounded-full py-2 px-2 bg-gray-500" v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'add-utilisateur')">
 				<Icon
 					icon="ant-design:user-add-outlined"
 					@click="openCreateModal"
@@ -129,7 +129,7 @@
 				class="w-full flex flex-1 flex-col overflow-y-auto"
 			>
 				<ul
-					class="w-full h-full grid grid-rows-10 md:grid-cols-4 space-y-2 md:space-y-2 items-center"
+					class="w-full max-h-fit grid grid-rows-10 md:grid-cols-4 space-y-2 md:space-y-2 items-center"
 				>
 					<UserRow
 						v-for="user in showedusers"
@@ -496,6 +496,9 @@ export default {
 
 		fonctions() {
 			return this.$store.getters.getFonctions;
+		},
+		currentUser() {
+			return this.$store.getters.getCurrentUser;
 		},
 	},
 	watch: {

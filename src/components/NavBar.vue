@@ -172,15 +172,36 @@
 			</div>
 			<div class="flex flex-row w-full">
 				<div class="flex-row mt-2 w-full">
-					
 					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Clients'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1 pr-1' : 'justify-center',
+						]"
+						v-if="hasPermission('read-client')"
+						@click="goto('/clients')"
+					>
+						<Icon
+							class="transition-all ease-linear flex-1 w-10 h-10"
+							icon="gridicons:multiple-users"
+						/>
+						<label
+							class="h-6 overflow-hidden"
+							:class="[extended ? 'w-full' : 'w-0']"
+							>Clients</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
 							this.$router.currentRoute.value.name === 'User'
 								? 'bg-gray-600 border-r-2 border-blue-700'
 								: 'bg-gray-900 hover:bg-gray-500',
 							this.extended ? 'justify-evenly p-1' : 'justify-center',
 						]"
+						v-if="hasPermission('read-utilisateur')"
 						@click="goto('/user')"
 					>
 						<Icon
@@ -194,18 +215,19 @@
 						>
 					</div>
 					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
 							this.$router.currentRoute.value.name === 'Fonction'
 								? 'bg-gray-600 border-r-2 border-blue-700'
 								: 'bg-gray-900 hover:bg-gray-500',
 							this.extended ? 'justify-evenly p-1' : 'justify-center',
 						]"
+						v-if="user.Profile.nom == 'admin'"
 						@click="goto('/fonction')"
 					>
 						<Icon
 							icon="icon-park-outline:permissions"
-							class="transition-all ease-linear  flex-1 w-10 h-10"
+							class="transition-all ease-linear flex-1 w-10 h-10"
 						/>
 						<label
 							class="overflow-hidden"
@@ -214,53 +236,14 @@
 						>
 					</div>
 					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
-						:class="[
-							this.$router.currentRoute.value.name === 'Produits'
-								? 'bg-gray-600 border-r-2 border-blue-700'
-								: 'bg-gray-900 hover:bg-gray-500',
-							this.extended ? 'justify-evenly p-1' : 'justify-center',
-						]"
-						@click="goto('/Produits')"
-					>
-						<Icon
-							icon="ri:paint-fill"
-							class="transition-all ease-linear flex-1 w-10 h-10"
-						/>
-						<label
-							class="overflow-hidden"
-							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
-							>Produits</label
-						>
-					</div>
-					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
-						:class="[
-							this.$router.currentRoute.value.name === 'Ventes'
-								? 'bg-gray-600 border-r-2 border-blue-700'
-								: 'bg-gray-900 hover:bg-gray-500',
-							this.extended ? 'justify-evenly p-1' : 'justify-center',
-						]"
-						@click="goto('/ventes')"
-					>
-						<Icon
-							icon="mdi:shipping-pallet"
-							class="transition-all ease-linear flex-1 w-10 h-10"
-						/>
-						<label
-							class="overflow-hidden"
-							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
-							>Ventes</label
-						>
-					</div>
-					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
 							this.$router.currentRoute.value.name === 'MatierePremiere'
 								? 'bg-gray-600 border-r-2 border-blue-700'
 								: 'bg-gray-900 hover:bg-gray-500',
 							this.extended ? 'justify-evenly p-1' : 'justify-center',
 						]"
+						v-if="hasPermission('read-matiere')"
 						@click="goto('/MatierePremiere')"
 					>
 						<Icon
@@ -274,14 +257,79 @@
 						>
 					</div>
 					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
-							this.$router.currentRoute.value.name === 'Formules'
+							this.$router.currentRoute.value.name === 'Produits'
 								? 'bg-gray-600 border-r-2 border-blue-700'
 								: 'bg-gray-900 hover:bg-gray-500',
 							this.extended ? 'justify-evenly p-1' : 'justify-center',
 						]"
-						@click="goto('/Formules')"
+						v-if="hasPermission('read-produit')"
+						@click="goto('/Produits')"
+					>
+						<Icon
+							icon="ri:paint-fill"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Produits</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Commandes'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1 pr-1' : 'justify-center',
+						]"
+						v-if="hasPermission('read-commande')"
+						@click="goto('/commandes')"
+					>
+						<Icon
+							class="transition-all ease-linear flex-1 w-10 h-10"
+							icon="icon-park-outline:transaction-order"
+						/>
+						<label
+							class="h-6 overflow-hidden"
+							:class="[extended ? 'w-full' : 'w-0']"
+							>Commandes</label
+						>
+					</div>
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Ventes'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						v-if="hasPermission('read-vente')"
+						@click="goto('/ventes')"
+					>
+						<Icon
+							icon="mdi:shipping-pallet"
+							class="transition-all ease-linear flex-1 w-10 h-10"
+						/>
+						<label
+							class="overflow-hidden"
+							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
+							>Ventes</label
+						>
+					</div>
+
+					<div
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
+						:class="[
+							this.$router.currentRoute.value.name === 'Parametres'
+								? 'bg-gray-600 border-r-2 border-blue-700'
+								: 'bg-gray-900 hover:bg-gray-500',
+							this.extended ? 'justify-evenly p-1' : 'justify-center',
+						]"
+						v-if="user.Profile.nom == 'admin'"
+						@click="goto('/parametres')"
 					>
 						<Icon
 							icon="icon-park-outline:composition"
@@ -290,17 +338,18 @@
 						<label
 							class="overflow-hidden"
 							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
-							>Formules</label
+							>Parametres</label
 						>
 					</div>
 					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
 							this.$router.currentRoute.value.name === 'Productions'
 								? 'bg-gray-600 border-r-2 border-blue-700'
 								: 'bg-gray-900 hover:bg-gray-500',
 							this.extended ? 'justify-evenly p-1' : 'justify-center',
 						]"
+						v-if="hasPermission('read-production')"
 						@click="goto('/Productions')"
 					>
 						<Icon
@@ -314,13 +363,14 @@
 						>
 					</div>
 					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
 							this.$router.currentRoute.value.name === 'ContactClient'
 								? 'bg-gray-600 border-r-2 border-blue-700'
 								: 'bg-gray-900 hover:bg-gray-500',
 							this.extended ? 'justify-evenly p-1' : 'justify-center',
 						]"
+						v-if="hasPermission('read-contactclient')"
 						@click="goto('/contact-client')"
 					>
 						<Icon
@@ -333,8 +383,8 @@
 							>Contact Client</label
 						>
 					</div>
-					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
+					<!-- <div
+						class="group transition-colors duration-100 ease-linear w-full h-12 text-white inline-flex space-x-2 justify-center items-center"
 						:class="[
 							this.$router.currentRoute.value.name === 'Messagerie'
 								? 'bg-gray-600 border-r-2 border-blue-700'
@@ -352,55 +402,15 @@
 							:class="[extended ? 'w-full h-6' : 'w-0 h-0']"
 							>Messagerie</label
 						>
-					</div>
-					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
-						:class="[
-							this.$router.currentRoute.value.name === 'Commandes'
-								? 'bg-gray-600 border-r-2 border-blue-700'
-								: 'bg-gray-900 hover:bg-gray-500',
-							this.extended ? 'justify-evenly p-1 pr-1' : 'justify-center',
-						]"
-						@click="goto('/commandes')"
-					>
-						<Icon
-							class="transition-all ease-linear flex-1 w-10 h-10"
-							icon="icon-park-outline:transaction-order"
-						/>
-						<label
-							class="h-6 overflow-hidden"
-							:class="[extended ? 'w-full' : 'w-0']"
-							>Commandes</label
-						>
-					</div>
-					<div
-						class="group transition-colors duration-100 ease-linear w-full h-14 text-white inline-flex space-x-2 justify-center items-center"
-						:class="[
-							this.$router.currentRoute.value.name === 'Clients'
-								? 'bg-gray-600 border-r-2 border-blue-700'
-								: 'bg-gray-900 hover:bg-gray-500',
-							this.extended ? 'justify-evenly p-1 pr-1' : 'justify-center',
-						]"
-						@click="goto('/clients')"
-					>
-						<Icon
-							class="transition-all ease-linear flex-1 w-10 h-10"
-							
-							icon="gridicons:multiple-users"
-						/>
-						<label
-							class="h-6 overflow-hidden"
-							:class="[extended ? 'w-full' : 'w-0']"
-							>Clients</label
-						>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div
-				class="mt-auto text-center text-light text-white mb-2 h-6 overflow-hidden transistion-all ease-in-out"
+				class="mt-auto text-center text-light text-white mb-2 h-12 overflow-hidden transistion-all ease-in-out"
 				:class="[
 					extended ? 'w-full delay-300 duration-100' : 'w-0 duration-75',
 				]"
+				@click="logout"
 			>
 				EURL NANOKIMYA
 			</div>
@@ -447,11 +457,15 @@ export default {
 		};
 	},
 	data() {
-		return { extended: false, user: this.$store.getters.getCurrentUser };
+		return { extended: false };
 	},
 	computed: {
 		nom() {
+			console.log(this.user);
 			return this.user.nom.toUpperCase();
+		},
+		user() {
+			return this.$store.getters.getCurrentUser;
 		},
 		prenom() {
 			// capitalize the first letter of the name
@@ -473,6 +487,16 @@ export default {
 	methods: {
 		goto(url) {
 			this.$router.push(url);
+		},
+		hasPermission(permission) {
+			return !!this.user.Profile.Autorisations.find(
+				(el) => el.nom == permission
+			);
+		},
+		logout() {
+			console.log("logout");
+			this.$store.dispatch("logout");
+			this.$router.push("/login");
 		},
 	},
 };

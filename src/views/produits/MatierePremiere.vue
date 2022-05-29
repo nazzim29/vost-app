@@ -13,9 +13,9 @@
 					class="h-7 fill-current text-white"
 				/>
 			</div>
-			<div class="rounded-full py-2 px-2 bg-gray-500">
+			<div class="rounded-full py-2 px-2 bg-gray-500" v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'add-matiere')">
 				<Icon
-					icon="bx:bx-paint-roll"
+					icon="ant-design:file-add-filled"
 					@click="openCreateModal"
 					class="h-7 w-7 fill-current text-white"
 				/>
@@ -387,6 +387,9 @@ export default {
 				(this.currentPage - 1) * this.nbperpage,
 				(this.currentPage - 1) * this.nbperpage + this.nbperpage
 			);
+		},
+		currentUser() {
+			return this.$store.getters.getCurrentUser;
 		},
 	},
 	watch: {

@@ -5,7 +5,7 @@
 		<div
 			class="w-4 flex justify-center items-center self-end justify-self-start border-none z-20"
 		>
-			<Menu as="div" class="h-full">
+			<Menu as="div" class="h-full" v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'update-client') || currentUser.Profile.Autorisations.find(el=>el.nom == 'delete-client')">
 				<MenuButton class="h-full" @click="extended = !extended">
 					<DotsVerticalIcon
 						class="h-6 w-6 text-black focus:outline-none transform rotate-90 mr-4"
@@ -23,7 +23,7 @@
 						class="fixed -ml-28 bg-white shadow-2xl border space-y-2 divide-y divide-gray-300 devide-solid rounded-md py-2 px-0 flex flex-col"
 					>
 						<div>
-							<MenuItem>
+							<MenuItem v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'update-client')">
 								<span
 									@click="$refs.updateModal.open = true"
 									class="w-full hover:bg-gray-300 flex flex-row justify-start items-center px-2 rounded-sm"
@@ -34,7 +34,7 @@
 									Editer
 								</span>
 							</MenuItem>
-							<MenuItem>
+							<MenuItem v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'delete-client')">
 								<button
 									class="w-full hover:bg-gray-300 flex flex-row justify-start items-center px-2 rounded-sm"
 									@click="this.$refs.deleteModal.open = true"
@@ -46,7 +46,7 @@
 								</button>
 							</MenuItem>
 						</div>
-						<MenuItem>
+						<!-- <MenuItem>
 							<router-link
 								as="button"
 								class="w-full hover:bg-gray-300 flex flex-row justify-start items-center px-2 rounded-sm"
@@ -57,7 +57,7 @@
 								/>
 								Profile
 							</router-link>
-						</MenuItem>
+						</MenuItem> -->
 					</MenuItems>
 				</transition>
 			</Menu>
@@ -283,7 +283,7 @@ import {
 	DotsVerticalIcon,
 	PencilIcon,
 	UserRemoveIcon,
-	UserCircleIcon,
+	// UserCircleIcon,
 } from "@heroicons/vue/outline";
 export default {
 	components: {
@@ -294,7 +294,7 @@ export default {
 		DotsVerticalIcon,
 		PencilIcon,
 		UserRemoveIcon,
-		UserCircleIcon,
+		// UserCircleIcon,
 		Modal,
 		Listbox,
 		ListboxButton,
@@ -311,8 +311,10 @@ export default {
 	props: ["client"],
 	methods: {
 		async deleteClient() {
-			this.$store.dispatch("deleteClient", this.client.id);
-			this.$refs.deleteModal.open = false;
+			this.$store.dispatch("deleteClient", this.client.id).then(()=>{
+				this.$refs.deleteModal.open = false;
+				this.$store.dispatch('getClients');
+			});
 		},
 		updateClient(){
 			this.$store.dispatch('updateClient',this.newClient)
@@ -323,6 +325,9 @@ export default {
 		types() {
 			return this.$store.getters.getTypeClients;
 		},
+		currentUser(){
+			return this.$store.getters.getCurrentUser;
+		}
 	},
 };
 </script>

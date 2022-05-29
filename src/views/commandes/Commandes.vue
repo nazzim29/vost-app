@@ -16,9 +16,10 @@
 			<div
 				class="rounded-full py-2 px-2 bg-gray-500"
 				@click="$router.push({ name: 'Commande', params: { id: 'new' } })"
+				v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'add-commande')"
 			>
 				<Icon
-					icon="bx:bx-paint-roll"
+					icon="ant-design:file-add-filled"
 					@click="openCreateModal"
 					class="h-7 w-7 fill-current text-white"
 				/>
@@ -288,6 +289,9 @@ export default {
 			let start = (this.currentPage - 1) * this.nbperpage;
 			let end = start + this.nbperpage;
 			return this.commandes.slice(start, end);
+		},
+		currentUser() {
+			return this.$store.getters.getCurrentUser;
 		},
 	},
 	methods: {

@@ -20,12 +20,23 @@ export default {
 		return Api.post("/commande/" + commandeId + "/produit", product);
 	},
 	updateProduit(commandeId, product) {
-		return Api.patch("/commande/" + commandeId + "/produit/"+product.id, product);
+		return Api.patch(
+			"/commande/" + commandeId + "/produit/" + product.id,
+			product
+		);
+	},
+	downloadBonDeCommande(id) {
+		return Api.get("/commande/" + id + "/document", {
+			
+		}, { ResponseType: "blob" });	
 	},
 	deleteProduit(commandeId, productId) {
 		return Api.delete("/commande/" + commandeId + "/produit/" + productId);
 	},
 	validate(commandeId) {
-		return Api.get(`/commande/${commandeId}/validate`)
+		return Api.get(`/commande/${commandeId}/validate`);
+	},
+	uploadBonDeCommande(id, data) {
+		return Api.post(`/commande/${id}/bon-de-commande`, data);
 	}
 };

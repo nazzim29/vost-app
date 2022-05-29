@@ -18,6 +18,7 @@
 				>
 					<div class="w-full flex p-1 flex-row justify-between">
 						<Icon
+							v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'update-produit')"
 							icon="ic:baseline-favorite"
 							class="h-5 w-5"
 							:class="{
@@ -27,11 +28,13 @@
 							@click="togglefeatured"
 						/>
 						<Icon
+							v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'update-produit')"
 							icon="bi:brush"
 							class="h-5 w-5 text-gray-600"
 							@click="this.$refs.editmodal.open = true"
 						/>
 						<Icon
+							v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'delete-produit')"
 							icon="clarity:archive-line"
 							class="h-5 w-5 text-red-600"
 							@click="this.$refs.deletemodal.open = true"
@@ -45,7 +48,7 @@
 			<div class="flex flex-row w-full p-2 divide-x-2 h-1/4">
 				<div class="flex flex-col h-full w-1/3 justify-center items-center">
 					<label class="text-xl font-bold text-black antialiased">{{
-						produit.prix
+						produit.prix || "0"
 					}}</label>
 					<label class="text-sm font-light text-gray-500 antialiased"
 						>DZD</label
@@ -61,8 +64,8 @@
 				</div>
 				<div class="flex flex-col h-full w-1/3 justify-center items-center">
 					<label class="text-xl font-bold text-black antialiased">{{
-						produit.quantite
-					}}</label>
+						produit.quantite || "0"
+					}}/{{produit.quantiteCommande || 0}}</label>
 					<label class="text-sm font-light text-gray-500 antialiased"
 						>Unités</label
 					>
@@ -72,8 +75,8 @@
 		<div class="flex-1 w-3/4 transition-all duration-700 ease-linear" v-if="extended">
 			<div class="w-full flex-row flex justify-between p-2">
 				<h1 class="font-semibold font-md ml-2 ">Formule</h1>
-				<button class="btn btn-sm btn-primary" @click="isEditingFormule = !isEditingFormule" v-if="!isEditingFormule">Modifier</button>
-				<div class="flex flex-row space-x-2" v-else>
+				<button class="btn btn-sm btn-primary" @click="isEditingFormule = !isEditingFormule" v-if="!isEditingFormule && currentUser.Profile.Autorisations.find(el=>el.nom == 'update-formule')">Modifier</button>
+				<div class="flex flex-row space-x-2" v-if="isEditingFormule">
 					<!-- save btn an cancel btn -->
 					<button
 						class="btn btn-sm btn-primary"
@@ -190,6 +193,23 @@
 									id="contenance"
 									v-model="newProduit.contenance"
 									placeholder="Contenance"
+									class="rounded-md border-0 w-3/4"
+								/>
+							</div>
+						</div>
+						<div class="flex flex-col w-full">
+							<div class="flex flex-col items-start w-full space-y-2 space-x-2">
+								<label
+									for="prix"
+									class="flex items-center text-bold h-full rounded-l-md px-2text-xl"
+									>Prix</label
+								>
+								<input
+									type="number"
+									name="Prix"
+									id="Prix"
+									v-model="newProduit.prix"
+									placeholder="Prix"
 									class="rounded-md border-0 w-3/4"
 								/>
 							</div>
@@ -481,6 +501,9 @@ export default {
 		},
 		types() {
 			return this.$store.getters.getTypeproduits;
+		},
+		currentUser() {
+			return this.$store.getters.getCurrentUser;
 		},
 	},
 };

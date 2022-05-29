@@ -12,7 +12,7 @@
 					class="h-7 fill-current text-white"
 				/>
 			</div>
-			<div class="rounded-full py-2 px-2 bg-gray-500">
+			<div class="rounded-full py-2 px-2 bg-gray-500" v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'add-client')">
 				<Icon
 					icon="ant-design:user-add-outlined"
 					@click="openCreateModal"
@@ -127,7 +127,7 @@
 				class="w-full flex flex-1 flex-col overflow-y-auto"
 			>
 				<ul
-					class="w-full h-full overflow-hidden flex flex-row flex-wrap justify-evenly space-y-2"
+					class="w-full h-full overflow-hidden flex flex-row flex-wrap justify-evenly"
 				>
 					<ClientRow
 						v-for="client in showedClients"
@@ -168,6 +168,24 @@
 								id="raison_social"
 								v-model="newClient.raisonSociale"
 								placeholder="Raison social"
+								class="rounded-r-md border-0 focus:ring-0"
+							/>
+						</div>
+					</div>
+					<div class="flex flex-col w-full space-y-2 space-x-2">
+						<label
+							class="flex items-center text-bold h-full rounded-l-md text-md"
+							>Username</label
+						>
+						<div
+							class="flex flex-row items-cente w-auto focus-within:ring-1 rounded-md ring-blue-600 overflow-hidden"
+						>
+							<input
+								type="text"
+								name="username"
+								id="username"
+								v-model="newClient.username"
+								placeholder="Username"
 								class="rounded-r-md border-0 focus:ring-0"
 							/>
 						</div>
@@ -413,6 +431,7 @@ export default {
 				raisonSociale: e,
 				numero: e,
 				numeroSecondaire: e,
+				username: e,
 			});
 		}, 500),
 		openModal(client) {
@@ -432,8 +451,12 @@ export default {
 			this.$refs.createModal.open = true;
 		},
 		addClient() {
-			this.$store.dispatch("addClient", this.newClient);
-			this.$refs.createModal.open = false;
+			this.$store.dispatch("addClient", this.newClient).then(()=>{
+				this.$refs.createModal.open = false;
+				this.$store.dispatch("getClients").then(()=>{
+					this.$refs.searchbar.search = this.newClient.username
+				})
+			});
 		},
 	},
 	computed: {
@@ -465,6 +488,9 @@ export default {
 		types() {
 			return this.$store.getters.getTypeClients;
 		},
+		currentUser() {
+			return this.$store.getters.getCurrentUser;
+		},
 	},
 	watch: {
 		typesel: function () {
@@ -473,6 +499,7 @@ export default {
 				raisonSociale: this.$refs.searchbar.search,
 				numero: this.$refs.searchbar.search,
 				numeroSecondaire: this.$refs.searchbar.search,
+				username: this.$refs.searchbar.search,
 			});
 		},
 	},

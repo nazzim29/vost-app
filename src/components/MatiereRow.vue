@@ -9,11 +9,13 @@
 				<div class="w-full flex pt-1 flex-row justify-between">
 					
 					<Icon
+						v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'update-matiere')"
 						icon="bi:brush"
 						class="h-5 w-5 text-gray-600"
 						@click="isEditing = !isEditing"
 					/>
 					<Icon
+						v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'delete-matiere')"
 						icon="clarity:archive-line"
 						class="h-5 w-5 text-red-600"
 						@click="deletematiere"
@@ -77,7 +79,9 @@ export default {
 		},
 	},
 	computed: {
-		
+		currentUser() {
+			return this.$store.getters.getCurrentUser;
+		},
 	},
     watch:{
         isEditing(val){

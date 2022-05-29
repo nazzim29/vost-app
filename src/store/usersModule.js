@@ -16,10 +16,15 @@ const usersModule = {
 		},
 		logout(state) {
 			/* eslint-disable-next-line */
-			state = defaultState();
+			// state = {...defaultState()};
+			Object.assign(state, defaultState());
+			console.log(state)
 		},
 		getUsers(state, users) {
 			state.users = users;
+		},
+		refresh(state, { user }) {
+			state.user = user;
 		},
 	},
 	actions: {
@@ -34,20 +39,15 @@ const usersModule = {
 		},
 		checkAuth(context) {
 			return AuthService.checklogin(context.state.jwt)
-				.then(() => {
+				.then((res) => {
+					context.commit("refresh", res.data);
 				})
 				.catch(() => {
 					context.commit("logout");
 				});
 		},
 		logout(context) {
-			return AuthService.logout()
-				.then(() => {
-					context.commit("logout");
-				})
-				.catch(() => {
-					context.commit("logout");
-				});
+			context.commit("logout");
 		},
 		getUsers(context, query) {
 			return UserService.get(query)
@@ -69,6 +69,15 @@ const usersModule = {
 		},
 		addUser(context, user) {
 			return UserService.create(user)
+				.then(() => {
+					return context.dispatch("getUsers");
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		updateUser(context, user) {
+			return UserService.update(user)
 				.then(() => {
 					return context.dispatch("getUsers");
 				})

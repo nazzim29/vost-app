@@ -3,6 +3,7 @@ const defaultState = () => ({
     clients: [],
 	client: {},
 	typeClient: [],
+	feedbacks:[]
 });
 const fonctionsModule = {
 	state: defaultState(),
@@ -16,6 +17,9 @@ const fonctionsModule = {
 		getTypeClients(state, typeClient) {
 			state.typeClient = typeClient;
 		},
+		getFeedbacks(state, feedbacks) {
+			state.feedbacks = feedbacks
+		}
 	},
 	actions: {
 		getClients(context, query) {
@@ -72,11 +76,30 @@ const fonctionsModule = {
 					return context.dispatch("add-error", err.response.data.message);
 				});
 		},
+		getFeedbacks(context,query) {
+			return ClientService.getFeedbacks(query)
+				.then((res) => {
+					return context.commit("getFeedbacks", res.data);
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		validerFeedback(context, feedback) {
+			return ClientService.updateFeedback(feedback)
+				.then(() => {
+					return context.dispatch("getFeedbacks");
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		}
 	},
 	getters: {
 		getClients: (state) => state.commandes,
 		getClient: (state) => state.commande,
 		getTypeClients: (state) => state.typeClient,
+		getFeedbacks:(state) => state.feedbacks,
 	},
 };
 

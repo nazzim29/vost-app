@@ -7,6 +7,7 @@ import commandes from "./commandeModule";
 import clients from "./clientModule";
 import vente from "./venteModule";
 import matiere from "./matiereModule";
+import production from "./productionModule";
 export default createStore({
   plugins: [createPersistedState({paths:['users.jwt',"users.authenticated","users.user"]})],
   modules: {
@@ -16,6 +17,7 @@ export default createStore({
     commandes,
     clients,
     vente,
-    matiere
+    matiere,
+    production
   }
 })

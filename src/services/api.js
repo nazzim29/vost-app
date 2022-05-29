@@ -1,11 +1,10 @@
 import axios from "axios";
 import store from "@/store";
 
-
 const api_url = process.env.VUE_APP_API_URL;
 axios.defaults.port = 2931;
 export default {
-	post(path, body,{ContentType}={}) {
+	post(path, body, { ContentType } = {}) {
 		return axios.post(`${api_url}${path}`, body, {
 			headers: {
 				Authorization: `Bearer ${store.state.users.jwt || ""}`,
@@ -13,10 +12,13 @@ export default {
 			},
 		});
 	},
-	get(path, params = null) {
+	get(path, params = null, config) {
 		return axios.get(`${api_url}${path}`, {
-			headers: {
-				Authorization: `Bearer ${store.state.users.jwt || ""}`,
+			...config,
+			...{
+				headers: {
+					Authorization: `Bearer ${store.state.users.jwt || ""}`,
+				},
 			},
 			params: params,
 		});
@@ -29,10 +31,10 @@ export default {
 		});
 	},
 	patch(path, params) {
-		return axios.patch(`${api_url}${path}`, params,{
+		return axios.patch(`${api_url}${path}`, params, {
 			headers: {
 				Authorization: `Bearer ${store.state.users.jwt || ""}`,
-			}
+			},
 		});
-	}
+	},
 };

@@ -14,7 +14,7 @@
 					class="h-7 fill-current text-white"
 				/>
 			</div>
-			<div class="rounded-full py-2 px-2 bg-gray-500">
+			<div class="rounded-full py-2 px-2 bg-gray-500" v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'add-produit')">
 				<Icon
 					icon="bx:bx-paint-roll"
 					@click="openCreateModal"
@@ -260,6 +260,23 @@
 								id="contenance"
 								v-model="newProduit.contenance"
 								placeholder="Contenance"
+								class="rounded-md border-0 w-3/4"
+							/>
+						</div>
+					</div>
+					<div class="flex flex-col w-full">
+						<div class="flex flex-col items-start w-full space-y-2 space-x-2">
+							<label
+								for="prenom"
+								class="flex items-center text-bold h-full rounded-l-md px-2text-xl"
+								>Prix</label
+							>
+							<input
+								type="number"
+								name="prix"
+								id="prix"
+								v-model="newProduit.prix"
+								placeholder="Prix"
 								class="rounded-md border-0 w-3/4"
 							/>
 						</div>
@@ -583,6 +600,9 @@ export default {
 		},
 	},
 	computed: {
+		currentUser(){
+			return this.$store.getters.getCurrentUser;
+		},
 		txt(){
 			return this.newProduit.description?.getText()||true;
 		},

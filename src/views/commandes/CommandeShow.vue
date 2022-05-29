@@ -1,15 +1,83 @@
 <template>
 	<div class="h-full w-full items-center justify-center p-2 space-y-5">
-		<div class="flex flex-row justify-end items-center p-1 space-x-2">
-			<button class="btn gap-2 btn-sm btn-error" @click="deleteCommande">
-				<Icon icon="bi:archive" class="w-5 h-5 ml-2 hidden text-red-500" />
+		<div
+			class="flex flex-row justify-end items-center p-1 space-x-2"
+			v-if="$route.params.id != 'new'"
+		>
+			<button
+				class="btn gap-2 btn-sm btn-error"
+				@click="deleteCommande"
+				v-if="
+					currentUser.Profile.Autorisations.find(
+						(el) => el.nom == 'delete-commande'
+					)
+				"
+			>
+				<Icon icon="bi:archive" class="w-5 h-5 text-red-500" />
 				<label>Archiver</label>
 			</button>
-			<button class="btn gap-2 btn-sm btn-success" @click="validerCommande">
-				<Icon icon="bi:archive" class="w-5 h-5 ml-2 hidden " />
+			<button
+				class="btn gap-2 btn-sm btn-success"
+				@click="validerCommande"
+				v-if="
+					currentUser.Profile.Autorisations.find(
+						(el) => el.nom == 'update-commande'
+					) && !commande.validationAdmin
+				"
+			>
+				<Icon icon="akar-icons:check" class="w-5 h-5" />
 				<label>Valider</label>
 			</button>
-
+			<button
+				class="btn gap-2 btn-sm"
+				@click="handleBDC"
+				v-if="
+					currentUser.Profile.Autorisations.find(
+						(el) => el.nom == 'update-commande'
+					) &&
+					commande.validationAdmin &&
+					commande.validationClient
+				"
+			>
+				<Icon
+					:icon="
+						commande.bonDeCommande
+							? 'akar-icons:file'
+							: 'akar-icons:cloud-upload'
+					"
+					class="w-5 h-5"
+				/>
+				<label>Bon de commande</label>
+			</button>
+		</div>
+		<div class="card glass">
+			<div class="card-body">
+				<!-- <h2 class="card-title">#{{ commande.id }}</h2> -->
+				<div class="flex flex-row h-full gap-3">
+					<div
+						class="bg-yellow-500 rounded-md w-1/4 h-full flex flex-row  py-2 px-1 hover:scale-110 hover:shadow-2xl hover:mx-3 transition-all duration-300 items-center"
+					>
+						<div class="p-2 rounded-full bg-yellow-400 justify-self-start ">
+							<Icon
+								icon="akar-icons:person"
+								class="w-10 h-10 text-gray-600"
+							/>
+						</div>
+						<span class="text-md font-semibold text-gray-600 mx-auto">{{ commande.Client.raisonSociale }}</span>
+					</div>
+					<div
+						class="bg-yellow-500 rounded-md w-1/4 h-full flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl transition-all duration-300 items-center hover:mx-3"
+					>
+						<div class="p-2 rounded-full bg-yellow-400 justify-self-start">
+							<Icon
+								icon="fa-solid:cash-register"
+								class="w-9 h-9 text-gray-600"
+							/>
+						</div>
+						<span class="text-md font-semibold text-gray-600 mx-auto">{{ commande.montant }} DA</span>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="bg-white rounded-md p-2">
 			<Disclosure v-slot="{ open }">
@@ -37,7 +105,12 @@
 							icon="bi:brush"
 							class="h-5 w-5 text-gray-600 self-end"
 							@click="isEditing"
-							v-if="!isEditing"
+							v-if="
+								!isEditing &&
+								currentUser.Profile.Autorisations.find(
+									(el) => el.nom == 'update-commande'
+								)
+							"
 						/>
 						<label class="text-md font-semibold"
 							>Identifiant: {{ commande.id }}</label
@@ -130,9 +203,10 @@
 								>Montant: {{ commande.montant }}</label
 							>
 						</div>
-						
+
 						<button
 							class="btn self-end btn-primary"
+							v-if="isEditing"
 							@click="() => (open = false || saveCommande())"
 						>
 							<label>Enregistrer</label>
@@ -176,7 +250,14 @@
 								<label>Ajouter</label>
 							</button>
 						</div>
-						<div v-else class="flex flex-row space-x-3 justify-end">
+						<div
+							v-if="
+								currentUser.Profile.Autorisations.find(
+									(el) => el.nom == 'update-commande'
+								)
+							"
+							class="flex flex-row space-x-3 justify-end"
+						>
 							<button class="btn btn-secondary btn-sm" @click="startEditMode">
 								<label>Modifier</label>
 							</button>
@@ -411,7 +492,32 @@
 				</transition>
 			</Disclosure>
 		</div>
-		<div class="bg-white rounded-md p-2">
+		<input
+			type="checkbox"
+			id="my-modal-4"
+			v-model="errorFileModal"
+			class="modal-toggle"
+		/>
+		<label
+			for="my-modal-4"
+			class="modal modal-bottom sm:modal-middle cursor-pointer"
+		>
+			<div class="modal-box relative">
+				<h3 class="text-lg font-bold">
+					Erreur lors de la selection du Fichier
+				</h3>
+				<p class="py-2">Seule les fichiers PDF sont autorisés.</p>
+				<div class="modal-action">
+					<label
+						for="my-modal"
+						@click="errorFileModal = false"
+						class="btn btn-sm btn-error"
+						>Ok</label
+					>
+				</div>
+			</div>
+		</label>
+		<!-- <div class="bg-white rounded-md p-2">
 			<Disclosure v-slot="{ open }">
 				<DisclosureButton
 					class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-blue-900 bg-blue-100 rounded-lg hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75"
@@ -616,7 +722,7 @@
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -639,9 +745,13 @@ import {
 	PlusIcon,
 } from "@heroicons/vue/solid";
 import { Icon } from "@iconify/vue";
+import fileDownload from "js-file-download";
+import Api from "@/services/api";
+// import { Buffer } from "buffer";
 export default {
 	data() {
 		return {
+			errorFileModal: false,
 			query: "",
 			isEditing: false,
 			newProduct: {
@@ -658,6 +768,51 @@ export default {
 		};
 	},
 	methods: {
+		handleBDC() {
+			if (this.commande.bonDeCommande != null) {
+				//todo
+				//
+				return Api.get(
+					`/commande/${this.commande.id}/document`,
+					{},
+					{
+						responseType: "arraybuffer",
+						reponseEncoding: "binary",
+						// headers: { "Accept-Encoding": "gzip, deflate, br" },
+					}
+				)
+					.then((response) => {
+						fileDownload(
+							response.data,
+							`Bon De Commande ${this.commande.id}.pdf`,
+							"application/pdf"
+						);
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			var input = document.createElement("input");
+			input.type = "file";
+			input.click();
+			input.onchange = this.uploadFile;
+			// const formData = new FormData();
+			//open file selector and get file
+		},
+		async uploadFile(event) {
+			var file = event.target.files[0];
+			if (file.type != "application/pdf") {
+				console.log("File is not a pdf");
+				this.errorFileModal = true;
+				return;
+			}
+			var formData = new FormData();
+			formData.append("file", file);
+			this.$store.dispatch("uploadBonDeCommande", {
+				formData,
+				id: this.$route.params.id,
+			});
+		},
 		numbersOnly(event) {
 			if (isNaN(parseInt(event.data)))
 				event.target.value = event.target.value.slice(
@@ -707,7 +862,7 @@ export default {
 
 		deleteCommande() {
 			this.$store.dispatch("deleteCommande", this.commande.id);
-			this.$router.go(-1)
+			this.$router.go(-1);
 		},
 		saveCommande() {
 			if (this.$route.params.id == "new") {
@@ -756,8 +911,11 @@ export default {
 			});
 			this.$store.dispatch("showCommande", this.commande.id);
 		},
-		validerCommande(){
-			this.$store.dispatch("commande/validate",{idCommande:this.commande.id,next:this.$router})
+		validerCommande() {
+			this.$store.dispatch("commande/validate", {
+				idCommande: this.commande.id,
+				next: this.$router,
+			});
 		},
 		save() {
 			// if(this.$route.params.id == 'new'){}
@@ -798,7 +956,11 @@ export default {
 	mounted() {
 		this.observer = new IntersectionObserver(this.infiniteScroll);
 	},
+
 	computed: {
+		currentUser() {
+			return this.$store.getters.getCurrentUser;
+		},
 		commande: {
 			get() {
 				return this.$store.getters.getCommande;

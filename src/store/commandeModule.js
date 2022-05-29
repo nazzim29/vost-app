@@ -43,6 +43,20 @@ const fonctionsModule = {
 						context.dispatch("add-error", err.response.data.message)
 					);
 		},
+		downloadBonDeCommande(context, id) {
+			return CommandeService.downloadBonDeCommande(id)
+				.then((res) => {
+					return res;
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				})
+		},
+		uploadBonDeCommande(context, { id, formData }) {
+			return CommandeService.uploadBonDeCommande(id, formData).then(() => {
+				return context.dispatch("showCommande", id);
+			})
+		},
 		deleteCommande(context, id) {
 			return CommandeService.destroy(id)
 				.then(() => {
@@ -58,6 +72,7 @@ const fonctionsModule = {
 		addCommande(context, commande) {
 			return CommandeService.create(commande)
 				.then(({ data }) => {
+					console.log(data)
 					return context.commit("showCommande", data);
 				})
 				.catch((err) => {

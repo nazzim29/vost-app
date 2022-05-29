@@ -149,7 +149,7 @@
 										.autorisations_fonctions
 								"
 							>
-								<div
+								<!-- <div
 									class="inline-flex space-x-1 w-full justify-center items-center"
 								>
 									<input
@@ -188,7 +188,7 @@
 										value="all"
 									/>
 									<label :for="a.nom + '-all'">All</label>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>

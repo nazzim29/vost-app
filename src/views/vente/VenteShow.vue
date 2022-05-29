@@ -125,7 +125,7 @@
 				</transition>
 			</Disclosure>
 		</div>
-		<div class="bg-white rounded-md p-2">
+		<!-- <div class="bg-white rounded-md p-2">
 			<Disclosure v-slot="{ open }">
 				<DisclosureButton
 					class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-blue-900 bg-blue-100 rounded-lg hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75"
@@ -330,27 +330,27 @@
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
-		</div>
+		</div> -->
 	</div>
 </template>
 
 <script>
 import {} from "@heroicons/vue/solid";
 import {
-	Listbox,
-	ListboxButton,
-	ListboxOptions,
-	ListboxOption,
+	// Listbox,
+	// ListboxButton,
+	// ListboxOptions,
+	// ListboxOption,
 	Disclosure,
 	DisclosureButton,
 	DisclosurePanel,
 } from "@headlessui/vue";
 import {
-	CheckIcon,
-	SelectorIcon,
+	// CheckIcon,
+	// SelectorIcon,
 	ChevronUpIcon,
-	MinusIcon,
-	PlusIcon,
+	// MinusIcon,
+	// PlusIcon,
 } from "@heroicons/vue/solid";
 export default {
 	data() {
@@ -444,18 +444,18 @@ export default {
 		},
 	},
 	components: {
-		Listbox,
-		ListboxButton,
-		ListboxOptions,
-		ListboxOption,
-		CheckIcon,
-		SelectorIcon,
+		// Listbox,
+		// ListboxButton,
+		// ListboxOptions,
+		// ListboxOption,
+		// CheckIcon,
+		// SelectorIcon,
 		ChevronUpIcon,
 		Disclosure,
 		DisclosureButton,
 		DisclosurePanel,
-		MinusIcon,
-		PlusIcon,
+		// MinusIcon,
+		// PlusIcon,
 	},
 	beforeMount() {
 		this.$store.dispatch("showVente", this.$route.params.id);
