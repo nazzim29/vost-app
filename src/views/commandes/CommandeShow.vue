@@ -85,9 +85,13 @@
             }}</span>
           </div>
           <div
-            class="bg-yellow-300 rounded-md w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl transition-all duration-300 items-center hover:mx-3"
+            class="rounded-md w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl transition-all duration-300 items-center hover:mx-3"
+            style="background-color: #ffee00"
           >
-            <div class="p-2 rounded-full bg-yellow-400 justify-self-start">
+            <div
+              class="p-2 rounded-full bg-white justify-self-start"
+              style="background-color: rgba(255, 255, 255, 0.4)"
+            >
               <Icon
                 icon="fa-solid:cash-register"
                 class="w-9 h-9 text-gray-600"
