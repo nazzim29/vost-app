@@ -23,22 +23,24 @@
 						class="flex flex-col flex-wrap w-full p-5 space-y-3 bg-white"
 					>
 						<label class="text-md font-semibold"
-							>Identifiant: {{ vente.id }}</label
+							>Identifiant: {{ isNew ? "Nouvelle vente" : vente.id }}</label
 						>
 						<div class="flex flex-row items-center space-x-3 w-full">
 							<label class="text-md font-semibold">Client:</label>
+
+							
 							<span class="text-sm font-medium">
 								{{ vente.Client?.raisonSociale }}
 							</span>
 						</div>
-						<div>
+						<div v-if="!isNew">
 							<label class="text-md font-semibold"
 								>Etat: {{ vente.etat }}</label
 							>
 						</div>
 						<div>
 							<label class="text-md font-semibold"
-								>Montant: {{ vente.montant }}</label
+								>Montant: {{ vente.montant }} DZD</label
 							>
 						</div>
 					</DisclosurePanel>
@@ -65,67 +67,67 @@
 					leave-to-class="transform scale-95 opacity-0"
 				>
 					<DisclosurePanel class="w-full p-5 space-y-3 bg-white flex flex-col">
+						
 						<table class="w-full table items-center">
 							<thead class="w-full flex flex-col">
 								
-								<tr class="md:grid grid-cols-5 hidden">
+								<tr class="md:grid grid-cols-4 hidden">
 									<td class="whitespace-pre-wrap text-center"></td>
-									<td class="whitespace-pre-wrap text-center">prix initiale</td>
 									<td class="whitespace-pre-wrap text-center">prix</td>
 									<td class="whitespace-pre-wrap text-center">quantité</td>
-									<td class="whitespace-pre-wrap text-center">remise</td>
+									<td class="whitespace-pre-wrap text-center"></td>
 								</tr>
 							</thead>
 							<tbody class="grid gap-3">
 								<tr
-									v-for="produit in [...vente.Produits, ...addedProducts]"
+									v-for="produit in [
+										...vente.Produits
+									]"
 									:key="produit"
-									class="grid md:grid-cols-5 border-gray-400 border rounded-md bg-gray-200 shadow-md"
+									class="grid md:grid-cols-4 border-gray-400 border rounded-md bg-gray-200 shadow-md"
 								>
-									<td
-										class="col-span-1"
-									>
-										<span class="whitespace-pre-wrap text-center flex items-center justify-center">{{ produit.nom }} ({{ produit.contenance }}Kg)</span>
-									</td>
-									<td
-										class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
-									>
-										<span class="md:hidden font-semibold">Prix Initiale: </span>
-										<span class="whitespace-pre-wrap text-center flex items-center justify-center">{{ produit.prix }} DA</span>
+									<td class="col-span-1">
+										<span
+											class="whitespace-pre-wrap text-center flex items-center justify-center"
+											>{{ produit.nom }} ({{ produit.contenance }}Kg)</span
+										>
 									</td>
 
-									
 									<td
-										
 										class="col-span-1 whitespace-pre-wrap flex justify-center items-center"
 									>
 										<span class="md:hidden font-semibold">Prix: </span>
-										{{ produit.produits_vente.prix }} DA
+										{{ produit.produits_vente.prix }} DZD
 									</td>
 
-									
 									<td
-										
 										class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
 									>
-									<span class="md:hidden font-semibold">Quantité: </span>
-										{{ produit.produits_vente.quantite }} KG
+										<span class="md:hidden font-semibold">Quantité: </span>
+										x {{ produit.produits_vente.quantite }}
 									</td>
-
 									<td
-										class="col-span-1 whitespace-pre-wrap text-center flex justify-center items-center"
+										class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
 									>
-										<span class="md:hidden font-semibold">Remise: </span>
-										{{ produit.prix - produit.produits_vente.prix }} DA
+										<span class="md:hidden font-semibold">Quantité: </span>
+										{{ produit.produits_vente.quantite * produit.produits_vente.quantite }} DZD
 									</td>
 								</tr>
+							<tfoot>
+								<tr class="grid md:grid-cols-4">
+									<td class="whitespace-pre-wrap text-center"></td>
+									<td class="whitespace-pre-wrap text-center"></td>
+									<td class="whitespace-pre-wrap text-center">Total</td>
+									<td class="whitespace-pre-wrap text-center text-md">{{vente.montant}} DZD</td>
+								</tr>
+							</tfoot>
 							</tbody>
 						</table>
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
 		</div>
-		<!-- <div class="bg-white rounded-md p-2">
+		<div class="bg-white rounded-md p-2">
 			<Disclosure v-slot="{ open }">
 				<DisclosureButton
 					class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-blue-900 bg-blue-100 rounded-lg hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75"
@@ -145,7 +147,7 @@
 					leave-to-class="transform scale-95 opacity-0"
 				>
 					<DisclosurePanel class="w-full p-5 space-y-3 bg-white flex flex-col">
-						<div v-if="isEditing" class="flex flex-row space-x-3">
+						<div class="flex flex-row space-x-3">
 							<button class="btn self-end btn-primary" @click="addPaiement">
 								<PlusIcon class="w-8 h-8 cursor-pointer text-white" />
 								<label>Ajouter</label>
@@ -154,96 +156,15 @@
 						<table class="w-full table items-center">
 							<thead class="w-full flex flex-col">
 								<tr v-if="isEditing" class="grid grid-cols-5">
-									<td class="whitespace-pre-wrap text-center col-span-2">
-										<Listbox v-model="vente.produit">
-											<div class="relative w-full">
-												<ListboxButton
-													class="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm"
-												>
-													<span class="block truncate">{{
-														newProduct.produit?.nom || "Produits..."
-													}}</span>
-													<span
-														class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
-													>
-														<SelectorIcon
-															class="w-5 h-5 text-gray-400"
-															aria-hidden="true"
-														/>
-													</span>
-												</ListboxButton>
-
-												<transition
-													leave-active-class="transition duration-100 ease-in"
-													leave-from-class="opacity-100"
-													leave-to-class="opacity-0"
-												>
-													<ListboxOptions
-														class="absolute w-max py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50"
-													>
-														<ListboxOption
-															v-slot="{ active, selected }"
-															v-for="product in products"
-															:key="product.id"
-															:value="product"
-															as="template"
-														>
-															<li
-																:class="[
-																	active
-																		? 'text-amber-900 bg-amber-100'
-																		: 'text-gray-900',
-																	'cursor-default select-none relative py-2 pl-10 pr-4',
-																]"
-															>
-																<span
-																	:class="[
-																		selected ? 'font-medium' : 'font-normal',
-																		'block truncate',
-																	]"
-																	>{{ product.nom }} ({{
-																		product.contenance
-																	}}kg)</span
-																>
-																<span
-																	v-if="selected"
-																	class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
-																>
-																	<CheckIcon
-																		class="w-5 h-5"
-																		aria-hidden="true"
-																	/>
-																</span>
-															</li>
-														</ListboxOption>
-													</ListboxOptions>
-												</transition>
-											</div>
-										</Listbox>
-									</td>
+									
 									<td class="whitespace-pre-wrap text-center">
 										<input
-											disabled
 											class="w-full h-full p-2 border-2 border-gray-200 rounded-md text-md"
-											:value="(newProduct.produit?.contenance || 0) + ' Da'"
+											v-model="newPaiement.montant"
 										/>
 									</td>
-									<td class="whitespace-pre-wrap text-center">
-										<input
-											type="number"
-											class="w-full p-2 border-2 border-gray-200 rounded-md text-md"
-											v-model="newProduct.produits_vente.prix"
-											placeholder="Prix..."
-										/>
-									</td>
-									<td class="whitespace-pre-wrap text-center">
-										<input
-											type="number"
-											class="w-full p-2 border-2 border-gray-200 rounded-md text-md"
-											v-model="newProduct.produits_vente.quantite"
-											placeholder="Quantité..."
-										/>
-									</td>
+									
+								
 								</tr>
 								<tr class="grid grid-cols-5">
 									<td class="whitespace-pre-wrap text-center"></td>
@@ -330,24 +251,18 @@
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
-		</div> -->
+		</div>
 	</div>
 </template>
 
 <script>
 import {} from "@heroicons/vue/solid";
 import {
-	// Listbox,
-	// ListboxButton,
-	// ListboxOptions,
-	// ListboxOption,
 	Disclosure,
 	DisclosureButton,
 	DisclosurePanel,
 } from "@headlessui/vue";
 import {
-	// CheckIcon,
-	// SelectorIcon,
 	ChevronUpIcon,
 	// MinusIcon,
 	// PlusIcon,
@@ -355,19 +270,7 @@ import {
 export default {
 	data() {
 		return {
-			query: "",
-			isEditing: false,
-			newProduct: {
-				produit: null,
-				produits_vente: {
-					prix: null,
-					quantite: null,
-				},
-			},
-			observer: null,
-			limit: 10,
-			search: "",
-			addedProducts: [],
+			
 		};
 	},
 	methods: {
@@ -378,78 +281,9 @@ export default {
 					event.target.value.length - 1
 				);
 		},
-		scrolllist(e){
-			if(e.target.scrollHeight - e.target.scrollTop == e.target.clientHeight && this.hasNextPage) this.limit+=10;
-		},
-		async onOpen() {
-			if (this.hasNextPage) {
-				await this.$nextTick();
-				this.observer.observe(this.$refs.load);
-			}
-		},
-		onClose() {
-			this.observer.disconnect();
-		},
-		async infiniteScroll([{ isIntersecting, target }]) {
-			console.log(isIntersecting)
-			if (isIntersecting) {
-				const ul = target.offsetParent;
-				const scrollTop = target.offsetParent.scrollTop;
-				this.limit += 10;
-				await this.$nextTick();
-				ul.scrollTop = scrollTop;
-			}
-		},
-		inputgroupfocushandler(e) {
-			e.target.parentNode.classList.add("border");
-			e.target.parentNode.classList.add("border-primary");
-			// e.target.parentNode.classList.add('border-blue-500')
-		},
-		inputgroupblurhandler(e) {
-			e.target.parentNode.classList.remove("border");
-			e.target.parentNode.classList.remove("border-primary");
-			// e.target.parentNode.classList.add('border-blue-500')
-		},
-		startEditMode() {
-			this.isEditing = true;
-		},
-		addProduct() {
-			if (
-				this.newProduct.produit == null ||
-				this.newProduct.produits_vente.prix == null
-			)
-				return;
-			if (!this.newProduct.produits_vente.quantite)
-				this.newProduct.produits_vente.quantite = 1;
-
-			this.addedProducts.push({
-				...this.newProduct.produit,
-				produits_vente: this.newProduct.produits_vente,
-			});
-			this.newProduct = {
-				produit: null,
-				produits_vente: {
-					prix: null,
-					quantite: null,
-				},
-			};
-		},
-		save() {
-			this.$store.dispatch("vente/addProducts", {
-				venteId: this.vente.id,
-				products: this.addedProducts,
-			});
-			this.addedProducts = [];
-			this.isEditing = false;
-		},
+		
 	},
 	components: {
-		// Listbox,
-		// ListboxButton,
-		// ListboxOptions,
-		// ListboxOption,
-		// CheckIcon,
-		// SelectorIcon,
 		ChevronUpIcon,
 		Disclosure,
 		DisclosureButton,
@@ -458,14 +292,11 @@ export default {
 		// PlusIcon,
 	},
 	beforeMount() {
-		this.$store.dispatch("showVente", this.$route.params.id);
+			this.$store.dispatch("showVente", this.$route.params.id);
 		this.$store.dispatch("getClients");
 		this.$store.dispatch("getProduits");
 	},
-	mounted() {
-
-		this.observer = new IntersectionObserver(this.infiniteScroll);
-	},
+	mounted() {},
 	computed: {
 		vente() {
 			return this.$store.getters.getVente;
@@ -482,33 +313,10 @@ export default {
 				return 0;
 			});
 		},
-		paginated() {
-			return this.canAddProducts.slice(0, this.limit);
-		},
-		hasNextPage() {
-			return this.paginated.length < this.canAddProducts.length;
-		},
 		products() {
 			return this.$store.getters.getProduits;
 		},
-		canAddProducts() {
-			let i = this.products.filter((el) => {
-				// console.log(thi)
-				if (
-					this.vente.Produits.find((d) => d.nom == el.nom) ||
-					this.addedProducts.includes((d) => d.nom == el.nom)
-				)
-					return false;
-				if (
-					this.search != "" &&
-					el.nom.toLowerCase().indexOf(this.search.toLowerCase()) == -1
-				)
-					return false;
-				return true;
-			});
-			console.log({ i });
-			return i;
-		},
+		
 	},
 };
 </script>

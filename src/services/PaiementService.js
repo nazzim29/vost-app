@@ -2,22 +2,22 @@ import Api from "./api";
 
 export default {
   create(paiement) {
-    return Api.post("/paiement", paiement);
+    return Api.post("/payement", paiement);
   },
   get(query) {
-    return Api.get("/paiement", query);
+    return Api.get("/payement", query);
   },
   show(id) {
-    return Api.get("/paiement/" + id);
+    return Api.get("/payement/" + id);
   },
   update(paiement) {
-    return Api.put("/paiement/" + paiement.id, paiement);
+    return Api.put("/payement/" + paiement.id, paiement);
   },
   destroy(id) {
-    return Api.delete("/paiement/" + id);
+    return Api.delete("/payement/" + id);
   },
   addProduit(paiementId, product) {
-    return Api.post("/paiement/" + paiementId + "/produit", product);
+    return Api.post("/payement/" + paiementId + "/produit", product);
   },
   updateProduit(paiementId, product) {
     return Api.patch(

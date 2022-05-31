@@ -1,19 +1,22 @@
 <template>
-  <td class="px-4 py-2 col-span-1 hidden md:block">
+<tr class="grid grid-cols-4">
+  <td class="px-4 py-2 col-span-1 ">
     <span class="font-medium">{{ paiement?.id }}</span>
+  </td>
+  <td class="px-4 py-2 col-span-1">
+    <span class="font-medium">{{ formatDate }}</span>
   </td>
   <td class="px-4 py-2 col-span-1">
     <span class="font-medium">{{ paiement?.Client?.raisonSociale }}</span>
   </td>
   <td class="px-4 py-2 col-span-1">
-    <span class="font-medium">{{ paiement?.montant || 0 }} Da</span>
+    <span class="font-medium">{{ paiement?.montant || 0 }} DZD</span>
   </td>
-  <td class="px-4 py-2 col-span-1">
-    <span class="font-medium">{{ paiement?.etat }}</span>
-  </td>
+</tr>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "paiementRow",
   props: {
@@ -25,6 +28,11 @@ export default {
   mounted() {
     // console.log(this.paiement    )
   },
+  computed:{
+    formatDate(){
+      return moment(this.paiement.date).format("DD/MM/YYYY");
+    }
+  }
 };
 </script>
 

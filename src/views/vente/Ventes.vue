@@ -13,13 +13,21 @@
 					class="h-7 fill-current text-white"
 				/>
 			</div>
-			<!-- <div class="rounded-full py-2 px-2 bg-gray-500">
+			<div
+				class="rounded-full py-2 px-2 bg-gray-500"
+				@click="$router.push({ name: 'Vente', params: { id: 'new' } })"
+				v-if="
+					currentUser.Profile.Autorisations.find(
+						(el) => el.nom == 'add-vente'
+					)
+				"
+			>
 				<Icon
-					icon="bx:bx-paint-roll"
+					icon="ant-design:file-add-filled"
 					@click="openCreateModal"
 					class="h-7 w-7 fill-current text-white"
 				/>
-			</div> -->
+			</div>
 		</div>
 		<div class="bg-blue-900">
 			<div>
@@ -93,9 +101,7 @@
 									</h3>
 									<DisclosurePanel class="pt-6">
 										<div class="space-y-6">
-											<div
-												class="flex items-center"
-											>
+											<div class="flex items-center">
 												<input
 													value="en attente"
 													type="checkbox"
@@ -108,9 +114,7 @@
 											</div>
 										</div>
 										<div class="space-y-6">
-											<div
-												class="flex items-center"
-											>
+											<div class="flex items-center">
 												<input
 													value="valide"
 													type="checkbox"
@@ -250,7 +254,7 @@ export default {
 		return {
 			mobileFiltersOpen: false,
 			currentPage: 1,
-			etatsel:[]
+			etatsel: [],
 		};
 	},
 	components: {
@@ -282,6 +286,9 @@ export default {
 			if (this.ventes.length % this.nbperpage != 0) nb++;
 			return parseInt(nb);
 		},
+		currentUser() {
+			return this.$store.getters.getCurrentUser;
+		},
 		ventes() {
 			return this.$store.getters.getVentes;
 		},
@@ -293,18 +300,18 @@ export default {
 	},
 	methods: {
 		searchfn: debounce(async function () {
-			this.$store.dispatch("getVentes",{
-				etat:this.etatsel,
-				"$Client.raisonSociale$":this.$refs.searchbar.search
+			this.$store.dispatch("getVentes", {
+				etat: this.etatsel,
+				"$Client.raisonSociale$": this.$refs.searchbar.search,
 			});
 		}, 500),
 		openCreateModal() {},
 	},
-	watch:{
-		etatsel: function(){
+	watch: {
+		etatsel: function () {
 			this.searchfn();
-		}
-	}
+		},
+	},
 };
 </script>
 
