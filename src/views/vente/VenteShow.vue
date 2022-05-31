@@ -43,6 +43,11 @@
 								>Montant: {{ vente.montant }} DZD</label
 							>
 						</div>
+						<div>
+							<label class="text-md font-semibold"
+								>R.A.P: {{ vente.montant - vente.versement }} DZD</label
+							>
+						</div>
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
@@ -149,18 +154,17 @@
 					<DisclosurePanel class="w-full p-5 space-y-3 bg-white flex flex-col">
 						<table class="w-full table items-center">
 							<thead class="w-full flex flex-col">
-								<tr class="grid grid-cols-5">
+								<tr class="grid grid-cols-3">
 									<td class="whitespace-pre-wrap text-center"></td>
 									<td class="whitespace-pre-wrap text-center">Montant</td>
-									<td class="whitespace-pre-wrap text-center">Client</td>
 									<td class="whitespace-pre-wrap text-center">Date</td>
 								</tr>
 							</thead>
 							<tbody>
 								<tr
-									v-for="paiement in vente.Paiements"
+									v-for="paiement in vente.Payements"
 									:key="paiement"
-									class="grid grid-cols-5"
+									class="grid grid-cols-3"
 								>
 									<td
 										class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
@@ -170,7 +174,7 @@
 									<td
 										class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
 									>
-										{{ paiement.montant }} DZD
+										{{ paiement.ventes_payement.montant }} DZD
 									</td>
 
 									
@@ -178,10 +182,15 @@
 										
 										class="col-span-1 whitespace-pre-wrap flex justify-center items-center"
 									>
-										{{paiement.date}}
+										{{formatDate(paiement.date)}}
 									</td>
 
 									
+								</tr>
+								<tr class="grid grid-cols-3">
+									<td class="whitespace-pre-wrap text-center">Total</td>
+									<td class="whitespace-pre-wrap text-center text-md">{{vente.versement}} DZD</td>
+									<td class="whitespace-pre-wrap text-center"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -194,6 +203,7 @@
 
 <script>
 import {} from "@heroicons/vue/solid";
+import moment from "moment"
 import {
 	Disclosure,
 	DisclosureButton,
@@ -218,6 +228,9 @@ export default {
 					event.target.value.length - 1
 				);
 		},
+		formatDate(date){
+			return moment(date).format('DD/MM/YYYY')
+		}
 		
 	},
 	components: {
