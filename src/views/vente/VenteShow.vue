@@ -1,5 +1,80 @@
 <template>
 	<div class="h-full w-full items-center justify-center p-2 space-y-5">
+		<div class="card glass">
+			<div class="card-body">
+				<!-- <h2 class="card-title">#{{ commande.id }}</h2> -->
+				<div class="flex md:flex-row flex-col h-full gap-3">
+				<div
+					class="rounded-md w-full md:w-16 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:mx-3 transition-all duration-300 items-center"
+					style="background-color: #ffee00"
+				>
+					<span class="text-md font-semibold text-gray-600 mx-auto">{{  vente.id }}</span>
+				</div>
+				<div
+					class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:mx-3 transition-all duration-300 items-center"
+					style="background-color: #ffee00"
+				>
+					<div
+					class="p-2 rounded-full bg-white justify-self-start"
+					style="background-color: rgba(255, 255, 255, 0.4)"
+					>
+					<Icon icon="akar-icons:person" class="w-10 h-10 text-gray-600" />
+					</div>
+					<span class="text-md font-semibold text-gray-600 mx-auto">{{
+					vente.Client?.raisonSociale
+					}}</span>
+				</div>
+				<div
+					class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:mx-3 transition-all duration-300 items-center"
+					style="background-color: #ffee00"
+				>
+					<div
+					class="p-2 rounded-full bg-white justify-self-start"
+					style="background-color: rgba(255, 255, 255, 0.4)"
+					>
+					<Icon icon="akar-icons:check" class="w-10 h-10 text-gray-600" />
+					</div>
+					<span class="text-md font-semibold text-gray-600 mx-auto">{{
+					vente.etat
+					}}</span>
+				</div>
+				<div
+					class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl transition-all duration-300 hover:mx-3 items-center"
+					style="background-color: #ffee00"
+				>
+					<div
+					class="p-2 rounded-full bg-white justify-self-start"
+					style="background-color: rgba(255, 255, 255, 0.4)"
+					>
+					<Icon
+						icon="fa-solid:cash-register"
+						class="w-9 h-9 text-gray-600"
+					/>
+					</div>
+					<span class="text-md font-semibold text-gray-600 mx-auto"
+					>{{ vente.montant }} DZD</span
+					>
+				</div>
+				<div
+					class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl transition-all duration-300 hover:mx-3 items-center"
+					style="background-color: #ffee00"
+				>
+					<div
+					class="p-2 rounded-full bg-white justify-self-start"
+					style="background-color: rgba(255, 255, 255, 0.4)"
+					>
+					<Icon
+						icon="fa-solid:cash-register"
+						class="w-9 h-9 text-gray-600"
+					/>
+					</div>
+					<span class="text-md font-semibold text-gray-600 mx-auto"
+					>{{ vente.montant - vente.versement }} DZD</span
+					>
+				</div>
+			</div>
+		</div>
+    </div>
 		<div class="bg-white rounded-md p-2">
 			<Disclosure v-slot="{ open }">
 				<DisclosureButton
