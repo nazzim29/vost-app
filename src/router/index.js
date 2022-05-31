@@ -198,6 +198,15 @@ const routes = [
       //   autorisation: "read-paiement",
     },
   },
+  {
+    path: "/paiements/:id",
+    name: "PaiementShow",
+    component: loadView("paiement/PaiementShow"),
+    meta: {
+      auth: true,
+      autorisation: "read-paiement",
+    },
+  },
 ];
 
 const router = createRouter({
