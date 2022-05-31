@@ -89,6 +89,9 @@
     <div class="flex flex-row space-x-2 w-full order-2 -mt-3 px-2">
       <div class="flex flex-col flex-1 items-center">
         <label
+          @click="
+            $router.push({ name: 'ClientShow', params: { id: client.id } })
+          "
           class="text-bold w-full text-center whitespace-nowrap overflow-hidden text-ellipsis"
           >{{ client.raisonSociale }}</label
         >

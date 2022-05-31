@@ -190,7 +190,7 @@
     </div>
     <div class="flex-1 flex flex-col h-full w-full overflow-hidden">
       <div
-        class="h-full md:justify-center aligned-center m-4 overflow-auto overflow-x-hidden py-3"
+        class="h-full md:justify-start align-center m-4 flex flex-1 flex-col overflow-auto overflow-x-hidden py-3"
       >
         <div class="text-white text-2xl m-2 mb-4 font-bold">
           <h1>Liste de commandes</h1>

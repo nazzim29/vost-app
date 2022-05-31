@@ -351,7 +351,7 @@
             @click="goto('/parametres')"
           >
             <Icon
-              icon="icon-park-outline:composition"
+              icon="ci:settings-filled"
               class="transition-all ease-linear flex-1 w-10 h-10"
             />
             <label
