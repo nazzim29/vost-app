@@ -147,104 +147,41 @@
 					leave-to-class="transform scale-95 opacity-0"
 				>
 					<DisclosurePanel class="w-full p-5 space-y-3 bg-white flex flex-col">
-						<div class="flex flex-row space-x-3">
-							<button class="btn self-end btn-primary" @click="addPaiement">
-								<PlusIcon class="w-8 h-8 cursor-pointer text-white" />
-								<label>Ajouter</label>
-							</button>
-						</div>
 						<table class="w-full table items-center">
 							<thead class="w-full flex flex-col">
-								<tr v-if="isEditing" class="grid grid-cols-5">
-									
-									<td class="whitespace-pre-wrap text-center">
-										<input
-											class="w-full h-full p-2 border-2 border-gray-200 rounded-md text-md"
-											v-model="newPaiement.montant"
-										/>
-									</td>
-									
-								
-								</tr>
 								<tr class="grid grid-cols-5">
 									<td class="whitespace-pre-wrap text-center"></td>
-									<td class="whitespace-pre-wrap text-center">prix initiale</td>
-									<td class="whitespace-pre-wrap text-center">prix</td>
-									<td class="whitespace-pre-wrap text-center">quantité</td>
-									<td class="whitespace-pre-wrap text-center">remise</td>
+									<td class="whitespace-pre-wrap text-center">Montant</td>
+									<td class="whitespace-pre-wrap text-center">Client</td>
+									<td class="whitespace-pre-wrap text-center">Date</td>
 								</tr>
 							</thead>
 							<tbody>
 								<tr
-									v-for="produit in vente.Produits"
-									:key="produit"
+									v-for="paiement in vente.Paiements"
+									:key="paiement"
 									class="grid grid-cols-5"
 								>
 									<td
 										class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
 									>
-										{{ produit.nom }} ({{ produit.contenance }}Kg)
+										{{paiement.id}}
 									</td>
 									<td
 										class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
 									>
-										{{ produit.prix }} DA
+										{{ paiement.montant }} DZD
 									</td>
 
+									
 									<td
-										v-if="isEditing"
-										class="col-span-1 text-center flex flex-row py-4 form-control items-center justify-center"
-									>
-										<input
-											v-model="produit.produits_vente.prix"
-											class="input input-primary w-20 h-6 focus:outline-none text-center"
-										/>
-										<label class="label items-center">DA</label>
-									</td>
-									<td
-										v-else
+										
 										class="col-span-1 whitespace-pre-wrap flex justify-center items-center"
 									>
-										{{ produit.produits_vente.prix }} DA
+										{{paiement.date}}
 									</td>
 
-									<td
-										v-if="isEditing"
-										class="col-span-1 text-center flex flex-row py-4 form-control items-center justify-center"
-									>
-										<label
-											class="inline-flex overflow-hidden rounded-lg bg-gray-400 justify-evenly"
-											:class="{}"
-										>
-											<MinusIcon
-												class="cursor-pointer h-8 w-8 flex-1"
-												@click="produit.produits_vente.quantite--"
-											/>
-											<input
-												:value="produit.produits_vente.quantite"
-												@focus="inputgroupfocushandler"
-												@blur="inputgroupblurhandler"
-												@input="numbersOnly"
-												class="input focus:outline-none flex-2 w-16 h-auto text-center peer rounded-none focus:border-0 focus:shadow-none focus:ring-0"
-											/>
-											<PlusIcon
-												class="w-8 h-8 cursor-pointer flex-1"
-												@click="produit.produits_vente.quantite++"
-											/>
-										</label>
-									</td>
-									<td
-										v-else
-										class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
-									>
-										{{ produit.produits_vente.quantite }} KG
-									</td>
-
-									<td
-										class="col-span-1 whitespace-pre-wrap text-center flex justify-center items-center"
-									>
-										{{ produit.prix - produit.produits_vente.prix }} DA
-									</td>
+									
 								</tr>
 							</tbody>
 						</table>
