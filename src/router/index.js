@@ -204,7 +204,7 @@ const routes = [
     component: loadView("paiement/PaiementShow"),
     meta: {
       auth: true,
-      autorisation: "read-paiement",
+      //autorisation: "read-paiement",
     },
   },
 ];
