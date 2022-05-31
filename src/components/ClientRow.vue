@@ -92,7 +92,7 @@
           @click="
             $router.push({ name: 'ClientShow', params: { id: client.id } })
           "
-          class="text-bold w-full text-center whitespace-nowrap overflow-hidden text-ellipsis"
+          class="text-bold w-full text-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer"
           >{{ client.raisonSociale }}</label
         >
         <h3 class="text-light text-gray-400 text-sm py-2">

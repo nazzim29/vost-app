@@ -1,12 +1,9 @@
 <template>
-  <div class="flex flex-col w-full h-screen bg-gray-700 space-y-1">
-    <div
-      class="flex self-start w-full items-center space-x-0 md:space-x-3 h-16 px-16 md:items-center"
-    ></div>
-    <div class="flex card bg-base-100 shadow-xl m-4 md:m-20 md:mt-96">
+  <div class="flex flex-col w-full bg-gray-700 gap-3">
+    <div class="flex card bg-base-100 shadow-xl md:mt-16 md:mx-12 mx-2 mt-8">
       <div class="card-body w-full">
         <h2 class="card-title">Profile client</h2>
-        <div class="flex flex-col w-full p-0 md:px-3 overflow-hidden">
+        <div class="flex flex-col w-full p-0 md:px-3">
           <div class="flex flex-col space-y-3 mt-4 p-0 md:px-2">
             <div class="flex md:flex-row flex-col gap-6">
               <div class="flex flex-col space-y-2 w-full md:w-1/2">
@@ -183,282 +180,160 @@
         </div>
       </div>
     </div>
-    <div class="bg-white rounded-md p-2">
-      <Disclosure v-slot="{ open }">
-        <DisclosureButton
-          class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-blue-900 bg-blue-100 rounded-lg hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75"
-        >
-          <span>Details de la commande</span>
-          <ChevronUpIcon
-            :class="open ? 'transform rotate-180' : ''"
-            class="w-5 h-5 text-blue-500 transition-transform duration-100"
-          />
-        </DisclosureButton>
-        <transition
-          enter-active-class="transition duration-100 ease-out"
-          enter-from-class="transform scale-95 opacity-0"
-          enter-to-class="transform scale-100 opacity-100"
-          leave-active-class="transition duration-75 ease-out"
-          leave-from-class="transform scale-100 opacity-100"
-          leave-to-class="transform scale-95 opacity-0"
-        >
-          <DisclosurePanel class="w-full p-5 space-y-3 bg-white flex flex-col">
-            <div v-if="isEditing" class="flex flex-row space-x-3">
-              <button
-                class="btn self-end btn-sm btn-primary"
-                @click="isEditing = false"
-              >
-                <label>Enregistrer</label>
-              </button>
-              <button
-                class="btn self-end btn-sm btn-primary"
-                @click="addProduct"
-              >
-                <PlusIcon class="w-8 h-8 cursor-pointer text-white" />
-                <label>Ajouter</label>
-              </button>
-            </div>
-            <div
-              v-if="
-                currentUser.Profile.Autorisations.find(
-                  (el) => el.nom == 'update-commande'
-                )
-              "
-              class="flex flex-row space-x-3 justify-end"
+    <div class="md:mx-12 mx-2">
+      <div class="bg-white rounded-xl p-2 mb-10">
+        <Disclosure v-slot="{ open }">
+          <DisclosureButton
+            class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-blue-900 bg-blue-100 rounded-lg hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75"
+          >
+            <span>Liste des paiements</span>
+            <ChevronUpIcon
+              :class="open ? 'rotate-180 transform' : ''"
+              class="h-5 w-5 text-purple-500"
+            />
+          </DisclosureButton>
+          <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+            <transition
+              enter-active-class="transition duration-100 ease-out"
+              enter-from-class="transform scale-95 opacity-0"
+              enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-75 ease-out"
+              leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0"
             >
-              <button class="btn btn-secondary btn-sm" @click="startEditMode">
-                <label>Modifier</label>
-              </button>
-            </div>
-            <table
-              class="w-full table items-center"
-              v-if="commande.Produits.length != 0 || isEditing"
-            >
-              <thead class="w-full flex flex-col">
-                <tr
-                  v-if="isEditing"
-                  class="grid grid-cols-1 md:grid-cols-5 items-center"
-                >
-                  <td
-                    class="h-full whitespace-pre-wrap text-center md:col-span-2"
-                  >
-                    <Listbox v-model="newProduct.produit" v-slot="{ open }">
-                      <div class="relative w-full">
-                        <ListboxButton
-                          @focus="onOpen"
-                          @blur="onClose"
-                          class="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm"
+              <DisclosurePanel
+                class="w-full p-5 space-y-3 bg-white flex flex-col"
+              >
+                <table class="w-full table items-center">
+                  <thead class="w-full flex flex-col">
+                    <tr class="md:grid grid-cols-4 hidden">
+                      <td class="whitespace-pre-wrap text-center"></td>
+                      <td class="whitespace-pre-wrap text-center">
+                        Date de paiement
+                      </td>
+                      <td class="whitespace-pre-wrap text-center">Montant</td>
+                      <td class="whitespace-pre-wrap text-center">
+                        Reste a payer
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody class="grid gap-3">
+                    <tr
+                      class="grid md:grid-cols-4 border-gray-400 border rounded-md bg-gray-200 shadow-md"
+                    >
+                      <td class="col-span-1">
+                        <span
+                          class="whitespace-pre-wrap text-center flex items-center justify-center"
+                          >paiement?.id</span
                         >
-                          <span class="block truncate">{{
-                            newProduct.produit?.nom || "Produits..."
-                          }}</span>
-                          <span
-                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
-                          >
-                            <SelectorIcon
-                              class="w-5 h-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </ListboxButton>
+                      </td>
 
-                        <transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
-                        >
-                          <ListboxOptions
-                            static
-                            v-show="open"
-                            @scroll="scrolllist"
-                            class="absolute w-max py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50"
-                          >
-                            <ListboxOption
-                              v-slot="{ active, selected }"
-                              v-for="product in paginated"
-                              :key="product.id"
-                              :value="product"
-                              as="template"
-                            >
-                              <li
-                                :class="[
-                                  active
-                                    ? 'text-amber-900 bg-amber-100'
-                                    : 'text-gray-900',
-                                  'cursor-default select-none relative py-2 pl-10 pr-4',
-                                ]"
-                              >
-                                <span
-                                  :class="[
-                                    selected ? 'font-medium' : 'font-normal',
-                                    'block truncate',
-                                  ]"
-                                  >{{ product.nom }} ({{
-                                    product.contenance
-                                  }}kg)</span
-                                >
-                                <span
-                                  v-if="selected"
-                                  class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
-                                >
-                                  <CheckIcon
-                                    class="w-5 h-5"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                            <ListboxOption v-show="hasNextPage">
-                              <span ref="load"> loading</span>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </transition>
-                      </div>
-                    </Listbox>
-                  </td>
-                  <td class="h-full whitespace-pre-wrap text-center">
-                    <input
-                      disabled
-                      class="w-full h-full p-2 border-2 border-gray-200 rounded-md text-md"
-                      :value="(newProduct.produit?.contenance || 0) + ' Da'"
-                    />
-                  </td>
-                  <td class="h-full whitespace-pre-wrap text-center">
-                    <input
-                      type="number"
-                      class="w-full p-2 border-2 border-gray-200 rounded-md text-md"
-                      v-model="newProduct.produits_commande.prix"
-                      placeholder="Prix..."
-                    />
-                  </td>
-                  <td class="h-full whitespace-pre-wrap text-center">
-                    <input
-                      type="number"
-                      class="w-full p-2 border-2 border-gray-200 rounded-md text-md"
-                      v-model="newProduct.produits_commande.quantite"
-                      placeholder="Quantité..."
-                    />
-                  </td>
-                </tr>
-                <tr class="md:grid grid-cols-5 hidden">
-                  <td class="whitespace-pre-wrap text-center"></td>
-                  <td class="whitespace-pre-wrap text-center">prix initiale</td>
-                  <td class="whitespace-pre-wrap text-center">prix</td>
-                  <td class="whitespace-pre-wrap text-center">quantité</td>
-                  <td class="whitespace-pre-wrap text-center">remise</td>
-                </tr>
-              </thead>
-              <tbody class="grid gap-3">
-                <tr
-                  v-for="produit in [...commande.Produits, ...addedProducts]"
-                  :key="produit"
-                  class="grid relative md:grid-cols-5 border-gray-400 border rounded-md bg-gray-200 shadow-md mt-5"
+                      <td
+                        class="col-span-1 whitespace-pre-wrap flex justify-center items-center"
+                      >
+                        <span class="font-semibold"> paiement?.date </span>
+                      </td>
+
+                      <td
+                        class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
+                      >
+                        <span class="font-semibold">paiement?.montant DZD</span>
+                      </td>
+                      <td
+                        class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
+                      >
+                        <span class="font-semibold">reste a p calcul</span>
+                      </td>
+                    </tr>
+
+                    <!-- <tfoot>
+								<tr class="grid md:grid-cols-4">
+									<td class="whitespace-pre-wrap text-center"></td>
+									<td class="whitespace-pre-wrap text-center"></td>
+									<td class="whitespace-pre-wrap text-center">Total</td>
+									<td class="whitespace-pre-wrap text-center text-md">{{paiement.montant}} DZD</td>
+								</tr>
+							</tfoot> -->
+                  </tbody>
+                </table>
+              </DisclosurePanel>
+            </transition>
+            <!-- <div class="flex-1 flex flex-col h-full w-full overflow-hidden">
+              <div
+                class="h-full md:justify-center aligned-center w-full flex flex-1 flex-col overflow-auto overflow-x-hidden py-3"
+              >
+                <table
+                  class="bg-white rounded-md mx-1 grid grid-flow-row overflow-hidden text-black my-auto"
                 >
-                  <td class="col-span-1">
-                    <span
-                      class="whitespace-pre-wrap text-center flex items-center justify-center"
-                      >{{ produit.nom }} ({{ produit.contenance }}Kg)</span
+                  <thead>
+                    <tr class="w-full grid grid-flow-col">
+                      <th class="px-2 py-2 col-span-1 hidden md:block"></th>
+                      <th class="px-4 py-2 col-span-1">Montant</th>
+                      <th class="px-4 py-2 col-span-1">Reste a payer</th>
+                      <th class="px-4 py-2 col-span-1">Etat</th>
+                    </tr>
+                  </thead>
+                  <tbody class="w-full grid grid-flow-row overflow-auto">
+                    <router-link
+                      :to="{ name: 'Vente', params: { id: 41 } }"
+                      class="border-b border-gray-400 w-full grid grid-flow-col grid-cols-3 md:grid-cols-4 items-center justify-center text-center odd:bg-slate-200 text-black"
                     >
-                  </td>
-                  <td
-                    class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
-                  >
-                    <span class="md:hidden font-semibold">Prix Initiale: </span>
-                    <span
-                      class="whitespace-pre-wrap text-center flex items-center justify-center"
-                      >{{ produit.prix }} DA</span
+                      <td class="px-4 py-2 col-span-1 hidden md:block">
+                        <span class="font-medium"> paiement?.id </span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium">
+                          paiement?.Client?.raisonSociale
+                        </span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium">paiement?.montant</span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium"> paiement?.etat </span>
+                      </td>
+                    </router-link>
+                    <router-link
+                      v-for="paiement in showedVentes"
+                      :key="paiement.id"
+                      :to="{ name: 'Vente', params: { id: paiement.id } }"
+                      class="border-b border-gray-400 w-full grid grid-flow-col grid-cols-3 md:grid-cols-4 items-center justify-center text-center odd:bg-slate-200 text-black"
                     >
-                  </td>
-
-                  <td
-                    v-if="isEditing"
-                    class="col-span-1 text-center flex flex-row py-4 form-control items-center justify-center"
-                  >
-                    <span class="md:hidden font-semibold md:mr-0 mr-2"
-                      >Prix :
-                    </span>
-                    <input
-                      v-model="produit.produits_commande.prix"
-                      @change="updateProduit(produit)"
-                      class="input input-primary w-20 h-6 focus:outline-none text-center"
-                    />
-                    <label class="label items-center">DA</label>
-                  </td>
-                  <td
-                    v-else
-                    class="col-span-1 whitespace-pre-wrap flex justify-center items-center"
-                  >
-                    <span class="md:hidden font-semibold">Prix: </span>
-                    {{ produit.produits_commande.prix }} DA
-                  </td>
-
-                  <td
-                    v-if="isEditing"
-                    class="col-span-1 text-center flex flex-row py-4 form-control items-center justify-center"
-                  >
-                    <span class="md:hidden font-semibold mr-2 md:mr-0"
-                      >Quantité:
-                    </span>
-                    <label
-                      class="inline-flex overflow-hidden rounded-lg bg-gray-400 justify-evenly"
-                      :class="{}"
-                    >
-                      <MinusIcon
-                        class="cursor-pointer h-8 w-8 flex-1"
-                        @click="
-                          produit.produits_commande.quantite-- &&
-                            updateProduit(produit)
-                        "
-                      />
-                      <input
-                        :value="produit.produits_commande.quantite"
-                        @focus="inputgroupfocushandler"
-                        @blur="inputgroupblurhandler"
-                        @input="numbersOnly"
-                        @change="updateProduit(produit)"
-                        class="input focus:outline-none flex-2 w-16 h-auto text-center peer rounded-none focus:border-0 focus:shadow-none focus:ring-0"
-                      />
-                      <PlusIcon
-                        class="w-8 h-8 cursor-pointer flex-1"
-                        @click="
-                          produit.produits_commande.quantite++ &&
-                            updateProduit(produit)
-                        "
-                      />
-                    </label>
-                  </td>
-                  <td
-                    v-else
-                    class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
-                  >
-                    <span class="md:hidden font-semibold">Quantité: </span>
-                    {{ produit.produits_commande.quantite }} KG
-                  </td>
-
-                  <td
-                    class="col-span-1 whitespace-pre-wrap text-center flex justify-center items-center"
-                  >
-                    <span class="md:hidden font-semibold">Remise: </span>
-                    {{ produit.prix - produit.produits_commande.prix }} DA
-                  </td>
-                  <div
-                    class="absolute -top-4 -right-4 w-8 h-8 text-red-600 rounded-full bg-white"
-                  >
-                    <Icon
-                      class="w-full h-full"
-                      icon="dashicons:remove"
-                      @click="deleteProduit(produit.id)"
-                    />
-                  </div>
-                </tr>
-              </tbody>
-            </table>
-            <h4 v-else class="font-semibold text-center">
-              Cette commande ne contient aucun produit
-            </h4>
+                      <td class="px-4 py-2 col-span-1 hidden md:block">
+                        <span class="font-medium">{{ paiement?.id }}</span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium">{{
+                          paiement?.Client?.raisonSociale
+                        }}</span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium"
+                          >{{ paiement?.montant || 0 }} Da</span
+                        >
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium">{{ paiement?.etat }}</span>
+                      </td>
+                    </router-link>
+                  </tbody>
+                </table>
+              </div>
+              <Pagination
+                ref="Pagination"
+                :currentPage="currentPage"
+                :pageSize="nbperpage"
+                :dataLength="paiements.length"
+                @page="currentPage = $event"
+                @next="currentPage++"
+                @prev="currentPage--"
+                @first="currentPage = 1"
+                @last="currentPage = $refs.Pagination.pageNumber"
+              />
+            </div> -->
           </DisclosurePanel>
-        </transition>
-      </Disclosure>
+        </Disclosure>
+      </div>
     </div>
   </div>
 </template>
@@ -468,20 +343,12 @@ import {} from "@heroicons/vue/solid";
 import {
   Listbox,
   ListboxButton,
-  ListboxOptions,
-  ListboxOption,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/vue";
-import {
-  CheckIcon,
-  SelectorIcon,
-  ChevronUpIcon,
-  MinusIcon,
-  PlusIcon,
-} from "@heroicons/vue/solid";
-import { Icon } from "@iconify/vue";
+import { SelectorIcon, ChevronUpIcon } from "@heroicons/vue/solid";
+//import { Icon } from "@iconify/vue";
 import fileDownload from "js-file-download";
 import Api from "@/services/api";
 // import { Buffer } from "buffer";
@@ -667,17 +534,12 @@ export default {
   components: {
     Listbox,
     ListboxButton,
-    ListboxOptions,
-    ListboxOption,
-    CheckIcon,
+
     SelectorIcon,
     ChevronUpIcon,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
-    MinusIcon,
-    PlusIcon,
-    Icon,
   },
   beforeMount() {
     if (this.$route.params.id != "new")

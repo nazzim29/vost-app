@@ -3,11 +3,7 @@
     class="h-full w-full items-center justify-center p-2 space-y-5"
     style="font-family: Roboto"
   >
-    <div class="flex flex-row justify-end items-center p-1 space-x-2">
-      <div class="text-white text-2xl m-2 mb-4 font-bold">
-        <h1>Détails paiement</h1>
-      </div>
-    </div>
+    <div class="flex flex-row justify-end items-center p-1 h-16"></div>
     <div class="card glass">
       <div class="card-body">
         <!-- <h2 class="card-title">#{{ commande.id }}</h2> -->
@@ -81,81 +77,141 @@
             />
           </DisclosureButton>
           <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
-            <div>
-              <div class="flex-1 flex flex-col h-full w-full overflow-hidden">
-                <div
-                  class="h-full md:justify-center aligned-center w-full flex flex-1 flex-col overflow-auto overflow-x-hidden py-3"
+            <transition
+              enter-active-class="transition duration-100 ease-out"
+              enter-from-class="transform scale-95 opacity-0"
+              enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-75 ease-out"
+              leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0"
+            >
+              <DisclosurePanel
+                class="w-full p-5 space-y-3 bg-white flex flex-col"
+              >
+                <table class="w-full table items-center">
+                  <thead class="w-full flex flex-col">
+                    <tr class="md:grid grid-cols-4 hidden">
+                      <td class="whitespace-pre-wrap text-center"></td>
+                      <td class="whitespace-pre-wrap text-center">Montant</td>
+                      <td class="whitespace-pre-wrap text-center">
+                        Reste a payer
+                      </td>
+                      <td class="whitespace-pre-wrap text-center">Etat</td>
+                    </tr>
+                  </thead>
+                  <tbody class="grid gap-3">
+                    <tr
+                      class="grid md:grid-cols-4 border-gray-400 border rounded-md bg-gray-200 shadow-md"
+                    >
+                      <td class="col-span-1">
+                        <span
+                          class="whitespace-pre-wrap text-center flex items-center justify-center"
+                          >vente?.id</span
+                        >
+                      </td>
+
+                      <td
+                        class="col-span-1 whitespace-pre-wrap flex justify-center items-center"
+                      >
+                        <span class="font-semibold"> vente?.montant DZD </span>
+                      </td>
+
+                      <td
+                        class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
+                      >
+                        <span class="font-semibold">reste a p calcul</span>
+                      </td>
+                      <td
+                        class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
+                      >
+                        <span class="font-semibold">etat</span>
+                      </td>
+                    </tr>
+                    <!-- <tfoot>
+								<tr class="grid md:grid-cols-4">
+									<td class="whitespace-pre-wrap text-center"></td>
+									<td class="whitespace-pre-wrap text-center"></td>
+									<td class="whitespace-pre-wrap text-center">Total</td>
+									<td class="whitespace-pre-wrap text-center text-md">{{vente.montant}} DZD</td>
+								</tr>
+							</tfoot> -->
+                  </tbody>
+                </table>
+              </DisclosurePanel>
+            </transition>
+            <!-- <div class="flex-1 flex flex-col h-full w-full overflow-hidden">
+              <div
+                class="h-full md:justify-center aligned-center w-full flex flex-1 flex-col overflow-auto overflow-x-hidden py-3"
+              >
+                <table
+                  class="bg-white rounded-md mx-1 grid grid-flow-row overflow-hidden text-black my-auto"
                 >
-                  <table
-                    class="bg-white rounded-md mx-1 grid grid-flow-row overflow-hidden text-black my-auto"
-                  >
-                    <thead>
-                      <tr class="w-full grid grid-flow-col">
-                        <th class="px-2 py-2 col-span-1 hidden md:block"></th>
-                        <th class="px-4 py-2 col-span-1">Montant</th>
-                        <th class="px-4 py-2 col-span-1">Reste a payer</th>
-                        <th class="px-4 py-2 col-span-1">Etat</th>
-                      </tr>
-                    </thead>
-                    <tbody class="w-full grid grid-flow-row overflow-auto">
-                      <router-link
-                        :to="{ name: 'Vente', params: { id: 41 } }"
-                        class="border-b border-gray-400 w-full grid grid-flow-col grid-cols-3 md:grid-cols-4 items-center justify-center text-center odd:bg-slate-200 text-black"
-                      >
-                        <td class="px-4 py-2 col-span-1 hidden md:block">
-                          <span class="font-medium"> vente?.id </span>
-                        </td>
-                        <td class="px-4 py-2 col-span-1">
-                          <span class="font-medium">
-                            vente?.Client?.raisonSociale
-                          </span>
-                        </td>
-                        <td class="px-4 py-2 col-span-1">
-                          <span class="font-medium">vente?.montant</span>
-                        </td>
-                        <td class="px-4 py-2 col-span-1">
-                          <span class="font-medium"> vente?.etat </span>
-                        </td>
-                      </router-link>
-                      <!-- <router-link
-                        v-for="vente in showedVentes"
-                        :key="vente.id"
-                        :to="{ name: 'Vente', params: { id: vente.id } }"
-                        class="border-b border-gray-400 w-full grid grid-flow-col grid-cols-3 md:grid-cols-4 items-center justify-center text-center odd:bg-slate-200 text-black"
-                      >
-                        <td class="px-4 py-2 col-span-1 hidden md:block">
-                          <span class="font-medium">{{ vente?.id }}</span>
-                        </td>
-                        <td class="px-4 py-2 col-span-1">
-                          <span class="font-medium">{{
-                            vente?.Client?.raisonSociale
-                          }}</span>
-                        </td>
-                        <td class="px-4 py-2 col-span-1">
-                          <span class="font-medium"
-                            >{{ vente?.montant || 0 }} Da</span
-                          >
-                        </td>
-                        <td class="px-4 py-2 col-span-1">
-                          <span class="font-medium">{{ vente?.etat }}</span>
-                        </td>
-                      </router-link> -->
-                    </tbody>
-                  </table>
-                </div>
-                <!-- <Pagination
-                  ref="Pagination"
-                  :currentPage="currentPage"
-                  :pageSize="nbperpage"
-                  :dataLength="ventes.length"
-                  @page="currentPage = $event"
-                  @next="currentPage++"
-                  @prev="currentPage--"
-                  @first="currentPage = 1"
-                  @last="currentPage = $refs.Pagination.pageNumber"
-                /> -->
+                  <thead>
+                    <tr class="w-full grid grid-flow-col">
+                      <th class="px-2 py-2 col-span-1 hidden md:block"></th>
+                      <th class="px-4 py-2 col-span-1">Montant</th>
+                      <th class="px-4 py-2 col-span-1">Reste a payer</th>
+                      <th class="px-4 py-2 col-span-1">Etat</th>
+                    </tr>
+                  </thead>
+                  <tbody class="w-full grid grid-flow-row overflow-auto">
+                    <router-link
+                      :to="{ name: 'Vente', params: { id: 41 } }"
+                      class="border-b border-gray-400 w-full grid grid-flow-col grid-cols-3 md:grid-cols-4 items-center justify-center text-center odd:bg-slate-200 text-black"
+                    >
+                      <td class="px-4 py-2 col-span-1 hidden md:block">
+                        <span class="font-medium"> vente?.id </span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium">
+                          vente?.Client?.raisonSociale
+                        </span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium">vente?.montant</span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium"> vente?.etat </span>
+                      </td>
+                    </router-link>
+                    <router-link
+                      v-for="vente in showedVentes"
+                      :key="vente.id"
+                      :to="{ name: 'Vente', params: { id: vente.id } }"
+                      class="border-b border-gray-400 w-full grid grid-flow-col grid-cols-3 md:grid-cols-4 items-center justify-center text-center odd:bg-slate-200 text-black"
+                    >
+                      <td class="px-4 py-2 col-span-1 hidden md:block">
+                        <span class="font-medium">{{ vente?.id }}</span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium">{{
+                          vente?.Client?.raisonSociale
+                        }}</span>
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium"
+                          >{{ vente?.montant || 0 }} Da</span
+                        >
+                      </td>
+                      <td class="px-4 py-2 col-span-1">
+                        <span class="font-medium">{{ vente?.etat }}</span>
+                      </td>
+                    </router-link>
+                  </tbody>
+                </table>
               </div>
-            </div>
+              <Pagination
+                ref="Pagination"
+                :currentPage="currentPage"
+                :pageSize="nbperpage"
+                :dataLength="ventes.length"
+                @page="currentPage = $event"
+                @next="currentPage++"
+                @prev="currentPage--"
+                @first="currentPage = 1"
+                @last="currentPage = $refs.Pagination.pageNumber"
+              />
+            </div> -->
           </DisclosurePanel>
         </Disclosure>
       </div>
