@@ -105,11 +105,11 @@
           <h1>Liste des paiements</h1>
         </div>
         <table
-          class="bg-white rounded-md mx-1 grid grid-flow-row overflow-hidden text-black top-0"
+          class="table bg-white rounded-md mx-1 grid grid-flow-row overflow-hidden text-black top-0"
         >
           <thead>
-            <tr class="w-full grid grid-flow-col">
-              <th class="px-2 py-2 col-span-1 hidden md:block"></th>
+            <tr class="w-full grid grid-cols-4">
+              <th class="px-2 py-2 col-span-1 hidden md:table-cell"></th>
               <th class="px-4 py-2 col-span-1">Date de paiement</th>
               <th class="px-4 py-2 col-span-1">Client</th>
               <th class="px-4 py-2 col-span-1">Montant Total</th>
@@ -211,6 +211,7 @@ export default {
       });
     }, 500),
     openCreateModal() {},
+    
   },
   watch: {
     etatsel: function () {
