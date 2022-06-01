@@ -53,20 +53,21 @@
         <label>Bon de commande</label>
       </button>
     </div>
-    <div class="card glass">
+    <div class="card glass overflow-visible">
       <div class="card-body">
         <!-- <h2 class="card-title">#{{ commande.id }}</h2> -->
         <div class="flex md:flex-row flex-col h-full gap-3">
           <div
-            class="rounded-md w-full md:w-16 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:mx-3 transition-all duration-300 items-center"
+            class="rounded-md w-full md:w-16 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:my-3 md:hover:mx-3 transition-all duration-300 items-center"
             style="background-color: #ffee00"
+            v-if="commande.id"
           >
             <span class="text-md font-semibold text-gray-600 mx-auto">{{
               commande.id
             }}</span>
           </div>
           <div
-            class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:mx-3 transition-all duration-300 items-center"
+            class="rounded-md w-full md:w-2/6 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:my-3 md:hover:mx-3 hover:md:my-0 transition-all duration-300 items-center"
             style="background-color: #ffee00"
           >
             <div
@@ -75,13 +76,88 @@
             >
               <Icon icon="akar-icons:person" class="w-10 h-10 text-gray-600" />
             </div>
-            <span class="text-md font-semibold text-gray-600 mx-auto">{{
-              commande.Client.raisonSociale
+            <Combobox v-if="isEditing" v-model="commande.Client">
+							<div class="relative mt-1">
+								<div
+									class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
+								>
+									<ComboboxInput
+										class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+										:displayValue="(person) => person.raisonSociale || ''"
+										@change="queryClient = $event.target.value"
+									/>
+									<ComboboxButton
+										class="absolute inset-y-0 right-0 flex items-center pr-2"
+									>
+										<SelectorIcon
+											class="h-5 w-5 text-gray-400"
+											aria-hidden="true"
+										/>
+									</ComboboxButton>
+								</div>
+								<TransitionRoot
+									leave="transition ease-in duration-100"
+									leaveFrom="opacity-100"
+									leaveTo="opacity-0"
+									@after-leave="queryClient = ''"
+								>
+									<ComboboxOptions
+										class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+									>
+										<div
+											v-if="filtredClients.length === 0 && queryClient !== ''"
+											class="relative cursor-default select-none py-2 px-4 text-gray-700"
+										>
+											Nothing found.
+										</div>
+
+										<ComboboxOption
+											v-for="person in filtredClients"
+											as="template"
+											:key="person.id"
+											:value="person"
+											v-slot="{ selected, active }"
+										>
+											<li
+												class="relative cursor-default select-none py-2 pl-10 pr-4"
+												:class="{
+													'bg-teal-600 text-white': active,
+													'text-gray-900': !active,
+												}"
+											>
+												<span
+													class="block truncate"
+													:class="{
+														'font-medium': selected,
+														'font-normal': !selected,
+													}"
+												>
+													{{ person.raisonSociale }}
+												</span>
+												<span
+													v-if="selected"
+													class="absolute inset-y-0 left-0 flex items-center pl-3"
+													:class="{
+														'text-white': active,
+														'text-teal-600': !active,
+													}"
+												>
+													<CheckIcon class="h-5 w-5" aria-hidden="true" />
+												</span>
+											</li>
+										</ComboboxOption>
+									</ComboboxOptions>
+								</TransitionRoot>
+							</div>
+						</Combobox>
+            <span v-else class="text-md font-semibold text-gray-600 mx-auto">{{
+              commande.Client?.raisonSociale
             }}</span>
           </div>
           <div
-            class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:mx-3 transition-all duration-300 items-center"
+            class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl hover:my-3 hover:md:mx-3 hover:md:my-0 transition-all duration-300 items-center"
             style="background-color: #ffee00"
+            
           >
             <div
               class="p-2 rounded-full bg-white justify-self-start"
@@ -94,7 +170,7 @@
             }}</span>
           </div>
           <div
-            class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl transition-all duration-300 hover:mx-3 items-center"
+            class="rounded-md w-full md:w-1/4 h-16 flex flex-row py-2 px-1 hover:scale-110 hover:shadow-2xl transition-all duration-300 hover:my-3 hover:md:my-0 md:hover:mx-3 items-center"
             style="background-color: #ffee00"
           >
             <div
@@ -111,6 +187,13 @@
             >
           </div>
         </div>
+          <button
+              class="btn self-end btn-primary"
+              v-if="isEditing"
+              @click="saveCommande"
+            >
+              <label>Enregistrer</label>
+            </button>
       </div>
     </div>
     <!-- <div class="bg-white rounded-md p-2">
@@ -292,7 +375,7 @@
               "
               class="flex flex-row space-x-3 justify-end"
             >
-              <button class="btn btn-secondary btn-sm" @click="startEditMode">
+              <button class="btn btn-secondary btn-sm" @click="startEditMode" v-if="!isEditing">
                 <label>Modifier</label>
               </button>
             </div>
@@ -770,6 +853,7 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
+  Combobox,ComboboxButton,ComboboxInput,ComboboxOptions,ComboboxOption
 } from "@headlessui/vue";
 import {
   CheckIcon,
@@ -787,6 +871,7 @@ export default {
     return {
       errorFileModal: false,
       query: "",
+      queryClient:"",
       isEditing: false,
       newProduct: {
         produit: null,
@@ -975,6 +1060,7 @@ export default {
     MinusIcon,
     PlusIcon,
     Icon,
+    Combobox,ComboboxButton,ComboboxInput,ComboboxOptions,ComboboxOption
   },
   beforeMount() {
     if (this.$route.params.id != "new")
@@ -1014,6 +1100,11 @@ export default {
         }
         return 0;
       });
+    },
+    filtredClients(){
+      return this.$store.getters.getClients.filter(el=>{
+        return el.raisonSociale.toLowerCase().includes(this.queryClient.toLowerCase())
+      })
     },
     paginated() {
       return this.canAddProducts.slice(0, this.limit);

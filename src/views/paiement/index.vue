@@ -13,9 +13,10 @@
           class="h-7 fill-current text-white"
         />
       </div>
+      
       <div
         class="rounded-full py-2 px-2 bg-gray-500"
-        @click="$router.push({ name: 'Paiement', params: { id: 'new' } })"
+        @click="$router.push({ name: 'PaiementShow', params: { id: 'new' } })"
         v-if="
           currentUser.Profile.Autorisations.find(
             (el) => el.nom == 'add-paiement'
@@ -24,7 +25,6 @@
       >
         <Icon
           icon="ant-design:file-add-filled"
-          @click="openCreateModal"
           class="h-7 w-7 fill-current text-white"
         />
       </div>
