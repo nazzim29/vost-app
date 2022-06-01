@@ -15,8 +15,7 @@ const fonctionsModule = {
 		},
 		setCountVentes(state, count) {
 			state.count = count;
-		}
-
+		},
 	},
 	actions: {
 		getVentes(context, query) {
@@ -45,6 +44,15 @@ const fonctionsModule = {
 				.catch((err) =>
 					context.dispatch("add-error", err.response.data.message)
 				);
+		},
+		downloadFacture(context, id) {
+			return VenteServices.downloadFacture(id)
+				.then((res) => {
+					return res;
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
 		},
 		deleteVente(context, id) {
 			return VenteServices.destroy(id)

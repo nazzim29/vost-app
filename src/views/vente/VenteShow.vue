@@ -1,5 +1,26 @@
 <template>
 	<div class="h-full w-full items-center justify-center p-2 space-y-5">
+		<div class="flex flex-row gap-2 py-2 w-full justify-end">
+			<button
+				class="btn gap-2 btn-sm btn-primary"
+				@click="facture"	
+			>
+				<label>facture </label>
+			</button>
+			<button v-if="vente.etat == ''"
+				class="btn gap-2 btn-sm btn-primary"
+				@click="valide"	
+			>
+				<label>Livrée </label>
+			</button>
+		<!-- <button
+        class="btn gap-2 btn-sm btn-primary"
+        @click="bonLivraison"
+       
+      >
+        <label>Bon de livraison </label>
+      </button> -->
+		</div>
 		<div class="card glass">
 			<div class="card-body">
 				<!-- <h2 class="card-title">#{{ commande.id }}</h2> -->
@@ -75,7 +96,7 @@
 			</div>
 		</div>
     </div>
-		<div class="bg-white rounded-md p-2">
+		<!-- <div class="bg-white rounded-md p-2">
 			<Disclosure v-slot="{ open }">
 				<DisclosureButton
 					class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-blue-900 bg-blue-100 rounded-lg hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75"
@@ -126,7 +147,7 @@
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
-		</div>
+		</div> -->
 		<div class="bg-white rounded-md p-2">
 			<Disclosure v-slot="{ open }">
 				<DisclosureButton
@@ -278,6 +299,7 @@
 
 <script>
 import {} from "@heroicons/vue/solid";
+import {Icon} from "@iconify/vue";
 import moment from "moment"
 import {
 	Disclosure,
@@ -289,6 +311,7 @@ import {
 	// MinusIcon,
 	// PlusIcon,
 } from "@heroicons/vue/solid";
+import fileDownload from 'js-file-download';
 export default {
 	data() {
 		return {
@@ -305,6 +328,16 @@ export default {
 		},
 		formatDate(date){
 			return moment(date).format('DD/MM/YYYY')
+		},
+		bonLivraison(){
+			this.$store.dispatch('bonLivraison',this.vente.id)
+		},
+		facture(){
+			this.$store.dispatch('downloadFacture',this.vente.id).then(res=>{
+				fileDownload(res.data,'facture.pdf'),'application/pdf'
+			}).catch(err=>{
+				console.log(err)
+			})
 		}
 		
 	},
@@ -313,6 +346,7 @@ export default {
 		Disclosure,
 		DisclosureButton,
 		DisclosurePanel,
+		Icon,
 		// MinusIcon,
 		// PlusIcon,
 	},

@@ -82,7 +82,7 @@
         </div>
         <div class="flex flex-col h-full w-1/3 justify-center items-center">
           <label class="text-xl font-bold text-black antialiased"
-            >{{ produit.quantite || "0" }}</label
+            >{{ (produit.quantite-produit.vendu) || "0" }}</label
           >
           <label class="text-sm font-light text-gray-500 antialiased"
             >Unités</label

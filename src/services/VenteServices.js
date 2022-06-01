@@ -16,6 +16,13 @@ export default {
 	destroy(id) {
 		return Api.delete("/vente/" + id);
 	},
+	downloadFacture(id) {
+		return Api.get(
+			"/vente/" + id + "/facture",
+			{},
+			{ responseType: "arraybuffer", reponseEncoding: "binary" }
+		);
+	},
 	addProduit(venteId, products) {
 		return Api.post(
 			"/vente/" + venteId + "/produit",
@@ -28,5 +35,5 @@ export default {
 	},
 	getCount() {
 		return Api.get("/vente/count");
-	}
+	},
 };
