@@ -7,7 +7,7 @@
 			>
 				<label>facture </label>
 			</button>
-			<button v-if="vente.etat == ''"
+			<button v-if="vente.etat == 'en cours de livraison' "
 				class="btn gap-2 btn-sm btn-primary"
 				@click="valide"	
 			>
@@ -332,9 +332,16 @@ export default {
 		bonLivraison(){
 			this.$store.dispatch('bonLivraison',this.vente.id)
 		},
+		valide(){
+			this.$store.dispatch('updateVente',{...this.vente,etat:'livree'}).then(()=>{
+				this.$store.dispatch('showVente',this.vente.id)
+			})
+		},
 		facture(){
 			this.$store.dispatch('downloadFacture',this.vente.id).then(res=>{
 				fileDownload(res.data,'facture.pdf'),'application/pdf'
+			}).then(()=>{
+				this.$store.dispatch('showVente',this.vente.id)
 			}).catch(err=>{
 				console.log(err)
 			})

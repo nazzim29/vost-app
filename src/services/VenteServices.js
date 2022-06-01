@@ -11,7 +11,7 @@ export default {
 		return Api.get("/vente/" + id);
 	},
 	update(vente) {
-		return Api.put("/vente/" + vente.id, vente);
+		return Api.post("/vente/" + vente.id, vente);
 	},
 	destroy(id) {
 		return Api.delete("/vente/" + id);
