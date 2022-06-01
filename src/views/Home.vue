@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="flex flex-col md:flex-row w-full">
-      <div class="flex flex-col gap-10 p-8 w-1/2">
+      <div class="flex flex-col gap-10 p-8 w-full md:w-1/2">
         <div class="card md:card-side bg-base-100 shadow-xl">
           <div class="card-body">
             <h2 class="card-title">Paiements</h2>
@@ -94,7 +94,7 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col gap-10 p-8 w-1/2">
+      <div class="flex flex-col gap-10 p-8 w-full md:w-1/2">
         <div class="card md:card-side bg-base-100 shadow-xl">
           <div class="card-body p-0">
             <div class="mx-10 mt-10">
