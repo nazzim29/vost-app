@@ -2,6 +2,10 @@ import CommandeService from "@/services/CommandeService";
 const defaultState = () => ({
 	commandes: [],
 	commande: {},
+	count: {
+		total: 0,
+		attente: 0,
+	},
 });
 const fonctionsModule = {
 	state: defaultState(),
@@ -12,12 +16,25 @@ const fonctionsModule = {
 		showCommande(state, commande) {
 			state.commande = commande;
 		},
+		setCountCommande(state, count) {
+			console.log(count);
+			state.count = count;
+		},
 	},
 	actions: {
 		getCommandes(context, query) {
 			return CommandeService.get(query)
 				.then((res) => {
 					return context.commit("getCommandes", res.data);
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		getCountCommande(context) {
+			return CommandeService.count()
+				.then((res) => {
+					return context.commit("setCountCommande", res.data);
 				})
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
@@ -50,12 +67,12 @@ const fonctionsModule = {
 				})
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
-				})
+				});
 		},
 		uploadBonDeCommande(context, { id, formData }) {
 			return CommandeService.uploadBonDeCommande(id, formData).then(() => {
 				return context.dispatch("showCommande", id);
-			})
+			});
 		},
 		deleteCommande(context, id) {
 			return CommandeService.destroy(id)
@@ -72,7 +89,7 @@ const fonctionsModule = {
 		addCommande(context, commande) {
 			return CommandeService.create(commande)
 				.then(({ data }) => {
-					console.log(data)
+					console.log(data);
 					return context.commit("showCommande", data);
 				})
 				.catch((err) => {
@@ -130,6 +147,7 @@ const fonctionsModule = {
 	getters: {
 		getCommandes: (state) => state.commandes,
 		getCommande: (state) => state.commande,
+		countCommande: (state) => state.count,
 	},
 };
 

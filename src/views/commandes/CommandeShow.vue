@@ -489,19 +489,17 @@
                     />
                   </td>
                 </tr>
-                <tr class="md:grid grid-cols-5 hidden">
+                <tr class="md:grid grid-cols-3 hidden">
                   <td class="whitespace-pre-wrap text-center"></td>
-                  <td class="whitespace-pre-wrap text-center">prix initiale</td>
                   <td class="whitespace-pre-wrap text-center">prix</td>
                   <td class="whitespace-pre-wrap text-center">quantité</td>
-                  <td class="whitespace-pre-wrap text-center">remise</td>
                 </tr>
               </thead>
               <tbody class="grid gap-3">
                 <tr
                   v-for="produit in [...commande.Produits, ...addedProducts]"
                   :key="produit"
-                  class="grid relative md:grid-cols-5 border-gray-400 border rounded-md bg-gray-200 shadow-md mt-5"
+                  class="grid relative md:grid-cols-3 border-gray-400 border rounded-md bg-gray-200 shadow-md mt-5"
                 >
                   <td class="col-span-1">
                     <span
@@ -509,15 +507,7 @@
                       >{{ produit.nom }} ({{ produit.contenance }}Kg)</span
                     >
                   </td>
-                  <td
-                    class="col-span-1 whitespace-pre-wrap text-center flex items-center justify-center"
-                  >
-                    <span class="md:hidden font-semibold">Prix Initiale: </span>
-                    <span
-                      class="whitespace-pre-wrap text-center flex items-center justify-center"
-                      >{{ produit.prix }} DA</span
-                    >
-                  </td>
+                 
 
                   <td
                     v-if="isEditing"
@@ -584,12 +574,7 @@
                     {{ produit.produits_commande.quantite }} KG
                   </td>
 
-                  <td
-                    class="col-span-1 whitespace-pre-wrap text-center flex justify-center items-center"
-                  >
-                    <span class="md:hidden font-semibold">Remise: </span>
-                    {{ produit.prix - produit.produits_commande.prix }} DA
-                  </td>
+                  
                   <div
                     class="absolute -top-4 -right-4 w-8 h-8 text-red-600 rounded-full bg-white"
                   >

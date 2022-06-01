@@ -26,4 +26,7 @@ export default {
 			}))
 		);
 	},
+	getCount() {
+		return Api.get("/vente/count");
+	}
 };

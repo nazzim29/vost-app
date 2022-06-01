@@ -25,4 +25,7 @@ export default {
 	updateFeedback(feedback) {
 		return Api.post("/feedback/"+feedback.id)
 	},
+	count() {
+		return Api.get("/client/count");
+	}
 };

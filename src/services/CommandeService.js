@@ -38,5 +38,8 @@ export default {
 	},
 	uploadBonDeCommande(id, data) {
 		return Api.post(`/commande/${id}/bon-de-commande`, data);
+	},
+	count() {
+		return Api.get("/commande/count");
 	}
 };

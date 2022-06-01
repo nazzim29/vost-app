@@ -20,11 +20,15 @@ export function hasRight(user, action, /*object*/) {
     //if (action.split('-')[1] == 'fonction' && object.id == user.Profile.id) return false;
     return true;
 }
+export function getCount() {
+    return Api.get('/user/count');
+}
 export default {
     get,
     create,
     show,
     destroy,
     update,
-    hasRight
+    hasRight,
+    getCount
 };

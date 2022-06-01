@@ -5,6 +5,7 @@ const defaultState = () => ({
 	user: null,
 	authenticated: false,
 	users: [],
+	count:0,
 });
 const usersModule = {
 	state: defaultState(),
@@ -18,7 +19,7 @@ const usersModule = {
 			/* eslint-disable-next-line */
 			// state = {...defaultState()};
 			Object.assign(state, defaultState());
-			console.log(state)
+			console.log(state);
 		},
 		getUsers(state, users) {
 			state.users = users;
@@ -26,12 +27,24 @@ const usersModule = {
 		refresh(state, { user }) {
 			state.user = user;
 		},
+		setCount(state, count) {
+			state.count = count;
+		},
 	},
 	actions: {
 		login(context, credidentials) {
 			return AuthService.login(credidentials)
 				.then((res) => {
 					context.commit("login", res.data);
+				})
+				.catch((err) => {
+					return context.dispatch("add-error", err.response.data.message);
+				});
+		},
+		getCountUser(context) {
+			return UserService.getCount()
+				.then((res) => {
+					return context.commit("setCount", res.data);
 				})
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
@@ -91,6 +104,7 @@ const usersModule = {
 		getCurrentUser: (state) => state.user,
 		getUsers: (state) => state.users,
 		getJwt: (state) => state.jwt,
+		countUsers: (state) => state.count,
 	},
 };
 
