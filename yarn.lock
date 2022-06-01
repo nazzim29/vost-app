@@ -2419,6 +2419,25 @@
     "ansi-styles" "^4.1.0"
     "supports-color" "^7.1.0"
 
+"chart.js@^3.0.0", "chart.js@^3.8.0", "chart.js@>=3.0.2":
+  "integrity" "sha512-cr8xhrXjLIXVLOBZPkBZVF6NDeiVIrPLHcMhnON7UufudL+CNeRrD+wpYanswlm8NpudMdrt3CHoLMQMxJhHRg=="
+  "resolved" "https://registry.npmjs.org/chart.js/-/chart.js-3.8.0.tgz"
+  "version" "3.8.0"
+
+"chartjs-adapter-date-fns@>=2.0.0":
+  "integrity" "sha512-rmZINGLe+9IiiEB0kb57vH3UugAtYw33anRiw5kS2Tu87agpetDDoouquycWc9pRsKtQo5j+vLsYHyr8etAvFw=="
+  "resolved" "https://registry.npmjs.org/chartjs-adapter-date-fns/-/chartjs-adapter-date-fns-2.0.0.tgz"
+  "version" "2.0.0"
+
+"chartkick@>=3.2.0":
+  "integrity" "sha512-7yYZyxeFhOh/LA7gc1VwDFgc6t4ZM9RrbBjgb4dJoFukk2+94QkK0yulYI2OUH1cjcfrf1qmj04FkjZx7kZDeg=="
+  "resolved" "https://registry.npmjs.org/chartkick/-/chartkick-4.2.0.tgz"
+  "version" "4.2.0"
+  optionalDependencies:
+    "chart.js" ">=3.0.2"
+    "chartjs-adapter-date-fns" ">=2.0.0"
+    "date-fns" ">=2.0.0"
+
 "chokidar@^3.5.2", "chokidar@^3.5.3":
   "integrity" "sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw=="
   "resolved" "https://registry.npmjs.org/chokidar/-/chokidar-3.5.3.tgz"
@@ -2886,6 +2905,11 @@
   dependencies:
     "color" "^4.2"
     "tailwindcss" "^3.0"
+
+"date-fns@>=2.0.0":
+  "integrity" "sha512-8d35hViGYx/QH0icHYCeLmsLmMUheMmTyV9Fcm6gvNwdw31yXXH+O85sOBJ+OLnLQMKZowvpKb6FgMIQjcpvQw=="
+  "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-2.28.0.tgz"
+  "version" "2.28.0"
 
 "de-indent@^1.0.2":
   "integrity" "sha1-sgOOhG3DO6pXlhKNCAS0VbjB4h0="
@@ -6792,6 +6816,13 @@
   "resolved" "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   "version" "1.1.2"
 
+"vue-chartkick@^1.1.0":
+  "integrity" "sha512-6kn50SX5qk8BV1HiFK82XEjxcP0SG7PBHkSwJoCZT+Bsjv67IEnbk0G/iygA5XodIvRLzTUvYZs2oQ+uB4efEw=="
+  "resolved" "https://registry.npmjs.org/vue-chartkick/-/vue-chartkick-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "chartkick" ">=3.2.0"
+
 "vue-eslint-parser@^8.0.1":
   "integrity" "sha512-hvl8OVT8imlKk/lQyhkshqwQQChzHETcBd5abiO4ePw7ib7QUZLfW+2TUrJHKUvFOCFRJrDin5KJO9OHzB5bRQ=="
   "resolved" "https://registry.npmjs.org/vue-eslint-parser/-/vue-eslint-parser-8.2.0.tgz"
@@ -6869,7 +6900,7 @@
     "vue" "^2.5.13"
     "vue-template-compiler" "^2.5.13"
 
-"vue@^2 || ^3.2.13", "vue@^3.0.0", "vue@^3.0.2", "vue@^3.2.0", "vue@^3.2.13", "vue@^3.2.31", "vue@>= 3", "vue@3.2.31", "vue@3.x":
+"vue@^2 || ^3.2.13", "vue@^3.0.0", "vue@^3.0.2", "vue@^3.2.0", "vue@^3.2.13", "vue@^3.2.31", "vue@>= 3", "vue@>=3.0.0", "vue@3.2.31", "vue@3.x":
   "integrity" "sha512-odT3W2tcffTiQCy57nOT93INw1auq5lYLLYtWpPYQQYQOOdHiqFct9Xhna6GJ+pJQaF67yZABraH47oywkJgFw=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.31.tgz"
   "version" "3.2.31"
