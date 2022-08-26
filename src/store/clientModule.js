@@ -10,10 +10,10 @@ const fonctionsModule = {
 	state: defaultState(),
 	mutations: {
 		getClients(state, commandes) {
-			state.commandes = commandes;
+			state.clients = commandes;
 		},
 		showClient(state, commande) {
-			state.commande = commande;
+			state.client = commande;
 		},
 		getTypeClients(state, typeClient) {
 			state.typeClient = typeClient;
@@ -48,7 +48,7 @@ const fonctionsModule = {
 		showClient(context, id) {
 			return ClientService.show(id)
 				.then((res) => {
-					return context.commit("showCommande", res.data);
+					return context.commit("showClient", res.data);
 				})
 				.catch((err) =>
 					context.dispatch("add-error", err.response.data.message)
@@ -65,8 +65,9 @@ const fonctionsModule = {
 		},
 		addClient(context, commande) {
 			return ClientService.create(commande)
-				.then(() => {
-					return context.dispatch("getCommandes", {});
+				.then((res) => {
+					context.dispatch("getClients", {});
+					return res
 				})
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
@@ -75,7 +76,7 @@ const fonctionsModule = {
 		updateClient(context, commande) {
 			return ClientService.update(commande)
 				.then(() => {
-					return context.dispatch("getCommandes", {});
+					return context.dispatch("getClients", {});
 				})
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
@@ -110,8 +111,8 @@ const fonctionsModule = {
 		},
 	},
 	getters: {
-		getClients: (state) => state.commandes,
-		getClient: (state) => state.commande,
+		getClients: (state) => state.clients,
+		getClient: (state) => state.client,
 		getTypeClients: (state) => state.typeClient,
 		getFeedbacks: (state) => state.feedbacks,
 		countClient: (state) => state.count,

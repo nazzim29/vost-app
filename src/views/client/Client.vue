@@ -20,7 +20,7 @@
       >
         <Icon
           icon="ant-design:user-add-outlined"
-          @click="openCreateModal"
+          @click="$router.push('/clients/add')"
           class="h-7 w-7 fill-current text-white"
         />
       </div>
@@ -471,7 +471,7 @@ export default {
     nbperpage() {
       if (window.innerWidth >= 640 && window.innerWidth < 768) return 2 * 6;
       else if (window.innerWidth >= 768 && window.innerWidth < 1280) return 16;
-      else if (window.innerWidth > 1280) return 4 * 6;
+      else if (window.innerWidth > 1280) return 4 * 7;
       else return 1 * 6;
     },
     filters() {

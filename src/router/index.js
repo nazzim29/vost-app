@@ -181,6 +181,15 @@ const routes = [
     },
   },
   {
+    path: "/clients/add",
+    name: "AddClients",
+    component: loadView("client/ClientShow"),
+    meta: {
+      auth: true,
+      autorisation: "add-client",
+    },
+  },
+  {
     path: "/clients/:id",
     name: "ClientShow",
     component: loadView("client/ClientShow"),
