@@ -8,5 +8,12 @@ RUN npm run build
 
 
 
-# COPY --from=build /var/vost-front/dist /var/vos-front
-# COPY default-nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /var/vost-front/dist /var/vos-front
+COPY default-nginx.conf /etc/nginx/conf.d/default.conf
+
+FROM nginx:latest
+
+COPY ./dist /usr/share/nginx/html
+COPY default-nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
