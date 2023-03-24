@@ -6,7 +6,7 @@ RUN rm -rf node_modules/
 RUN npm install
 RUN chmod -R a+x node_modules
 COPY . .
-RUN npm run build
+RUN sudo npm run build
 
 
 
