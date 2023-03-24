@@ -1,12 +1,12 @@
 FROM node:14.17-alpine AS build
 
 WORKDIR /var/vost-admin
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN rm -rf node_modules/
 RUN npm install
 RUN chmod -R a+x node_modules
 COPY . .
-RUN npm run build
+RUN npm run build --unsafe-perm
 
 
 
