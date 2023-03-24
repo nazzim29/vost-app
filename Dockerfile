@@ -1,4 +1,4 @@
-FROM node:12.7-alpine AS build
+FROM node:14.17-alpine AS build
 
 WORKDIR /var/vost-admin
 COPY package.json package-lock.json ./
