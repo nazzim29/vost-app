@@ -15,12 +15,11 @@ export function show(id) {
 export function create(produit) {
 	const data = new FormData();
 	for (let key in produit) {
-		console.log({ key: produit[key] })
-		if (typeof produit[key] === "object") {
-			data.append(key, JSON.stringify(produit[key]));
-			console.log(JSON.stringify(produit[key]));
-			continue;
-		}
+		// if (typeof produit[key] === "object") {
+		// 	data.append(key, JSON.stringify(produit[key]));
+		// 	console.log(JSON.stringify(produit[key]));
+		// 	continue;
+		// }
 		data.append(key, produit[key]);
 	}
 	return Api.post("/produit",data , { ContentType: "multipart/form-data" });
@@ -29,7 +28,20 @@ export function destroy(id) {
 	return Api.delete(`/produit/${id}`);
 }
 export function update(produit) {
-	return Api.patch(`/produit/${produit.id}`, produit);
+	const data = new FormData();
+	for (let key in produit) {
+		console.log({ key: produit[key] });
+		// if (typeof produit[key] === "object") {
+		// 	data.append(key, JSON.stringify(produit[key]));
+		// 	console.log(JSON.stringify(produit[key]));
+		// 	continue;
+		// }
+		data.append(key, produit[key]);
+	}
+	console.log(data.values())
+	return Api.post(`/produit/${produit.id}`, data, {
+		ContentType: "multipart/form-data",
+	});
 }
 export function addFormule(formule) {
 	return Api.post(`/produit/${formule.ProduitId}/formule`, formule);

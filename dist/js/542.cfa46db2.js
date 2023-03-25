@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvost_app"]=self["webpackChunkvost_app"]||[]).push([[542],{8542:function(n,a,e){e.r(a),e.d(a,{default:function(){return c}});var t=e(3396);function r(n,a,e,r,o,s){return(0,t.wg)(),(0,t.iD)("div",null,"salut")}var o={async created(){},data(){return{avatarPath:"",nom:"",prenom:"",numero:"",username:"",password:"",passwordConfirm:"",fonction:{},fonctions:[]}},components:{},methods:{}},s=e(89);const u=(0,s.Z)(o,[["render",r],["__scopeId","data-v-de6e85d2"]]);var c=u}}]);
+//# sourceMappingURL=542.cfa46db2.js.map

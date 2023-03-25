@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvost_app"]=self["webpackChunkvost_app"]||[]).push([[864],{2864:function(e,n,r){r.r(n),r.d(n,{default:function(){return i}});var t=r(3396);function u(e,n,r,u,s,a){return(0,t.wg)(),(0,t.iD)("div",null,"messagerie")}var s={},a=r(89);const c=(0,a.Z)(s,[["render",u]]);var i=c}}]);
+//# sourceMappingURL=864.4b88bfef.js.map

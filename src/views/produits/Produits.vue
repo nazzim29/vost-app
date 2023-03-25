@@ -14,7 +14,7 @@
 					class="h-7 fill-current text-white"
 				/>
 			</div>
-			<div class="rounded-full py-2 px-2 bg-gray-500" v-if="currentUser.Profile.Autorisations.find(el=>el.nom == 'add-produit')">
+			<div class="rounded-full py-2 px-2 bg-gray-500" v-if="currentUser?.Profile.Autorisations.find(el=>el.nom == 'add-produit')">
 				<Icon
 					icon="bx:bx-paint-roll"
 					@click="openCreateModal"
@@ -207,15 +207,12 @@
 	<Modal ref="createmodal" primaryColor="haja" @submit="create">
 		<template v-slot:title>Ajouter un produit</template>
 		<template v-slot:body>
-			<div class="flex flex-col w-full pb-5 overflow-y-auto">
-				<div class="relative mt-24 self-center mx-4 max-w-xs">
+			<div class="flex flex-col w-full pb-5 pt-28 overflow-y-auto">
+				<div class="relative self-center mx-4 max-w-xs">
 					<img
 						ref="avatarDisplay"
 						class="w-full object-fit h-full rounded-md overflow-hidden"
-						:src="
-							newProduit.image ||
-							`${api_url}/uploads/products/default.jpeg`
-						"
+						:src="newProduit.image ||  `${api_url}/uploads/products/default.jpeg`"
 					/>
 					<PencilIcon
 						class="absolute w-5 bottom-1 right-1"

@@ -9,32 +9,32 @@
     >
       <div class="w-1/6"></div>
       <div
-        class="card md:card-side bg-base-100 shadow-xl w-full md:w-2/6 h-80 p-12"
+        class="card md:card-side bg-base-100 shadow-xl w-full md:w-2/6 h-80 p-4"
       >
         <div
           class="card-body p-0"
-          style="align-items: center; display: flex; justify-content: center"
+          style="align-items: center; display: flex; justify-content: space-between"
         >
-          <img src="/img/upload.png" alt="" style="height: 200px" />
+          <img src="/img/upload.png" alt="" class="w-full object-fit" />
           <button @click="backupandDownload" class="btn btn-primary btn-sm">
-            Faire un Backup et telecharger
+            Faire un Backup
           </button>
         </div>
       </div>
       <div
-        class="card md:card-side bg-base-100 shadow-xl w-full md:w-2/6 h-80 p-12"
+        class="card md:card-side bg-base-100 shadow-xl w-full md:w-2/6 h-80 p-4"
       >
         <div
           class="card-body p-0"
-          style="align-items: center; display: flex; justify-content: center"
+          style="align-items: center; display: flex; justify-content: space-between"
         >
           <img
             src="/img/backup.png"
             alt=""
-            style="height: 200px; width: 250px"
+            class="w-full object-fit"
           />
           <button @click="Downloadlast" class="btn btn-primary btn-sm">
-            telecharger le dernier backup en date
+            telecharger le dernier backup
           </button>
         </div>
       </div>

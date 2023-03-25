@@ -50,7 +50,7 @@
 					>
 						<DialogTitle
 							as="h3"
-							class="text-lg font-medium leading-6 text-gray-900 shadow-md pb-1 mx-2"
+							class="text-lg font-medium leading-6 text-gray-900 shadow-md pb-1"
 						>
 							<slot name="title"></slot>
 						</DialogTitle>
