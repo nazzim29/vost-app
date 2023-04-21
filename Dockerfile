@@ -15,7 +15,7 @@ FROM nginx:latest
 # COPY /var/vost-admin/dist /var/vos-admin
 # COPY default-nginx.conf /etc/nginx/conf.d/default.conf
 
-# COPY ./dist /usr/share/nginx/html
-# COPY default-nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./dist /usr/share/nginx/html
+COPY default-nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
