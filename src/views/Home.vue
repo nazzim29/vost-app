@@ -111,7 +111,7 @@ export default {
 	name: "Home",
 	components: {},
 	beforeMount() {
-		this.$store.dispatch("getCountClient");
+		// this.$store.dispatch("getCountClient");
 		// this.$store.dispatch("getCountUser");
 		// this.$store.dispatch("getCountCommande");
 		// this.$store.dispatch("getProduits");

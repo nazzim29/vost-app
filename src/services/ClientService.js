@@ -27,5 +27,8 @@ export default {
 	},
 	count() {
 		return Api.get("/client/count");
+	},
+	stats(id,params) {
+		return Api.get(`/client/${id}/etat`,params)
 	}
 };

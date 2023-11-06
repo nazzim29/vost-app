@@ -1,6 +1,6 @@
 <template>
   <li
-    class="md:w-48 w-64 overflow-hidden flex flex-col bg-white rounded-md shadow shadow-gray-900 items-center max-h-32 justify-evenly"
+    class="w-full h-full overflow-hidden flex flex-col bg-white rounded-md shadow shadow-gray-900 items-center max-h-32 justify-evenly"
     style="font-family: roboto"
   >
     <div
