@@ -106,17 +106,17 @@
 </template>
 
 <script>
-import moment from 'moment'; 
+// import moment from 'moment'; 
 export default {
 	name: "Home",
 	components: {},
 	beforeMount() {
 		this.$store.dispatch("getCountClient");
-		this.$store.dispatch("getCountUser");
-		this.$store.dispatch("getCountCommande");
-		this.$store.dispatch("getProduits");
-		this.$store.dispatch("getMatieres");
-		this.$store.dispatch("getCountVentes");
+		// this.$store.dispatch("getCountUser");
+		// this.$store.dispatch("getCountCommande");
+		// this.$store.dispatch("getProduits");
+		// this.$store.dispatch("getMatieres");
+		// this.$store.dispatch("getCountVentes");
 	},
 	computed: {
 		countClient() {
@@ -129,9 +129,10 @@ export default {
 			return this.$store.getters.countCommande;
 		},
 		countVentes() {
-			return this.$store.getters.countVentes.map((item) => {
-				return [moment(item.month,"M").format('MMMM'), item.count];
-			});
+			return this.$store.getters.countVentes
+			// .map((item) => {
+			// 	return [moment(item.month,"M").format('MMMM'), item.count];
+			// });
 		},
 		countProduits() {
 			return this.$store.getters.getProduits.filter((p) => p.quantite <= 5)

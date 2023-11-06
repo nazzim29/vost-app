@@ -3,7 +3,7 @@
 		<div class="flex card bg-base-100 shadow-xl md:mt-16 md:mx-12 mx-2 mt-8">
 			<div class="card-body w-full">
 				<h2 class="card-title">Profile client</h2>
-				<div class="grid md:grid-cols-3 xl:grid-cols-4 gap-y-2  w-full p-0 md:px-3">
+				<div class="grid md:grid-cols-3 xl:grid-cols-4 gap-y-2 gap-x-1 w-full p-0 md:px-3">
 					<div class="flex flex-col space-y-0.5 w-full">
 						<label class="flex items-center text-bold rounded-l-md text-md"
 							>Raison Sociale</label
@@ -137,6 +137,54 @@
 								>{{ client.numeroSecondaire }}</a
 							>
 						</label>
+					</div>
+					<div class="flex flex-col space-y-0.5 w-full">
+						<label
+							class="flex items-center text-bold h-full rounded-l-md text-md"
+							>NIF</label
+						>
+						<div
+							class="flex flex-row items-cente w-full focus-within:ring-1 rounded-md"
+						>
+							<input
+								type="text"
+								v-if="isEditing"
+								name="nif"
+								id="nif"
+								placeholder="NIF"
+								v-model="client.nif"
+								class="rounded-md border-gray-200 w-full focus:ring-0"
+							/>
+							<span
+								class="rounded-md font-semibold border-gray-200 w-full focus:ring-0"
+								v-else
+								>{{ client.nif }}</span
+							>
+						</div>
+					</div>
+					<div class="flex flex-col space-y-0.5 w-full">
+						<label
+							class="flex items-center text-bold h-full rounded-l-md text-md"
+							>NIS</label
+						>
+						<div
+							class="flex flex-row items-cente w-full focus-within:ring-1 rounded-md"
+						>
+							<input
+								type="text"
+								v-if="isEditing"
+								name="nis"
+								id="nis"
+								placeholder="NIS"
+								v-model="client.nis"
+								class="rounded-md border-gray-200 w-full focus:ring-0"
+							/>
+							<span
+								class="rounded-md font-semibold border-gray-200 w-full focus:ring-0"
+								v-else
+								>{{ client.nis }}</span
+							>
+						</div>
 					</div>
 					<div class="flex flex-col space-y-0.5 w-full">
 						<label

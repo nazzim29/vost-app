@@ -197,6 +197,42 @@
           </div>
           <div class="flex flex-col w-full space-y-2 space-x-2">
             <label
+              class="flex items-center text-bold h-full rounded-l-md text-md"
+              >NIF</label
+            >
+            <div
+              class="flex flex-row items-cente w-auto focus-within:ring-1 rounded-md ring-blue-600 overflow-hidden"
+            >
+              <input
+                type="text"
+                name="nif"
+                id="nif"
+                v-model="newClient.nif"
+                placeholder="NIF"
+                class="rounded-r-md border-0 focus:ring-0"
+              />
+            </div>
+          </div>
+          <div class="flex flex-col w-full space-y-2 space-x-2">
+            <label
+              class="flex items-center text-bold h-full rounded-l-md text-md"
+              >NIS</label
+            >
+            <div
+              class="flex flex-row items-cente w-auto focus-within:ring-1 rounded-md ring-blue-600 overflow-hidden"
+            >
+              <input
+                type="text"
+                name="nis"
+                id="nis"
+                v-model="newClient.nis"
+                placeholder="NIS"
+                class="rounded-r-md border-0 focus:ring-0"
+              />
+            </div>
+          </div>
+          <div class="flex flex-col w-full space-y-2 space-x-2">
+            <label
               for="numero"
               class="flex items-center text-bold h-full rounded-l-md text-md"
               >Numero</label
