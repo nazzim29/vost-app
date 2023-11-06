@@ -22,17 +22,13 @@
       <button
         class="btn gap-2 btn-sm btn-success"
         @click="validerCommande"
-        v-if="
-          currentUser.Profile.Autorisations.find(
-            (el) => el.nom == 'update-commande'
-          ) && !commande.validationAdmin
-        "
+
       >
         <Icon icon="akar-icons:check" class="w-5 h-5" />
         <label>Valider</label>
       </button>
       <button
-        class="btn gap-2 btn-sm"
+        class="btn gap-2 btn-sm"    
         @click="handleBDC"
         v-if="
           currentUser.Profile.Autorisations.find(
@@ -391,9 +387,9 @@
                   <td
                     class="h-full whitespace-pre-wrap text-center md:col-span-2"
                   >
-                    <Listbox v-model="newProduct.produit" v-slot="{ open }">
+                    <Combobox v-model="newProduct.produit" v-slot="{ open }">
                       <div class="relative w-full">
-                        <ListboxButton
+                        <ComboboxButton
                           @focus="onOpen"
                           @blur="onClose"
                           class="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm"
@@ -409,20 +405,20 @@
                               aria-hidden="true"
                             />
                           </span>
-                        </ListboxButton>
+                        </ComboboxButton>
 
                         <transition
                           leave-active-class="transition duration-100 ease-in"
                           leave-from-class="opacity-100"
                           leave-to-class="opacity-0"
                         >
-                          <ListboxOptions
+                          <ComboboxOptions
                             static
                             v-show="open"
                             @scroll="scrolllist"
                             class="absolute w-max py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50"
                           >
-                            <ListboxOption
+                            <ComboboxOption
                               v-slot="{ active, selected }"
                               v-for="product in paginated"
                               :key="product.id"
@@ -456,14 +452,14 @@
                                   />
                                 </span>
                               </li>
-                            </ListboxOption>
-                            <ListboxOption v-show="hasNextPage">
+                            </ComboboxOption>
+                            <ComboboxOption v-show="hasNextPage">
                               <span ref="load"> loading</span>
-                            </ListboxOption>
-                          </ListboxOptions>
+                            </ComboboxOption>
+                          </ComboboxOptions>
                         </transition>
                       </div>
-                    </Listbox>
+                    </Combobox>
                   </td>
                   <td class="h-full whitespace-pre-wrap text-center">
                     <input
@@ -898,8 +894,8 @@ export default {
       }
       var input = document.createElement("input");
       input.type = "file";
-      input.click();
       input.onchange = this.uploadFile;
+      input.click();
       // const formData = new FormData();
       //open file selector and get file
     },

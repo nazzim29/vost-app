@@ -140,7 +140,7 @@
 							</div>
 
 							<div
-								class="inline-flex md:grid md:grid-row-2 items-center space-evenly md:justify-center ml-5 md:ml-0"
+								class="inline-flex justify-center items-center p-2"
 								v-if="
 									selectedFonction &&
 									selectedFonction.Autorisations.find((el) => el.id == a.id) &&
@@ -149,10 +149,37 @@
 										.autorisations_fonctions
 								"
 							>
+								<span class="mr-3 text-sm font-medium text-gray-900"
+									>Own only</span
+								>
+								<label class="relative inline-flex items-center cursor-pointer">
+									<input
+										type="checkbox"
+										class="sr-only peer"
+										:checked="
+											selectedFonction.Autorisations.find(
+												(el) => el.id === a.id
+											).autorisations_fonctions.type == 'own'
+										"
+										@change="
+											changeAutType(
+												selectedFonction.Autorisations.find(
+													(el) => el.id === a.id
+												),
+												$event.target.checked ? 'own' : 'all'
+											)
+										"
+
+									/>
+									<div
+										class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300  dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+									></div>
+								</label>
+								<span class="ml-3 text-sm font-medium text-gray-900">All</span>
 								<!-- <div
 									class="inline-flex space-x-1 w-full justify-center items-center"
-								>
-									<input
+								> -->
+								<!-- <input
 										type="radio"
 										:id="a.nom + '-own'"
 										:name="a.nom"
@@ -352,6 +379,12 @@ export default {
 			}
 			this.selectedFonction.updated = false;
 		},
+		changeAutType(aut, type) {
+			console.log("🚀 ~ file: Fonction.vue:383 ~ updateAutType ~ aut:", aut)
+			console.log("🚀 ~ file: Fonction.vue:383 ~ updateAutType ~ type:", type)
+			// aut.autorisations_fonctions.type = type;
+			// this.selectedFonction.updated = false;
+		},
 		async updateFonction() {
 			if (this.selectedFonction.updated) return;
 			try {
@@ -374,7 +407,7 @@ export default {
 			}
 		},
 		async deleteFonction(f) {
-			console.log(f)
+			console.log(f);
 			try {
 				await this.$store.dispatch(
 					"deleteFonction",
@@ -437,11 +470,13 @@ export default {
 			if (this.selectedFonction.updated === undefined)
 				this.selectedFonction.updated = true;
 		},
-		"fonctions":function(){
-			if(!this.fonctions.find(el=>el.id == this.selectedFonction)){
-				this.selectedFonction = this.fonctions.find(el=>el.id == this.$store.state.users.user.Profile.id)
+		fonctions: function () {
+			if (!this.fonctions.find((el) => el.id == this.selectedFonction)) {
+				this.selectedFonction = this.fonctions.find(
+					(el) => el.id == this.$store.state.users.user.Profile.id
+				);
 			}
-		}
+		},
 	},
 };
 </script>

@@ -3,7 +3,9 @@
 		<div class="flex card bg-base-100 shadow-xl md:mt-16 md:mx-12 mx-2 mt-8">
 			<div class="card-body w-full">
 				<h2 class="card-title">Profile client</h2>
-				<div class="grid md:grid-cols-3 xl:grid-cols-4 gap-y-2  w-full p-0 md:px-3">
+				<div
+					class="grid md:grid-cols-3 xl:grid-cols-4 gap-y-2 gap-x-1 w-full p-0 md:px-3"
+				>
 					<div class="flex flex-col space-y-0.5 w-full">
 						<label class="flex items-center text-bold rounded-l-md text-md"
 							>Raison Sociale</label
@@ -33,7 +35,7 @@
 							class="flex items-center text-bold rounded-l-md text-md"
 							>Type</label
 						>
-						<Listbox v-model="client.TypeClientId" v-if="isEditing">
+						<Listbox v-model="client.TypeClient.id" v-if="isEditing">
 							<div class="relative w-full mx-1 space-x-auto">
 								<ListboxButton
 									class="h-10 relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm border-1"
@@ -80,13 +82,13 @@
 														selected ? 'font-medium' : 'font-normal',
 														'block truncate',
 													]"
-													>{{ f.type }}</span
+													>{{ f?.type }}</span
 												>
 												<span
 													v-if="selected"
 													class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
 												>
-													<CheckIcon class="w-5 h-5" aria-hidden="true" />
+													<!-- <CheckIcon class="w-5 h-5" aria-hidden="true" /> -->
 												</span>
 											</li>
 										</ListboxOption>
@@ -97,7 +99,7 @@
 						<label
 							class="rounded-md font-semibold border-gray-200 w-full focus:ring-0"
 							v-else
-							>{{ client.TypeClient.type }}</label
+							>{{ client.TypeClient?.type }}</label
 						>
 					</div>
 					<div class="flex flex-col space-y-0.5 w-full">
@@ -137,6 +139,54 @@
 								>{{ client.numeroSecondaire }}</a
 							>
 						</label>
+					</div>
+					<div class="flex flex-col space-y-0.5 w-full">
+						<label
+							class="flex items-center text-bold h-full rounded-l-md text-md"
+							>NIF</label
+						>
+						<div
+							class="flex flex-row items-cente w-full focus-within:ring-1 rounded-md"
+						>
+							<input
+								type="text"
+								v-if="isEditing"
+								name="nif"
+								id="nif"
+								placeholder="NIF"
+								v-model="client.nif"
+								class="rounded-md border-gray-200 w-full focus:ring-0"
+							/>
+							<span
+								class="rounded-md font-semibold border-gray-200 w-full focus:ring-0"
+								v-else
+								>{{ client.nif }}</span
+							>
+						</div>
+					</div>
+					<div class="flex flex-col space-y-0.5 w-full">
+						<label
+							class="flex items-center text-bold h-full rounded-l-md text-md"
+							>NIS</label
+						>
+						<div
+							class="flex flex-row items-cente w-full focus-within:ring-1 rounded-md"
+						>
+							<input
+								type="text"
+								v-if="isEditing"
+								name="nis"
+								id="nis"
+								placeholder="NIS"
+								v-model="client.nis"
+								class="rounded-md border-gray-200 w-full focus:ring-0"
+							/>
+							<span
+								class="rounded-md font-semibold border-gray-200 w-full focus:ring-0"
+								v-else
+								>{{ client.nis }}</span
+							>
+						</div>
 					</div>
 					<div class="flex flex-col space-y-0.5 w-full">
 						<label
@@ -200,15 +250,17 @@
 					</div>
 					<div
 						class="flex flex-col items-start space-y-1 w-full"
-						v-if="client.id&& !isEditing"
+						v-if="client.id && !isEditing"
 					>
 						<label
 							for="passwordConfirm"
 							class="flex items-center text-bold h-full rounded-l-md text-md"
-							>Dettes</label
+							>Solde Actuelle</label
 						>
-						<label class="rounded-md font-semibold border-gray-200 w-full focus:ring-0">{{ client.dettes }}</label>
-						
+						<label
+							class="rounded-md font-semibold border-gray-200 w-full focus:ring-0"
+							>{{ client.dettes }}</label
+						>
 					</div>
 				</div>
 				<div class="card-actions justify-end">
@@ -381,6 +433,71 @@
 				</Disclosure>
 			</div>
 		</div>
+		<div class="md:mx-12 mx-2" v-if="client.id && !isEditing">
+			<div class="bg-white rounded-xl p-2 mb-10">
+				<div class="inline-flex items-center justify-evenly w-full">
+
+					<h3 class="text-lg font-bold text-center my-2">
+						Nombre de Bon {{ client.stats?.count_vente }}
+					</h3>
+					<h3 class="text-lg font-bold text-center my-2">
+						Total Versement {{ client.stats?.totalVersement }} DA
+					</h3>
+					<h3 class="text-lg font-bold text-center my-2">
+						Solde {{ client.stats?.solde }} DA
+					</h3>
+				</div>
+				<div class="inline-flex gap-2 p-2 items-center justify-evenly w-full">
+					<div class="inline-flex gap-2 items-center">
+						<label>Debut:</label>
+						<input
+							type="date"
+							v-model="startDate"
+							@change="updateStat"
+							class="rounded-md"
+						/>
+					</div>
+					<div class="inline-flex gap-2 items-center">
+						<label>Fin: </label>
+						<input
+							type="date"
+							v-model="endDate"
+							@change="updateStat"
+							class="rounded-md"
+						/>
+					</div>
+				</div>
+				<div
+					class="flex flex-wrap -m-2 gap-3 px-4 py-2 divide-x-2 divide-dashed divide-slate-900"
+				>
+					<ul
+						v-for="column in statsColumns"
+						:key="column.id"
+						class="flex flex-col gap-2 max-w-max pl-3"
+					>
+						<il class="text-xl font-semibold text-gray-500 uppercase">{{
+							column.nom
+						}}</il>
+						<li
+							v-for="p in client.stats.produits.filter(
+								(el) => el.TypeProduitId == column.id
+							)"
+							:key="p.id"
+						>
+							{{ p.nom }} x {{ p.quantite }}
+						</li>
+						<li class="text-gray-400 font-bold text-md">
+							Total:
+							{{
+								client.stats.produits
+									.filter((el) => el.TypeProduitId == column.id)
+									.reduce((sum, e) => sum + e.quantite, 0)
+							}}
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -401,6 +518,8 @@ export default {
 	data() {
 		return {
 			isEditing: false,
+			startDate: null,
+			endDate: null,
 		};
 	},
 	methods: {
@@ -426,6 +545,7 @@ export default {
 			if (this.isEditing)
 				if (!this.client.id)
 					this.$store.dispatch("addClient", this.client).then((res) => {
+						console.log({ res });
 						this.$router.push(`/clients/${res.data.id}`);
 					});
 				else
@@ -433,6 +553,13 @@ export default {
 						this.isEditing = false;
 					});
 			else this.isEditing = true;
+		},
+		updateStat() {
+			this.$store.dispatch("fetchStat", {
+				id: this.client.id,
+				startDate: moment(this.startDate).toISOString(),
+				endDate: moment(this.endDate).toISOString(),
+			});
 		},
 		// format date using moment
 		formatDate(date) {
@@ -452,14 +579,19 @@ export default {
 	},
 	beforeMount() {
 		this.$store.dispatch("getTypeClients");
+		this.startDate = moment().startOf("M").format("YYYY-MM-DD");
+		this.endDate = moment().endOf("M").format("YYYY-MM-DD");
 		const id = this.$route.params.id;
-		console.log("id", id);
 		if (!id) {
 			this.isEditing = true;
 		} else {
 			this.$store.dispatch("showClient", id);
 		}
 	},
+	// mounted() {
+	// 	console.log("client",this.client)
+
+	// },
 
 	computed: {
 		currentUser() {
@@ -475,6 +607,15 @@ export default {
 			get: function () {
 				return this.$store.getters.getClient;
 			},
+		},
+		statsColumns() {
+			let columns = [];
+			this.client.stats.produits.forEach((elem) => {
+				if (columns.includes(elem.TypeProduit)) return;
+				columns.push(elem.TypeProduit);
+			});
+			console.log({ columns });
+			return columns;
 		},
 	},
 };

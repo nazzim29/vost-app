@@ -1,6 +1,7 @@
 import ClientService from "@/services/ClientService";
+import moment from "moment";
 const defaultState = () => ({
-    clients: [],
+	clients: [],
 	client: {},
 	typeClient: [],
 	feedbacks: [],
@@ -25,6 +26,9 @@ const fonctionsModule = {
 			console.log(count);
 			state.count = count;
 		},
+		setClientStats(state, stats) {
+			state.client.stats = stats;
+		},
 	},
 	actions: {
 		getClients(context, query) {
@@ -48,11 +52,17 @@ const fonctionsModule = {
 		showClient(context, id) {
 			return ClientService.show(id)
 				.then((res) => {
-					return context.commit("showClient", res.data);
+					console.log(res.data);
+
+					let startDate = moment().startOf("M").toISOString();
+					let endDate = moment().endOf("M").toISOString();
+					context.dispatch("fetchStat", {id, startDate, endDate});
+					return context.commit("showClient", res.data.client);
 				})
-				.catch((err) =>
-					context.dispatch("add-error", err.response.data.message)
-				);
+				.catch((err) => {
+					console.log(err);
+					context.dispatch("add-error", err.response.data.message);
+				});
 		},
 		deleteClient(context, id) {
 			return ClientService.destroy(id)
@@ -67,7 +77,7 @@ const fonctionsModule = {
 			return ClientService.create(commande)
 				.then((res) => {
 					context.dispatch("getClients", {});
-					return res
+					return res;
 				})
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
@@ -108,6 +118,15 @@ const fonctionsModule = {
 				.catch((err) => {
 					return context.dispatch("add-error", err.response.data.message);
 				});
+		},
+		fetchStat(context, {id, startDate, endDate}) {
+			console.log({
+				startDate,
+				endDate,
+			});
+			return ClientService.stats(id,{debut:startDate,fin:endDate}).then((res) => {
+				return context.commit("setClientStats", res.data);
+			});
 		},
 	},
 	getters: {
